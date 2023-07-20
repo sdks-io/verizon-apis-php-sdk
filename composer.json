@@ -1,0 +1,50 @@
+{
+    "name": "sdksio/verizon-apis-sdk",
+    "description": "Use the Verizon API for connectivity management, device diagnostics, device location, edge discovery service, edge performance, software management and much more.",
+    "type": "library",
+    "keywords": [
+        "verizon",
+        "5gedge",
+        "thingspace"
+    ],
+    "homepage": "https://www.verizon.com",
+    "license": [
+        "MIT"
+    ],
+    "authors": [
+        {
+            "name": "developer-sdksio",
+            "email": "developer+sdksio@apimatic.io"
+        }
+    ],
+    "support": {},
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "ext-json": "*",
+        "apimatic/unirest-php": "^4.0.0",
+        "apimatic/core-interfaces": "~0.1.0",
+        "apimatic/core": "~0.3.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.5",
+        "phan/phan": "5.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "VerizonLib\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "VerizonLib\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "lint-src": "phpcs --standard=phpcs-ruleset.xml src/",
+        "lint-src-fix": "phpcbf --standard=phpcs-ruleset.xml src/",
+        "analyze": "phan --allow-polyfill-parser",
+        "lint": [
+            "@lint-src"
+        ]
+    }
+}
