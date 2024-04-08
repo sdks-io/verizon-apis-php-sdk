@@ -52,10 +52,10 @@ The device identifier and fields to match in the search.
         "y": "y4",
         "z": "z6"
       },
-      "battery": "battery8",
-      "humidity": "humidity2",
-      "light": "light4",
-      "pressure": "pressure0"
+      "battery": "battery0",
+      "humidity": "humidity4",
+      "light": "light6",
+      "pressure": "pressure2"
     }
   }
 }

@@ -33,9 +33,9 @@ class DeviceAggregateUsageListRequestBuilder
     /**
      * Initializes a new device aggregate usage list request Builder object.
      */
-    public static function init(): self
+    public static function init(string $startTime, string $endTime): self
     {
-        return new self(new DeviceAggregateUsageListRequest());
+        return new self(new DeviceAggregateUsageListRequest($startTime, $endTime));
     }
 
     /**
@@ -66,20 +66,11 @@ class DeviceAggregateUsageListRequestBuilder
     }
 
     /**
-     * Sets start time field.
+     * Sets label field.
      */
-    public function startTime(?string $value): self
+    public function label(?array $value): self
     {
-        $this->instance->setStartTime($value);
-        return $this;
-    }
-
-    /**
-     * Sets end time field.
-     */
-    public function endTime(?string $value): self
-    {
-        $this->instance->setEndTime($value);
+        $this->instance->setLabel($value);
         return $this;
     }
 

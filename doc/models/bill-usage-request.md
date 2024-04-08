@@ -11,9 +11,9 @@ Bill usage request.
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `accountName` | `?string` | Optional | Account identifier. | getAccountName(): ?string | setAccountName(?string accountName): void |
-| `startDate` | `?string` | Optional | Start date to search for billable usage, mm-dd-yyyy. | getStartDate(): ?string | setStartDate(?string startDate): void |
-| `endDate` | `?string` | Optional | End date to search for billable usage, mm-dd-yyyy. | getEndDate(): ?string | setEndDate(?string endDate): void |
+| `accountName` | `string` | Required | Account identifier. | getAccountName(): string | setAccountName(string accountName): void |
+| `startDate` | `string` | Required | Start date to search for billable usage, mm-dd-yyyy. | getStartDate(): string | setStartDate(string startDate): void |
+| `endDate` | `string` | Required | End date to search for billable usage, mm-dd-yyyy. | getEndDate(): string | setEndDate(string endDate): void |
 | `usageForAllAccounts` | `?bool` | Optional | Request usage for single or multiple accounts. | getUsageForAllAccounts(): ?bool | setUsageForAllAccounts(?bool usageForAllAccounts): void |
 
 ## Example (as JSON)

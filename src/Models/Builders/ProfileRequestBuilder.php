@@ -33,18 +33,9 @@ class ProfileRequestBuilder
     /**
      * Initializes a new profile request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, array $devices): self
     {
-        return new self(new ProfileRequest());
-    }
-
-    /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
-        return $this;
+        return new self(new ProfileRequest($accountName, $devices));
     }
 
     /**
@@ -53,15 +44,6 @@ class ProfileRequestBuilder
     public function carrierName(?string $value): self
     {
         $this->instance->setCarrierName($value);
-        return $this;
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
         return $this;
     }
 
@@ -89,6 +71,24 @@ class ProfileRequestBuilder
     public function primaryPlaceOfUse(?array $value): self
     {
         $this->instance->setPrimaryPlaceOfUse($value);
+        return $this;
+    }
+
+    /**
+     * Sets smsr oid field.
+     */
+    public function smsrOid(?string $value): self
+    {
+        $this->instance->setSmsrOid($value);
+        return $this;
+    }
+
+    /**
+     * Sets carrier ip pool name field.
+     */
+    public function carrierIpPoolName(?string $value): self
+    {
+        $this->instance->setCarrierIpPoolName($value);
         return $this;
     }
 

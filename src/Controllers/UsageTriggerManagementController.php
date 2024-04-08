@@ -38,8 +38,36 @@ class UsageTriggerManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
+            ->type(UsageTriggerResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Update an existing usage trigger
+     *
+     *
+     * @param string $triggerId Usage trigger ID
+     * @param UsageTriggerUpdateRequest|null $body New trigger values
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateTrigger(string $triggerId, ?UsageTriggerUpdateRequest $body = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers/{triggerId}')
+            ->server(Server::SUBSCRIPTION_SERVER)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('triggerId', $triggerId),
+                HeaderParam::init('Content-Type', 'application/json'),
+                BodyParam::init($body)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
@@ -64,7 +92,7 @@ class UsageTriggerManagementController extends BaseController
             '/usage/accounts/{accountName}/triggers/{triggerId}'
         )
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('accountName', $accountName),
                 TemplateParam::init('triggerId', $triggerId)
@@ -73,34 +101,6 @@ class UsageTriggerManagementController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
             ->type(DeviceLocationSuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Update an existing usage trigger
-     *
-     *
-     * @param string $triggerId Usage trigger ID
-     * @param UsageTriggerUpdateRequest|null $body New trigger values
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateTrigger(string $triggerId, ?UsageTriggerUpdateRequest $body = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers/{triggerId}')
-            ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('triggerId', $triggerId),
-                HeaderParam::init('Content-Type', 'application/json'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
-            ->type(UsageTriggerResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

@@ -29,7 +29,8 @@ Request to assign or change custom field values for one or more devices.
           "id": "89148000000800139708",
           "kind": "iccid"
         }
-      ]
+      ],
+      "ipAddress": "ipAddress4"
     }
   ],
   "customFieldsToUpdate": [
@@ -49,12 +50,8 @@ Request to assign or change custom field values for one or more devices.
       "value": "value2"
     },
     {
-      "key": "key1",
-      "value": "value3"
-    },
-    {
-      "key": "key2",
-      "value": "value4"
+      "key": "key0",
+      "value": "value2"
     }
   ],
   "groupName": "groupName0"

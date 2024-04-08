@@ -18,15 +18,23 @@ use stdClass;
 class SessionResetPasswordRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $oldPassword;
+
+    /**
+     * @param string $oldPassword
+     */
+    public function __construct(string $oldPassword)
+    {
+        $this->oldPassword = $oldPassword;
+    }
 
     /**
      * Returns Old Password.
      * The current password for the username.
      */
-    public function getOldPassword(): ?string
+    public function getOldPassword(): string
     {
         return $this->oldPassword;
     }
@@ -35,9 +43,10 @@ class SessionResetPasswordRequest implements \JsonSerializable
      * Sets Old Password.
      * The current password for the username.
      *
+     * @required
      * @maps oldPassword
      */
-    public function setOldPassword(?string $oldPassword): void
+    public function setOldPassword(string $oldPassword): void
     {
         $this->oldPassword = $oldPassword;
     }
@@ -54,9 +63,7 @@ class SessionResetPasswordRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->oldPassword)) {
-            $json['oldPassword'] = $this->oldPassword;
-        }
+        $json['oldPassword'] = $this->oldPassword;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

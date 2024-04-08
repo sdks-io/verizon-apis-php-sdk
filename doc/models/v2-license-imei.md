@@ -22,7 +22,7 @@ IMEIs of the devices to assign or remove licenses.
     "990003425730524",
     "990000473475967"
   ],
-  "accountName": "accountName4"
+  "accountName": "accountName8"
 }
 ```
 

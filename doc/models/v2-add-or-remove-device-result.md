@@ -21,7 +21,7 @@ Add or remove devices from the existing software upgrade information.
 {
   "accountName": "0402196254-00001",
   "campaignId": "60b5d639-ccdc-4db8-8824-069bd94c95bf",
-  "requestId": "requestId2"
+  "requestId": "requestId6"
 }
 ```
 

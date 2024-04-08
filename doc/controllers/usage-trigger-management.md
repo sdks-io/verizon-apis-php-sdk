@@ -11,8 +11,8 @@ $usageTriggerManagementController = $client->getUsageTriggerManagementController
 ## Methods
 
 * [Create New Trigger](../../doc/controllers/usage-trigger-management.md#create-new-trigger)
-* [Delete Trigger](../../doc/controllers/usage-trigger-management.md#delete-trigger)
 * [Update Trigger](../../doc/controllers/usage-trigger-management.md#update-trigger)
+* [Delete Trigger](../../doc/controllers/usage-trigger-management.md#delete-trigger)
 
 
 # Create New Trigger
@@ -78,53 +78,6 @@ $apiResponse = $usageTriggerManagementController->createNewTrigger($body);
 | 400 | Unexpected error | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
 
 
-# Delete Trigger
-
-eletes the specified usage trigger from the given account
-
-```php
-function deleteTrigger(string $accountName, string $triggerId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `accountName` | `string` | Template, Required | Account name |
-| `triggerId` | `string` | Template, Required | Usage trigger ID |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceLocationSuccessResult`](../../doc/models/device-location-success-result.md).
-
-## Example Usage
-
-```php
-$accountName = '0212312345-00001';
-
-$triggerId = '595f5c44-c31c-4552-8670-020a1545a84d';
-
-$apiResponse = $usageTriggerManagementController->deleteTrigger(
-    $accountName,
-    $triggerId
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "success": true
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
-
-
 # Update Trigger
 
 Update an existing usage trigger
@@ -177,6 +130,53 @@ $apiResponse = $usageTriggerManagementController->updateTrigger(
   "emailAddresses": "",
   "createDate": "2018-08-11",
   "updateDate": "2018-08-12"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
+
+
+# Delete Trigger
+
+eletes the specified usage trigger from the given account
+
+```php
+function deleteTrigger(string $accountName, string $triggerId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountName` | `string` | Template, Required | Account name |
+| `triggerId` | `string` | Template, Required | Usage trigger ID |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceLocationSuccessResult`](../../doc/models/device-location-success-result.md).
+
+## Example Usage
+
+```php
+$accountName = '0212312345-00001';
+
+$triggerId = '595f5c44-c31c-4552-8670-020a1545a84d';
+
+$apiResponse = $usageTriggerManagementController->deleteTrigger(
+    $accountName,
+    $triggerId
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
 }
 ```
 

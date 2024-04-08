@@ -24,16 +24,16 @@ Request to return service suspension information about one or more devices.
     "servicePlan": "servicePlan6",
     "customFields": [
       {
-        "key": "key4",
-        "value": "value6"
+        "key": "key0",
+        "value": "value2"
       },
       {
-        "key": "key5",
-        "value": "value7"
+        "key": "key0",
+        "value": "value2"
       },
       {
-        "key": "key6",
-        "value": "value8"
+        "key": "key0",
+        "value": "value2"
       }
     ]
   },
@@ -44,12 +44,8 @@ Request to return service suspension information about one or more devices.
       "kind": "kind8"
     },
     {
-      "id": "id1",
-      "kind": "kind9"
-    },
-    {
-      "id": "id2",
-      "kind": "kind0"
+      "id": "id0",
+      "kind": "kind8"
     }
   ]
 }

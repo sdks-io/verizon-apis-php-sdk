@@ -10,28 +10,26 @@ $deviceGroupsController = $client->getDeviceGroupsController();
 
 ## Methods
 
-* [Update Device Group](../../doc/controllers/device-groups.md#update-device-group)
-* [Get Device Group Information](../../doc/controllers/device-groups.md#get-device-group-information)
 * [Create Device Group](../../doc/controllers/device-groups.md#create-device-group)
 * [List Device Groups](../../doc/controllers/device-groups.md#list-device-groups)
+* [Get Device Group Information](../../doc/controllers/device-groups.md#get-device-group-information)
+* [Update Device Group](../../doc/controllers/device-groups.md#update-device-group)
 * [Delete Device Group](../../doc/controllers/device-groups.md#delete-device-group)
 
 
-# Update Device Group
+# Create Device Group
 
-Make changes to a device group, including changing the name and description, and adding or removing devices.
+Create a new device group and optionally add devices to the group. Device groups can make it easier to manage similar devices and to get reports on their usage.
 
 ```php
-function updateDeviceGroup(string $aname, string $gname, DeviceGroupUpdateRequest $body): ApiResponse
+function createDeviceGroup(CreateDeviceGroupRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `aname` | `string` | Template, Required | Account name. |
-| `gname` | `string` | Template, Required | Group name. |
-| `body` | [`DeviceGroupUpdateRequest`](../../doc/models/device-group-update-request.md) | Body, Required | Request to update device group. |
+| `body` | [`CreateDeviceGroupRequest`](../../doc/models/create-device-group-request.md) | Body, Required | A request to create a new device group. |
 
 ## Response Type
 
@@ -40,28 +38,21 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$aname = '0252012345-00001';
-
-$gname = 'gname2';
-
-$body = DeviceGroupUpdateRequestBuilder::init()
+$body = CreateDeviceGroupRequestBuilder::init(
+    '0000123456-00001',
+    'descriptive string',
+    'group name'
+)
     ->devicesToAdd(
         [
-            DeviceIdBuilder::init()
-                ->id('990003420535537')
-                ->kind('imei')
-                ->build()
+            DeviceIdBuilder::init(
+                '15-digit IMEI',
+                'imei'
+            )->build()
         ]
-    )
-    ->newGroupDescription('All western region tank level monitors.')
-    ->newGroupName('Western region tanks')
-    ->build();
+    )->build();
 
-$apiResponse = $deviceGroupsController->updateDeviceGroup(
-    $aname,
-    $gname,
-    $body
-);
+$apiResponse = $deviceGroupsController->createDeviceGroup($body);
 ```
 
 ## Example Response *(as JSON)*
@@ -70,6 +61,58 @@ $apiResponse = $deviceGroupsController->updateDeviceGroup(
 {
   "success": true
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# List Device Groups
+
+Returns a list of all device groups in a specified account.
+
+```php
+function listDeviceGroups(string $aname): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `aname` | `string` | Template, Required | Account name. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceGroup[]`](../../doc/models/device-group.md).
+
+## Example Usage
+
+```php
+$aname = '0252012345-00001';
+
+$apiResponse = $deviceGroupsController->listDeviceGroups($aname);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "name": "Unassigned Devices",
+    "description": "All devices that are not in another device group.",
+    "isDefaultGroup": true,
+    "extendedAttributes": []
+  },
+  {
+    "name": "West Coast Devices",
+    "description": "",
+    "isDefaultGroup": false,
+    "extendedAttributes": []
+  }
+]
 ```
 
 ## Errors
@@ -143,19 +186,21 @@ $apiResponse = $deviceGroupsController->getDeviceGroupInformation(
 | 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
 
 
-# Create Device Group
+# Update Device Group
 
-Create a new device group and optionally add devices to the group. Device groups can make it easier to manage similar devices and to get reports on their usage.
+Make changes to a device group, including changing the name and description, and adding or removing devices.
 
 ```php
-function createDeviceGroup(CreateDeviceGroupRequest $body): ApiResponse
+function updateDeviceGroup(string $aname, string $gname, DeviceGroupUpdateRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`CreateDeviceGroupRequest`](../../doc/models/create-device-group-request.md) | Body, Required | A request to create a new device group. |
+| `aname` | `string` | Template, Required | Account name. |
+| `gname` | `string` | Template, Required | Group name. |
+| `body` | [`DeviceGroupUpdateRequest`](../../doc/models/device-group-update-request.md) | Body, Required | Request to update device group. |
 
 ## Response Type
 
@@ -164,21 +209,28 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = CreateDeviceGroupRequestBuilder::init()
-    ->accountName('0000123456-00001')
+$aname = '0252012345-00001';
+
+$gname = 'gname2';
+
+$body = DeviceGroupUpdateRequestBuilder::init()
     ->devicesToAdd(
         [
-            DeviceIdBuilder::init()
-                ->id('15-digit IMEI')
-                ->kind('imei')
-                ->build()
+            DeviceIdBuilder::init(
+                '990003420535537',
+                'imei'
+            )->build()
         ]
     )
-    ->groupDescription('descriptive string')
-    ->groupName('group name')
+    ->newGroupDescription('All western region tank level monitors.')
+    ->newGroupName('Western region tanks')
     ->build();
 
-$apiResponse = $deviceGroupsController->createDeviceGroup($body);
+$apiResponse = $deviceGroupsController->updateDeviceGroup(
+    $aname,
+    $gname,
+    $body
+);
 ```
 
 ## Example Response *(as JSON)*
@@ -187,58 +239,6 @@ $apiResponse = $deviceGroupsController->createDeviceGroup($body);
 {
   "success": true
 }
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# List Device Groups
-
-Returns a list of all device groups in a specified account.
-
-```php
-function listDeviceGroups(string $aname): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `aname` | `string` | Template, Required | Account name. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceGroup[]`](../../doc/models/device-group.md).
-
-## Example Usage
-
-```php
-$aname = '0252012345-00001';
-
-$apiResponse = $deviceGroupsController->listDeviceGroups($aname);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "name": "Unassigned Devices",
-    "description": "All devices that are not in another device group.",
-    "isDefaultGroup": true,
-    "extendedAttributes": []
-  },
-  {
-    "name": "West Coast Devices",
-    "description": "",
-    "isDefaultGroup": false,
-    "extendedAttributes": []
-  }
-]
 ```
 
 ## Errors

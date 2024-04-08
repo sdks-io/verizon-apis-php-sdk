@@ -30,12 +30,8 @@ Requests the current PRL (Preferred Roaming List) version for 2G or 3G devices, 
       "kind": "kind8"
     },
     {
-      "id": "id1",
-      "kind": "kind9"
-    },
-    {
-      "id": "id2",
-      "kind": "kind0"
+      "id": "id0",
+      "kind": "kind8"
     }
   ],
   "customFields": [
@@ -44,12 +40,8 @@ Requests the current PRL (Preferred Roaming List) version for 2G or 3G devices, 
       "value": "value2"
     },
     {
-      "key": "key1",
-      "value": "value3"
-    },
-    {
-      "key": "key2",
-      "value": "value4"
+      "key": "key0",
+      "value": "value2"
     }
   ]
 }

@@ -33,27 +33,9 @@ class RegisterCallbackRequestBuilder
     /**
      * Initializes a new register callback request Builder object.
      */
-    public static function init(): self
+    public static function init(string $name, string $url): self
     {
-        return new self(new RegisterCallbackRequest());
-    }
-
-    /**
-     * Sets name field.
-     */
-    public function name(?string $value): self
-    {
-        $this->instance->setName($value);
-        return $this;
-    }
-
-    /**
-     * Sets url field.
-     */
-    public function url(?string $value): self
-    {
-        $this->instance->setUrl($value);
-        return $this;
+        return new self(new RegisterCallbackRequest($name, $url));
     }
 
     /**

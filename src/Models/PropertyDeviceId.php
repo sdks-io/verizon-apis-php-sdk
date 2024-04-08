@@ -44,6 +44,8 @@ class PropertyDeviceId implements \JsonSerializable
 
     /**
      * Returns Kind.
+     * The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20
+     * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      */
     public function getKind(): ?string
     {
@@ -52,9 +54,10 @@ class PropertyDeviceId implements \JsonSerializable
 
     /**
      * Sets Kind.
+     * The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20
+     * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      *
      * @maps kind
-     * @factory \VerizonLib\Models\Kind1Enum::checkValue
      */
     public function setKind(?string $kind): void
     {
@@ -77,7 +80,7 @@ class PropertyDeviceId implements \JsonSerializable
             $json['id']   = $this->id;
         }
         if (isset($this->kind)) {
-            $json['kind'] = Kind1Enum::checkValue($this->kind);
+            $json['kind'] = $this->kind;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

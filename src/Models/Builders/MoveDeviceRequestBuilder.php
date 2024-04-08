@@ -34,18 +34,9 @@ class MoveDeviceRequestBuilder
     /**
      * Initializes a new move device request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName): self
     {
-        return new self(new MoveDeviceRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
+        return new self(new MoveDeviceRequest($accountName));
     }
 
     /**

@@ -63,6 +63,16 @@ class AccountDeviceListRequest implements \JsonSerializable
     private $servicePlan;
 
     /**
+     * @var int|null
+     */
+    private $maxNumberOfDevices;
+
+    /**
+     * @var int|null
+     */
+    private $largestDeviceIdSeen;
+
+    /**
      * Returns Account Name.
      * The billing account for which a list of devices is returned. If you don't specify an accountName,
      * the list includes all devices to which you have access.
@@ -249,6 +259,42 @@ class AccountDeviceListRequest implements \JsonSerializable
     }
 
     /**
+     * Returns Max Number of Devices.
+     */
+    public function getMaxNumberOfDevices(): ?int
+    {
+        return $this->maxNumberOfDevices;
+    }
+
+    /**
+     * Sets Max Number of Devices.
+     *
+     * @maps maxNumberOfDevices
+     */
+    public function setMaxNumberOfDevices(?int $maxNumberOfDevices): void
+    {
+        $this->maxNumberOfDevices = $maxNumberOfDevices;
+    }
+
+    /**
+     * Returns Largest Device Id Seen.
+     */
+    public function getLargestDeviceIdSeen(): ?int
+    {
+        return $this->largestDeviceIdSeen;
+    }
+
+    /**
+     * Sets Largest Device Id Seen.
+     *
+     * @maps largestDeviceIdSeen
+     */
+    public function setLargestDeviceIdSeen(?int $largestDeviceIdSeen): void
+    {
+        $this->largestDeviceIdSeen = $largestDeviceIdSeen;
+    }
+
+    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -261,31 +307,37 @@ class AccountDeviceListRequest implements \JsonSerializable
     {
         $json = [];
         if (isset($this->accountName)) {
-            $json['accountName']  = $this->accountName;
+            $json['accountName']         = $this->accountName;
         }
         if (isset($this->deviceId)) {
-            $json['deviceId']     = $this->deviceId;
+            $json['deviceId']            = $this->deviceId;
         }
         if (isset($this->filter)) {
-            $json['filter']       = $this->filter;
+            $json['filter']              = $this->filter;
         }
         if (isset($this->currentState)) {
-            $json['currentState'] = $this->currentState;
+            $json['currentState']        = $this->currentState;
         }
         if (isset($this->customFields)) {
-            $json['customFields'] = $this->customFields;
+            $json['customFields']        = $this->customFields;
         }
         if (isset($this->earliest)) {
-            $json['earliest']     = $this->earliest;
+            $json['earliest']            = $this->earliest;
         }
         if (isset($this->groupName)) {
-            $json['groupName']    = $this->groupName;
+            $json['groupName']           = $this->groupName;
         }
         if (isset($this->latest)) {
-            $json['latest']       = $this->latest;
+            $json['latest']              = $this->latest;
         }
         if (isset($this->servicePlan)) {
-            $json['servicePlan']  = $this->servicePlan;
+            $json['servicePlan']         = $this->servicePlan;
+        }
+        if (isset($this->maxNumberOfDevices)) {
+            $json['maxNumberOfDevices']  = $this->maxNumberOfDevices;
+        }
+        if (isset($this->largestDeviceIdSeen)) {
+            $json['largestDeviceIdSeen'] = $this->largestDeviceIdSeen;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

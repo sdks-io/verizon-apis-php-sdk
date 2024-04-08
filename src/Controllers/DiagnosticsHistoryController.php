@@ -33,7 +33,7 @@ class DiagnosticsHistoryController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/history/actions/$search')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

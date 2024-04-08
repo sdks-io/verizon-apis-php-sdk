@@ -19,11 +19,11 @@ Response to return an array of all regions in the Verizon 5G Edge service. You c
 {
   "regions": [
     {
-      "regionId": "regionId3",
-      "name": "name5",
-      "countryCode": "countryCode9",
-      "metro": "metro7",
-      "area": "area7"
+      "regionId": "regionId8",
+      "name": "name0",
+      "countryCode": "countryCode4",
+      "metro": "metro2",
+      "area": "area2"
     }
   ]
 }

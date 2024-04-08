@@ -15,7 +15,7 @@ use stdClass;
 class ConsentRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
@@ -35,10 +35,18 @@ class ConsentRequest implements \JsonSerializable
     private $exclusion;
 
     /**
+     * @param string $accountName
+     */
+    public function __construct(string $accountName)
+    {
+        $this->accountName = $accountName;
+    }
+
+    /**
      * Returns Account Name.
      * Account identifier in "##########-#####".
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -47,9 +55,10 @@ class ConsentRequest implements \JsonSerializable
      * Sets Account Name.
      * Account identifier in "##########-#####".
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -130,17 +139,15 @@ class ConsentRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName'] = $this->accountName;
-        }
+        $json['accountName']   = $this->accountName;
         if (isset($this->allDevice)) {
-            $json['allDevice']   = $this->allDevice;
+            $json['allDevice'] = $this->allDevice;
         }
         if (isset($this->type)) {
-            $json['type']        = $this->type;
+            $json['type']      = $this->type;
         }
         if (isset($this->exclusion)) {
-            $json['exclusion']   = $this->exclusion;
+            $json['exclusion'] = $this->exclusion;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

@@ -28,10 +28,10 @@ Location information for up to 1,000 devices.
   "devLocationList": [
     {
       "error": {
-        "time": "time0",
-        "utcoffset": "utcoffset0",
-        "type": "type0",
-        "info": "info0"
+        "time": "time4",
+        "utcoffset": "utcoffset4",
+        "type": "type6",
+        "info": "info4"
       },
       "msid": "7892345678",
       "pd": {
@@ -40,15 +40,15 @@ Location information for up to 1,000 devices.
         "time": "20170520004421",
         "x": "33.45324",
         "y": "-84.59621",
-        "utcoffset": "utcoffset6"
+        "utcoffset": "utcoffset2"
       }
     },
     {
       "error": {
-        "time": "time1",
-        "utcoffset": "utcoffset1",
-        "type": "type1",
-        "info": "info1"
+        "time": "time4",
+        "utcoffset": "utcoffset4",
+        "type": "type6",
+        "info": "info4"
       },
       "msid": "8583239709",
       "pd": {
@@ -57,7 +57,7 @@ Location information for up to 1,000 devices.
         "time": "20170525214342",
         "x": "38.8408694",
         "y": "-105.0422583",
-        "utcoffset": "utcoffset5"
+        "utcoffset": "utcoffset2"
       }
     },
     {
@@ -65,15 +65,15 @@ Location information for up to 1,000 devices.
         "time": "20170525214342",
         "type": "POSITION METHOD FAILURE",
         "info": "Exception code=ABSENT SUBSCRIBER",
-        "utcoffset": "utcoffset2"
+        "utcoffset": "utcoffset4"
       },
       "msid": "7897654321",
       "pd": {
-        "time": "time6",
-        "utcoffset": "utcoffset4",
-        "x": "x0",
-        "y": "y8",
-        "radius": "radius2"
+        "time": "time2",
+        "utcoffset": "utcoffset2",
+        "x": "x8",
+        "y": "y6",
+        "radius": "radius0"
       }
     }
   ]

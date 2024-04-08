@@ -107,8 +107,8 @@ class DeviceIdSearch implements \JsonSerializable
 
     /**
      * Returns Kind.
-     * The type of the device identifier to match. Valid types of identifiers are:EID,ESN,ICCID,IMEI,MDN,
-     * MEID,MSISDN.
+     * The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20
+     * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      */
     public function getKind(): string
     {
@@ -117,8 +117,8 @@ class DeviceIdSearch implements \JsonSerializable
 
     /**
      * Sets Kind.
-     * The type of the device identifier to match. Valid types of identifiers are:EID,ESN,ICCID,IMEI,MDN,
-     * MEID,MSISDN.
+     * The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20
+     * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      *
      * @required
      * @maps kind

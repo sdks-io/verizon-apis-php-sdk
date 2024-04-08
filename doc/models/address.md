@@ -31,11 +31,11 @@ The customer address for the line's primary place of use, for line usage taxatio
   "state": "DC",
   "zip": "20500",
   "country": "USA",
-  "addressLine2": "addressLine20",
-  "zip4": "zip46",
-  "phone": "phone0",
-  "phoneType": "phoneType6",
-  "emailAddress": "emailAddress0"
+  "addressLine2": "addressLine28",
+  "zip4": "zip42",
+  "phone": "phone8",
+  "phoneType": "phoneType2",
+  "emailAddress": "emailAddress8"
 }
 ```
 

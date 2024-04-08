@@ -11,8 +11,8 @@ Custom data that can be included using key-value pairs.
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `key` | `?string` | Optional | The key for an extended attribute. | getKey(): ?string | setKey(?string key): void |
-| `value` | `?string` | Optional | The value of an extended attribute. | getValue(): ?string | setValue(?string value): void |
+| `key` | `string` | Required | The key for an extended attribute. | getKey(): string | setKey(string key): void |
+| `value` | `string` | Required | The value of an extended attribute. | getValue(): string | setValue(string value): void |
 
 ## Example (as JSON)
 

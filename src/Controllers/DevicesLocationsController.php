@@ -40,7 +40,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/locations')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -64,7 +64,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devicelocations')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -88,12 +88,34 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/devicelocations/{txid}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(QueryParam::init('accountName', $accountName), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
             ->type(TransactionID::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Request an asynchronous device location report.
+     *
+     * @param LocationRequest $body Request for device location report.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function createLocationReport(LocationRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/locationreports')
+            ->server(Server::DEVICE_LOCATION)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
+            ->type(AsynchronousLocationRequestResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -115,7 +137,7 @@ class DevicesLocationsController extends BaseController
             '/locationreports/{account}/report/{txid}/index/{startindex}'
         )
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('txid', $txid),
@@ -142,34 +164,12 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/locationreports/{account}/report/{txid}/status')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
             ->type(LocationReportStatus::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Request an asynchronous device location report.
-     *
-     * @param LocationRequest $body Request for device location report.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function createLocationReport(LocationRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/locationreports')
-            ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
-            ->type(AsynchronousLocationRequestResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -187,7 +187,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/locationreports/{account}/report/{txid}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()

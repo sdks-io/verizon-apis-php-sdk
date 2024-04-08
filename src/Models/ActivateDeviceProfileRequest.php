@@ -15,12 +15,12 @@ use stdClass;
 class ActivateDeviceProfileRequest implements \JsonSerializable
 {
     /**
-     * @var DeviceList[]|null
+     * @var DeviceList[]
      */
     private $devices;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
@@ -35,11 +35,21 @@ class ActivateDeviceProfileRequest implements \JsonSerializable
     private $mdnZipCode;
 
     /**
+     * @param DeviceList[] $devices
+     * @param string $accountName
+     */
+    public function __construct(array $devices, string $accountName)
+    {
+        $this->devices = $devices;
+        $this->accountName = $accountName;
+    }
+
+    /**
      * Returns Devices.
      *
-     * @return DeviceList[]|null
+     * @return DeviceList[]
      */
-    public function getDevices(): ?array
+    public function getDevices(): array
     {
         return $this->devices;
     }
@@ -47,11 +57,12 @@ class ActivateDeviceProfileRequest implements \JsonSerializable
     /**
      * Sets Devices.
      *
+     * @required
      * @maps devices
      *
-     * @param DeviceList[]|null $devices
+     * @param DeviceList[] $devices
      */
-    public function setDevices(?array $devices): void
+    public function setDevices(array $devices): void
     {
         $this->devices = $devices;
     }
@@ -59,7 +70,7 @@ class ActivateDeviceProfileRequest implements \JsonSerializable
     /**
      * Returns Account Name.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -67,9 +78,10 @@ class ActivateDeviceProfileRequest implements \JsonSerializable
     /**
      * Sets Account Name.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -122,12 +134,8 @@ class ActivateDeviceProfileRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->devices)) {
-            $json['devices']     = $this->devices;
-        }
-        if (isset($this->accountName)) {
-            $json['accountName'] = $this->accountName;
-        }
+        $json['devices']         = $this->devices;
+        $json['accountName']     = $this->accountName;
         if (isset($this->servicePlan)) {
             $json['servicePlan'] = $this->servicePlan;
         }

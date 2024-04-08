@@ -19,47 +19,23 @@ Session and usage details for up to 10 devices.
 
 ```json
 {
-  "txid": "txid2",
+  "txid": "txid8",
   "usage": [
     {
       "imei": "709312034493372",
       "numberOfSessions": 1,
-      "bytesTransferred": 2057,
-      "example": {
-        "key1": "val1",
-        "key2": "val2"
-      }
+      "bytesTransferred": 2057
     }
   ],
   "errors": [
     {
-      "imei": "imei1",
-      "errorMessage": "errorMessage3",
+      "imei": "imei6",
+      "errorMessage": "errorMessage8",
       "errorResponse": {
-        "errorCode": "SUCCESS",
-        "errorMessage": "errorMessage7",
-        "httpStatusCode": "304 NOT_MODIFIED",
-        "detailErrorMessage": "detailErrorMessage3"
-      }
-    },
-    {
-      "imei": "imei0",
-      "errorMessage": "errorMessage4",
-      "errorResponse": {
-        "errorCode": "INVALID_ACCESS",
-        "errorMessage": "errorMessage8",
-        "httpStatusCode": "303 SEE_OTHER",
-        "detailErrorMessage": "detailErrorMessage2"
-      }
-    },
-    {
-      "imei": "imei9",
-      "errorMessage": "errorMessage5",
-      "errorResponse": {
-        "errorCode": "INVALID_PARAMETER",
-        "errorMessage": "errorMessage9",
-        "httpStatusCode": "302 MOVED_TEMPORARILY",
-        "detailErrorMessage": "detailErrorMessage1"
+        "errorCode": "INTERNAL_ERROR",
+        "errorMessage": "errorMessage4",
+        "httpStatusCode": "423 LOCKED",
+        "detailErrorMessage": "detailErrorMessage6"
       }
     }
   ]

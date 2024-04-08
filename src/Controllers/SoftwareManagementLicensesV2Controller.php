@@ -30,26 +30,26 @@ use VerizonLib\Server;
 class SoftwareManagementLicensesV2Controller extends BaseController
 {
     /**
-     * This endpoint allows user to delete a created cancel candidate device list.
-     *
-     * @deprecated
+     * The endpoint allows user to list license usage.
      *
      * @param string $account Account identifier.
+     * @param string|null $lastSeenDeviceId Last seen device identifier.
      *
      * @return ApiResponse Response from the API call
      */
-    public function deleteListOfLicensesToRemove(string $account): ApiResponse
+    public function getAccountLicenseStatus(string $account, ?string $lastSeenDeviceId = null): ApiResponse
     {
-        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account));
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(FotaV2SuccessResult::class)
+            ->type(V2LicenseSummary::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -71,7 +71,7 @@ class SoftwareManagementLicensesV2Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/assign')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -81,32 +81,6 @@ class SoftwareManagementLicensesV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(V2LicensesAssignedRemovedResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * The endpoint allows user to list license usage.
-     *
-     * @param string $account Account identifier.
-     * @param string|null $lastSeenDeviceId Last seen device identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getAccountLicenseStatus(string $account, ?string $lastSeenDeviceId = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(V2LicenseSummary::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -128,7 +102,7 @@ class SoftwareManagementLicensesV2Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/remove')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -159,7 +133,7 @@ class SoftwareManagementLicensesV2Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}/cancel')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), QueryParam::init('startIndex', $startIndex));
 
         $_resHandler = $this->responseHandler()
@@ -186,7 +160,7 @@ class SoftwareManagementLicensesV2Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/cancel')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -196,6 +170,32 @@ class SoftwareManagementLicensesV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(V2ListOfLicensesToRemoveResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows user to delete a created cancel candidate device list.
+     *
+     * @deprecated
+     *
+     * @param string $account Account identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteListOfLicensesToRemove(string $account): ApiResponse
+    {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
+
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(FotaV2SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

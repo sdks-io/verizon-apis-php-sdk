@@ -18,20 +18,30 @@ use stdClass;
 class CustomFields implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $key;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $value;
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function __construct(string $key, string $value)
+    {
+        $this->key = $key;
+        $this->value = $value;
+    }
 
     /**
      * Returns Key.
      * The key for an extended attribute.
      */
-    public function getKey(): ?string
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -40,9 +50,10 @@ class CustomFields implements \JsonSerializable
      * Sets Key.
      * The key for an extended attribute.
      *
+     * @required
      * @maps key
      */
-    public function setKey(?string $key): void
+    public function setKey(string $key): void
     {
         $this->key = $key;
     }
@@ -51,7 +62,7 @@ class CustomFields implements \JsonSerializable
      * Returns Value.
      * The value of an extended attribute.
      */
-    public function getValue(): ?string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -60,9 +71,10 @@ class CustomFields implements \JsonSerializable
      * Sets Value.
      * The value of an extended attribute.
      *
+     * @required
      * @maps value
      */
-    public function setValue(?string $value): void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -79,12 +91,8 @@ class CustomFields implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->key)) {
-            $json['key']   = $this->key;
-        }
-        if (isset($this->value)) {
-            $json['value'] = $this->value;
-        }
+        $json['key']   = $this->key;
+        $json['value'] = $this->value;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

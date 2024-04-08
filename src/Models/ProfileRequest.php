@@ -15,7 +15,12 @@ use stdClass;
 class ProfileRequest implements \JsonSerializable
 {
     /**
-     * @var DeviceList[]|null
+     * @var string
+     */
+    private $accountName;
+
+    /**
+     * @var DeviceList[]
      */
     private $devices;
 
@@ -23,11 +28,6 @@ class ProfileRequest implements \JsonSerializable
      * @var string|null
      */
     private $carrierName;
-
-    /**
-     * @var string|null
-     */
-    private $accountName;
 
     /**
      * @var string|null
@@ -45,11 +45,50 @@ class ProfileRequest implements \JsonSerializable
     private $primaryPlaceOfUse;
 
     /**
+     * @var string|null
+     */
+    private $smsrOid;
+
+    /**
+     * @var string|null
+     */
+    private $carrierIpPoolName;
+
+    /**
+     * @param string $accountName
+     * @param DeviceList[] $devices
+     */
+    public function __construct(string $accountName, array $devices)
+    {
+        $this->accountName = $accountName;
+        $this->devices = $devices;
+    }
+
+    /**
+     * Returns Account Name.
+     */
+    public function getAccountName(): string
+    {
+        return $this->accountName;
+    }
+
+    /**
+     * Sets Account Name.
+     *
+     * @required
+     * @maps accountName
+     */
+    public function setAccountName(string $accountName): void
+    {
+        $this->accountName = $accountName;
+    }
+
+    /**
      * Returns Devices.
      *
-     * @return DeviceList[]|null
+     * @return DeviceList[]
      */
-    public function getDevices(): ?array
+    public function getDevices(): array
     {
         return $this->devices;
     }
@@ -57,11 +96,12 @@ class ProfileRequest implements \JsonSerializable
     /**
      * Sets Devices.
      *
+     * @required
      * @maps devices
      *
-     * @param DeviceList[]|null $devices
+     * @param DeviceList[] $devices
      */
-    public function setDevices(?array $devices): void
+    public function setDevices(array $devices): void
     {
         $this->devices = $devices;
     }
@@ -82,24 +122,6 @@ class ProfileRequest implements \JsonSerializable
     public function setCarrierName(?string $carrierName): void
     {
         $this->carrierName = $carrierName;
-    }
-
-    /**
-     * Returns Account Name.
-     */
-    public function getAccountName(): ?string
-    {
-        return $this->accountName;
-    }
-
-    /**
-     * Sets Account Name.
-     *
-     * @maps accountName
-     */
-    public function setAccountName(?string $accountName): void
-    {
-        $this->accountName = $accountName;
     }
 
     /**
@@ -161,6 +183,44 @@ class ProfileRequest implements \JsonSerializable
     }
 
     /**
+     * Returns Smsr Oid.
+     */
+    public function getSmsrOid(): ?string
+    {
+        return $this->smsrOid;
+    }
+
+    /**
+     * Sets Smsr Oid.
+     *
+     * @maps smsrOid
+     */
+    public function setSmsrOid(?string $smsrOid): void
+    {
+        $this->smsrOid = $smsrOid;
+    }
+
+    /**
+     * Returns Carrier Ip Pool Name.
+     * The name of the pool of IP addresses assigned to the profile.
+     */
+    public function getCarrierIpPoolName(): ?string
+    {
+        return $this->carrierIpPoolName;
+    }
+
+    /**
+     * Sets Carrier Ip Pool Name.
+     * The name of the pool of IP addresses assigned to the profile.
+     *
+     * @maps carrierIpPoolName
+     */
+    public function setCarrierIpPoolName(?string $carrierIpPoolName): void
+    {
+        $this->carrierIpPoolName = $carrierIpPoolName;
+    }
+
+    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -172,14 +232,10 @@ class ProfileRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->devices)) {
-            $json['devices']           = $this->devices;
-        }
+        $json['accountName']           = $this->accountName;
+        $json['devices']               = $this->devices;
         if (isset($this->carrierName)) {
             $json['carrierName']       = $this->carrierName;
-        }
-        if (isset($this->accountName)) {
-            $json['accountName']       = $this->accountName;
         }
         if (isset($this->servicePlan)) {
             $json['servicePlan']       = $this->servicePlan;
@@ -189,6 +245,12 @@ class ProfileRequest implements \JsonSerializable
         }
         if (isset($this->primaryPlaceOfUse)) {
             $json['primaryPlaceOfUse'] = $this->primaryPlaceOfUse;
+        }
+        if (isset($this->smsrOid)) {
+            $json['smsrOid']           = $this->smsrOid;
+        }
+        if (isset($this->carrierIpPoolName)) {
+            $json['carrierIpPoolName'] = $this->carrierIpPoolName;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

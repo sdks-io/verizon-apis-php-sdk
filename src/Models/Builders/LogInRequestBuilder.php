@@ -33,27 +33,9 @@ class LogInRequestBuilder
     /**
      * Initializes a new log in request Builder object.
      */
-    public static function init(): self
+    public static function init(string $username, string $password): self
     {
-        return new self(new LogInRequest());
-    }
-
-    /**
-     * Sets username field.
-     */
-    public function username(?string $value): self
-    {
-        $this->instance->setUsername($value);
-        return $this;
-    }
-
-    /**
-     * Sets password field.
-     */
-    public function password(?string $value): self
-    {
-        $this->instance->setPassword($value);
-        return $this;
+        return new self(new LogInRequest($username, $password));
     }
 
     /**

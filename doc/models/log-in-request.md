@@ -11,8 +11,8 @@ Request to initiate a Connectivity Management session and returns a VZ-M2M sessi
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `username` | `?string` | Optional | The username for authentication. | getUsername(): ?string | setUsername(?string username): void |
-| `password` | `?string` | Optional | The password for authentication. | getPassword(): ?string | setPassword(?string password): void |
+| `username` | `string` | Required | The username for authentication. | getUsername(): string | setUsername(string username): void |
+| `password` | `string` | Required | The password for authentication. | getPassword(): string | setPassword(string password): void |
 
 ## Example (as JSON)
 

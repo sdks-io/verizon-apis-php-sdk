@@ -29,55 +29,6 @@ use VerizonLib\Models\UserEquipmentIdentityTypeEnum;
 class ServiceEndpointsController extends BaseController
 {
     /**
-     * Returns a list of all registered service endpoints.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAllServiceEndpoints(): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpointsall')->auth('global');
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(ListAllServiceEndpointsResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns endpoint information for all Service Endpoints registered to a specified serviceEndpointId.
-     *
-     * @param string $serviceEndpointsId A system-defined string identifier representing one or more
-     *        registered Service Endpoints.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getServiceEndpoint(string $serviceEndpointsId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth('global')
-            ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(ResourcesEdgeHostedServiceWithProfileId::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns a list of optimal Service Endpoints that client devices can connect to. **Note:** If a query
      * is sent with all of the parameters, it will fail with a "400" error. You can search based on the
      * following parameter combinations - Region plus Service Endpoints IDs and Subscriber density (density
@@ -103,7 +54,7 @@ class ServiceEndpointsController extends BaseController
         ?string $serviceEndpointsIds = null
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpoints')
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 QueryParam::init('region', $region),
                 QueryParam::init('subscriberDensity', $subscriberDensity),
@@ -127,6 +78,88 @@ class ServiceEndpointsController extends BaseController
     }
 
     /**
+     * Register Service Endpoints of a deployed application to specified MEC Platforms.
+     *
+     * @param ResourcesEdgeHostedServiceWithProfileId[] $body An array of Service Endpoint data for
+     *        a deployed application. The request body passes all of the needed parameters to
+     *        create a service endpoint. Parameters will be edited here rather than the
+     *        **Parameters** section above. The `ern`,`applicationServerProviderId`,
+     *        `applicationId` and `serviceProfileID` parameters are required. **Note:** Currently,
+     *        the only valid value for `applicationServerProviderId`is **AWS**. Also, if you do
+     *        not know one of the optional values (i.e. URI), you can erase the line from the
+     *        query by back-spacing over it.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function registerServiceEndpoints(array $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceendpoints')
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(RegisterServiceEndpointResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Returns a list of all registered service endpoints.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAllServiceEndpoints(): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpointsall')->auth('oAuth2');
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(ListAllServiceEndpointsResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Returns endpoint information for all Service Endpoints registered to a specified serviceEndpointId.
+     *
+     * @param string $serviceEndpointsId A system-defined string identifier representing one or more
+     *        registered Service Endpoints.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getServiceEndpoint(string $serviceEndpointsId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpoints/{serviceEndpointsId}')
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(ResourcesEdgeHostedServiceWithProfileId::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Update registered Service Endpoint information.
      *
      * @param string $serviceEndpointsId A system-defined string identifier representing one or more
@@ -143,7 +176,7 @@ class ServiceEndpointsController extends BaseController
     public function updateServiceEndpoint(string $serviceEndpointsId, array $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('serviceEndpointsId', $serviceEndpointsId),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -174,7 +207,7 @@ class ServiceEndpointsController extends BaseController
     public function deregisterServiceEndpoint(string $serviceEndpointsId): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
 
         $_resHandler = $this->responseHandler()
@@ -185,39 +218,6 @@ class ServiceEndpointsController extends BaseController
                 ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
             )
             ->type(DeregisterServiceEndpointResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Register Service Endpoints of a deployed application to specified MEC Platforms.
-     *
-     * @param ResourcesEdgeHostedServiceWithProfileId[] $body An array of Service Endpoint data for
-     *        a deployed application. The request body passes all of the needed parameters to
-     *        create a service endpoint. Parameters will be edited here rather than the
-     *        **Parameters** section above. The `ern`,`applicationServerProviderId`,
-     *        `applicationId` and `serviceProfileID` parameters are required. **Note:** Currently,
-     *        the only valid value for `applicationServerProviderId`is **AWS**. Also, if you do
-     *        not know one of the optional values (i.e. URI), you can erase the line from the
-     *        query by back-spacing over it.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function registerServiceEndpoints(array $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceendpoints')
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(RegisterServiceEndpointResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

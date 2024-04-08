@@ -24,7 +24,7 @@ Response for a request made to delete a device.
     "key2": "val2"
   },
   "status": "Success",
-  "message": "message0"
+  "message": "message6"
 }
 ```
 

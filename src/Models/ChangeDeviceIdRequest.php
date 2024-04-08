@@ -29,7 +29,7 @@ class ChangeDeviceIdRequest implements \JsonSerializable
     private $change4gOption;
 
     /**
-     * @var DeviceId[]|null
+     * @var DeviceId[]
      */
     private $deviceIds;
 
@@ -52,6 +52,19 @@ class ChangeDeviceIdRequest implements \JsonSerializable
      * @var string|null
      */
     private $zipCode;
+
+    /**
+     * @var string|null
+     */
+    private $smsrOid;
+
+    /**
+     * @param DeviceId[] $deviceIds
+     */
+    public function __construct(array $deviceIds)
+    {
+        $this->deviceIds = $deviceIds;
+    }
 
     /**
      * Returns Assign Non Geo Mdn.
@@ -99,9 +112,9 @@ class ChangeDeviceIdRequest implements \JsonSerializable
      * Returns Device Ids.
      * The device that you want to change, specified by a device identifier.
      *
-     * @return DeviceId[]|null
+     * @return DeviceId[]
      */
-    public function getDeviceIds(): ?array
+    public function getDeviceIds(): array
     {
         return $this->deviceIds;
     }
@@ -110,11 +123,12 @@ class ChangeDeviceIdRequest implements \JsonSerializable
      * Sets Device Ids.
      * The device that you want to change, specified by a device identifier.
      *
+     * @required
      * @maps deviceIds
      *
-     * @param DeviceId[]|null $deviceIds
+     * @param DeviceId[] $deviceIds
      */
-    public function setDeviceIds(?array $deviceIds): void
+    public function setDeviceIds(array $deviceIds): void
     {
         $this->deviceIds = $deviceIds;
     }
@@ -218,6 +232,24 @@ class ChangeDeviceIdRequest implements \JsonSerializable
     }
 
     /**
+     * Returns Smsr Oid.
+     */
+    public function getSmsrOid(): ?string
+    {
+        return $this->smsrOid;
+    }
+
+    /**
+     * Sets Smsr Oid.
+     *
+     * @maps smsrOid
+     */
+    public function setSmsrOid(?string $smsrOid): void
+    {
+        $this->smsrOid = $smsrOid;
+    }
+
+    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -235,9 +267,7 @@ class ChangeDeviceIdRequest implements \JsonSerializable
         if (isset($this->change4gOption)) {
             $json['change4gOption']  = $this->change4gOption;
         }
-        if (isset($this->deviceIds)) {
-            $json['deviceIds']       = $this->deviceIds;
-        }
+        $json['deviceIds']           = $this->deviceIds;
         if (isset($this->deviceIdsTo)) {
             $json['deviceIdsTo']     = $this->deviceIdsTo;
         }
@@ -249,6 +279,9 @@ class ChangeDeviceIdRequest implements \JsonSerializable
         }
         if (isset($this->zipCode)) {
             $json['zipCode']         = $this->zipCode;
+        }
+        if (isset($this->smsrOid)) {
+            $json['smsrOid']         = $this->smsrOid;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

@@ -34,7 +34,8 @@ Returns the name, description, and list of devices in a device group.
           "id": "54321",
           "kind": "mdn"
         }
-      ]
+      ],
+      "ipAddress": "ipAddress4"
     }
   ]
 }

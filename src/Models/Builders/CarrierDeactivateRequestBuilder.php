@@ -33,18 +33,9 @@ class CarrierDeactivateRequestBuilder
     /**
      * Initializes a new carrier deactivate request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, array $devices, string $reasonCode): self
     {
-        return new self(new CarrierDeactivateRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
+        return new self(new CarrierDeactivateRequest($accountName, $devices, $reasonCode));
     }
 
     /**
@@ -53,15 +44,6 @@ class CarrierDeactivateRequestBuilder
     public function customFields(?array $value): self
     {
         $this->instance->setCustomFields($value);
-        return $this;
-    }
-
-    /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
         return $this;
     }
 
@@ -84,20 +66,20 @@ class CarrierDeactivateRequestBuilder
     }
 
     /**
-     * Sets reason code field.
-     */
-    public function reasonCode(?string $value): self
-    {
-        $this->instance->setReasonCode($value);
-        return $this;
-    }
-
-    /**
      * Sets service plan field.
      */
     public function servicePlan(?string $value): self
     {
         $this->instance->setServicePlan($value);
+        return $this;
+    }
+
+    /**
+     * Sets delete after deactivation field.
+     */
+    public function deleteAfterDeactivation(?bool $value): self
+    {
+        $this->instance->setDeleteAfterDeactivation($value);
         return $this;
     }
 

@@ -29,10 +29,10 @@ Returns information for all leads associated with an account.
         "state": "DC",
         "zip": "20500",
         "country": "USA",
-        "zip4": "zip47",
-        "phone": "phone3",
-        "phoneType": "phoneType7",
-        "emailAddress": "emailAddress3"
+        "zip4": "zip40",
+        "phone": "phone4",
+        "phoneType": "phoneType0",
+        "emailAddress": "emailAddress6"
       }
     }
   ],

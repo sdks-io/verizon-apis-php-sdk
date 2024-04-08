@@ -42,6 +42,7 @@ $additionalFieldParams = [
 
 $apiResponse = $oauthAuthorizationController->requestToken(
     $authorization,
+    null,
     $additionalFieldParams
 );
 ```

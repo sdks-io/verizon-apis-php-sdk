@@ -18,12 +18,12 @@ use stdClass;
 class RegisterCallbackRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $name;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $url;
 
@@ -38,10 +38,20 @@ class RegisterCallbackRequest implements \JsonSerializable
     private $password;
 
     /**
+     * @param string $name
+     * @param string $url
+     */
+    public function __construct(string $name, string $url)
+    {
+        $this->name = $name;
+        $this->url = $url;
+    }
+
+    /**
      * Returns Name.
      * The name of the callback service that you want to subscribe to.
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -50,9 +60,10 @@ class RegisterCallbackRequest implements \JsonSerializable
      * Sets Name.
      * The name of the callback service that you want to subscribe to.
      *
+     * @required
      * @maps name
      */
-    public function setName(?string $name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -61,7 +72,7 @@ class RegisterCallbackRequest implements \JsonSerializable
      * Returns Url.
      * The address on your server where you have enabled a listening service for callback messages.
      */
-    public function getUrl(): ?string
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -70,9 +81,10 @@ class RegisterCallbackRequest implements \JsonSerializable
      * Sets Url.
      * The address on your server where you have enabled a listening service for callback messages.
      *
+     * @required
      * @maps url
      */
-    public function setUrl(?string $url): void
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
@@ -129,12 +141,8 @@ class RegisterCallbackRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->name)) {
-            $json['name']     = $this->name;
-        }
-        if (isset($this->url)) {
-            $json['url']      = $this->url;
-        }
+        $json['name']         = $this->name;
+        $json['url']          = $this->url;
         if (isset($this->username)) {
             $json['username'] = $this->username;
         }

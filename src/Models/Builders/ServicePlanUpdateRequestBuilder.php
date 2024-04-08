@@ -33,9 +33,9 @@ class ServicePlanUpdateRequestBuilder
     /**
      * Initializes a new service plan update request Builder object.
      */
-    public static function init(): self
+    public static function init(string $servicePlan): self
     {
-        return new self(new ServicePlanUpdateRequest());
+        return new self(new ServicePlanUpdateRequest($servicePlan));
     }
 
     /**
@@ -84,11 +84,20 @@ class ServicePlanUpdateRequestBuilder
     }
 
     /**
-     * Sets service plan field.
+     * Sets carrier ip pool name field.
      */
-    public function servicePlan(?string $value): self
+    public function carrierIpPoolName(?string $value): self
     {
-        $this->instance->setServicePlan($value);
+        $this->instance->setCarrierIpPoolName($value);
+        return $this;
+    }
+
+    /**
+     * Sets take effect field.
+     */
+    public function takeEffect(?\DateTime $value): self
+    {
+        $this->instance->setTakeEffect($value);
         return $this;
     }
 

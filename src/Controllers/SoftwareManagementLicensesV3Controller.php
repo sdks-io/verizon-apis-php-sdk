@@ -37,7 +37,7 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('acc', $acc), QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId));
 
         $_resHandler = $this->responseHandler()
@@ -60,7 +60,7 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/assign')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -87,7 +87,7 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/remove')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),

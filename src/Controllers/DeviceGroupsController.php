@@ -28,65 +28,6 @@ use VerizonLib\Server;
 class DeviceGroupsController extends BaseController
 {
     /**
-     * Make changes to a device group, including changing the name and description, and adding or removing
-     * devices.
-     *
-     * @param string $aname Account name.
-     * @param string $gname Group name.
-     * @param DeviceGroupUpdateRequest $body Request to update device group.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateDeviceGroup(string $aname, string $gname, DeviceGroupUpdateRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/v1/groups/{aname}/name/{gname}')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('aname', $aname),
-                TemplateParam::init('gname', $gname),
-                HeaderParam::init('Content-Type', 'application/json'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(ConnectivityManagementSuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * When HTTP status is 202, a URL will be returned in the Location header of the form
-     * /groups/{aname}/name/{gname}/?next={token}. This URL can be used to request the next set of groups.
-     *
-     * @param string $aname Account name.
-     * @param string $gname Group name.
-     * @param int|null $next Continue the previous query from the pageUrl pagetoken.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getDeviceGroupInformation(string $aname, string $gname, ?int $next = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/groups/{aname}/name/{gname}')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('aname', $aname),
-                TemplateParam::init('gname', $gname),
-                QueryParam::init('next', $next)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceGroupDevicesData::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Create a new device group and optionally add devices to the group. Device groups can make it easier
      * to manage similar devices and to get reports on their usage.
      *
@@ -96,9 +37,9 @@ class DeviceGroupsController extends BaseController
      */
     public function createDeviceGroup(CreateDeviceGroupRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/groups')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/groups')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -118,14 +59,73 @@ class DeviceGroupsController extends BaseController
      */
     public function listDeviceGroups(string $aname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/groups/{aname}')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/groups/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(DeviceGroup::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * When HTTP status is 202, a URL will be returned in the Location header of the form
+     * /groups/{aname}/name/{gname}/?next={token}. This URL can be used to request the next set of groups.
+     *
+     * @param string $aname Account name.
+     * @param string $gname Group name.
+     * @param int|null $next Continue the previous query from the pageUrl pagetoken.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getDeviceGroupInformation(string $aname, string $gname, ?int $next = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/groups/{aname}/name/{gname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('aname', $aname),
+                TemplateParam::init('gname', $gname),
+                QueryParam::init('next', $next)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceGroupDevicesData::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Make changes to a device group, including changing the name and description, and adding or removing
+     * devices.
+     *
+     * @param string $aname Account name.
+     * @param string $gname Group name.
+     * @param DeviceGroupUpdateRequest $body Request to update device group.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateDeviceGroup(string $aname, string $gname, DeviceGroupUpdateRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/groups/{aname}/name/{gname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('aname', $aname),
+                TemplateParam::init('gname', $gname),
+                HeaderParam::init('Content-Type', 'application/json'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(ConnectivityManagementSuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -142,9 +142,9 @@ class DeviceGroupsController extends BaseController
      */
     public function deleteDeviceGroup(string $aname, string $gname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/v1/groups/{aname}/name/{gname}')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/groups/{aname}/name/{gname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('gname', $gname));
 
         $_resHandler = $this->responseHandler()

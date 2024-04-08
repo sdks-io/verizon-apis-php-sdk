@@ -29,7 +29,7 @@ Request to assign license.
           "kind": "IMEI"
         }
       ],
-      "ipAddress": "ipAddress6"
+      "ipAddress": "ipAddress4"
     }
   ]
 }

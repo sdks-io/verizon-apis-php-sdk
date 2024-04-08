@@ -18,17 +18,25 @@ use stdClass;
 class AccountDeviceListFilter implements \JsonSerializable
 {
     /**
-     * @var DeviceIdSearch[]|null
+     * @var DeviceIdSearch[]
      */
     private $deviceIdentifierFilters;
+
+    /**
+     * @param DeviceIdSearch[] $deviceIdentifierFilters
+     */
+    public function __construct(array $deviceIdentifierFilters)
+    {
+        $this->deviceIdentifierFilters = $deviceIdentifierFilters;
+    }
 
     /**
      * Returns Device Identifier Filters.
      * Specify the kind of the device identifier, the type of match, and the string that you want to match.
      *
-     * @return DeviceIdSearch[]|null
+     * @return DeviceIdSearch[]
      */
-    public function getDeviceIdentifierFilters(): ?array
+    public function getDeviceIdentifierFilters(): array
     {
         return $this->deviceIdentifierFilters;
     }
@@ -37,11 +45,12 @@ class AccountDeviceListFilter implements \JsonSerializable
      * Sets Device Identifier Filters.
      * Specify the kind of the device identifier, the type of match, and the string that you want to match.
      *
+     * @required
      * @maps deviceIdentifierFilters
      *
-     * @param DeviceIdSearch[]|null $deviceIdentifierFilters
+     * @param DeviceIdSearch[] $deviceIdentifierFilters
      */
-    public function setDeviceIdentifierFilters(?array $deviceIdentifierFilters): void
+    public function setDeviceIdentifierFilters(array $deviceIdentifierFilters): void
     {
         $this->deviceIdentifierFilters = $deviceIdentifierFilters;
     }
@@ -58,9 +67,7 @@ class AccountDeviceListFilter implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->deviceIdentifierFilters)) {
-            $json['deviceIdentifierFilters'] = $this->deviceIdentifierFilters;
-        }
+        $json['deviceIdentifierFilters'] = $this->deviceIdentifierFilters;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

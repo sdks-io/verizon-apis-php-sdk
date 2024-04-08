@@ -33,18 +33,9 @@ class SessionResetPasswordRequestBuilder
     /**
      * Initializes a new session reset password request Builder object.
      */
-    public static function init(): self
+    public static function init(string $oldPassword): self
     {
-        return new self(new SessionResetPasswordRequest());
-    }
-
-    /**
-     * Sets old password field.
-     */
-    public function oldPassword(?string $value): self
-    {
-        $this->instance->setOldPassword($value);
-        return $this;
+        return new self(new SessionResetPasswordRequest($oldPassword));
     }
 
     /**

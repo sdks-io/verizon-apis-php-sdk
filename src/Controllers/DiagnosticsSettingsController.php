@@ -33,7 +33,7 @@ class DiagnosticsSettingsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/settings')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(QueryParam::init('accountName', $accountName), QueryParam::init('devices', $devices));
 
         $_resHandler = $this->responseHandler()

@@ -18,7 +18,7 @@ Additional service support information for the MEC platform.
 
 ```json
 {
-  "type": "type0",
+  "type": "type8",
   "data": {
     "additionalInfo": "additionalInfo2"
   }

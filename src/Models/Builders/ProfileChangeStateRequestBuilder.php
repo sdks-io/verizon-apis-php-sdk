@@ -33,36 +33,9 @@ class ProfileChangeStateRequestBuilder
     /**
      * Initializes a new profile change state request Builder object.
      */
-    public static function init(): self
+    public static function init(array $devices, string $accountName, string $smsrOid): self
     {
-        return new self(new ProfileChangeStateRequest());
-    }
-
-    /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
-        return $this;
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
-    }
-
-    /**
-     * Sets smsr oid field.
-     */
-    public function smsrOid(?string $value): self
-    {
-        $this->instance->setSmsrOid($value);
-        return $this;
+        return new self(new ProfileChangeStateRequest($devices, $accountName, $smsrOid));
     }
 
     /**

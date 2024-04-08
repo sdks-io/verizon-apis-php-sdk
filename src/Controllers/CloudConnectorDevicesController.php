@@ -30,6 +30,46 @@ use VerizonLib\Server;
 class CloudConnectorDevicesController extends BaseController
 {
     /**
+     * Change configuration values on a device, such as setting how often a device records and reports
+     * sensor readings.
+     *
+     * @param ChangeConfigurationRequest $body The request body changes configuration values on a
+     *        device.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateDevicesConfigurationValue(ChangeConfigurationRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/configuration/actions/set')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(ChangeConfigurationResponse::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Find devices by property values. Returns an array of all matching device resources.
+     *
+     * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function findDeviceByPropertyValues(QuerySubscriptionRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/query')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(FindDeviceByPropertyResponseList::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Search for devices by property values. Returns an array of all matching device resources.
      *
      * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
@@ -40,7 +80,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/search')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(SearchDeviceByPropertyResponseList::class)->returnApiResponse();
@@ -61,31 +101,12 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/fields/actions/history/search')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->type(SearchDeviceEventHistoryResponseList::class)
             ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Find devices by property values. Returns an array of all matching device resources.
-     *
-     * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function findDeviceByPropertyValues(QuerySubscriptionRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/query')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(FindDeviceByPropertyResponseList::class)->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }
@@ -104,7 +125,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/fields/{fieldname}/actions/history')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('fieldname', $fieldname),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -112,27 +133,6 @@ class CloudConnectorDevicesController extends BaseController
             );
 
         $_resHandler = $this->responseHandler()->type(SearchSensorHistoryResponseList::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Change configuration values on a device, such as setting how often a device records and reports
-     * sensor readings.
-     *
-     * @param ChangeConfigurationRequest $body The request body changes configuration values on a
-     *        device.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateDevicesConfigurationValue(ChangeConfigurationRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/configuration/actions/set')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(ChangeConfigurationResponse::class)->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }
@@ -148,7 +148,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/delete')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->returnApiResponse();

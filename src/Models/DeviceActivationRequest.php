@@ -18,20 +18,30 @@ use stdClass;
 class DeviceActivationRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
     /**
-     * @var AccountDeviceList[]|null
+     * @var AccountDeviceList[]
      */
     private $devices;
+
+    /**
+     * @param string $accountName
+     * @param AccountDeviceList[] $devices
+     */
+    public function __construct(string $accountName, array $devices)
+    {
+        $this->accountName = $accountName;
+        $this->devices = $devices;
+    }
 
     /**
      * Returns Account Name.
      * The name of a billing account.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -40,9 +50,10 @@ class DeviceActivationRequest implements \JsonSerializable
      * Sets Account Name.
      * The name of a billing account.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -51,9 +62,9 @@ class DeviceActivationRequest implements \JsonSerializable
      * Returns Devices.
      * Up to 10,000 devices that you want to move to a different account, specified by device identifier.
      *
-     * @return AccountDeviceList[]|null
+     * @return AccountDeviceList[]
      */
-    public function getDevices(): ?array
+    public function getDevices(): array
     {
         return $this->devices;
     }
@@ -62,11 +73,12 @@ class DeviceActivationRequest implements \JsonSerializable
      * Sets Devices.
      * Up to 10,000 devices that you want to move to a different account, specified by device identifier.
      *
+     * @required
      * @maps devices
      *
-     * @param AccountDeviceList[]|null $devices
+     * @param AccountDeviceList[] $devices
      */
-    public function setDevices(?array $devices): void
+    public function setDevices(array $devices): void
     {
         $this->devices = $devices;
     }
@@ -83,12 +95,8 @@ class DeviceActivationRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName'] = $this->accountName;
-        }
-        if (isset($this->devices)) {
-            $json['devices']     = $this->devices;
-        }
+        $json['accountName'] = $this->accountName;
+        $json['devices']     = $this->devices;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

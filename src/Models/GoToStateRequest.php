@@ -19,6 +19,26 @@ use stdClass;
 class GoToStateRequest implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    private $serviceName;
+
+    /**
+     * @var string
+     */
+    private $stateName;
+
+    /**
+     * @var string
+     */
+    private $servicePlan;
+
+    /**
+     * @var string
+     */
+    private $mdnZipCode;
+
+    /**
      * @var AccountDeviceList[]|null
      */
     private $devices;
@@ -27,26 +47,6 @@ class GoToStateRequest implements \JsonSerializable
      * @var DeviceFilter|null
      */
     private $filter;
-
-    /**
-     * @var string|null
-     */
-    private $serviceName;
-
-    /**
-     * @var string|null
-     */
-    private $stateName;
-
-    /**
-     * @var string|null
-     */
-    private $servicePlan;
-
-    /**
-     * @var string|null
-     */
-    private $mdnZipCode;
 
     /**
      * @var string|null
@@ -69,6 +69,16 @@ class GoToStateRequest implements \JsonSerializable
     private $customFields;
 
     /**
+     * @var array[]|null
+     */
+    private $devicesWithServiceAddress;
+
+    /**
+     * @var string|null
+     */
+    private $ipAddress;
+
+    /**
      * @var string|null
      */
     private $groupName;
@@ -77,6 +87,108 @@ class GoToStateRequest implements \JsonSerializable
      * @var PlaceOfUse|null
      */
     private $primaryPlaceOfUse;
+
+    /**
+     * @param string $serviceName
+     * @param string $stateName
+     * @param string $servicePlan
+     * @param string $mdnZipCode
+     */
+    public function __construct(string $serviceName, string $stateName, string $servicePlan, string $mdnZipCode)
+    {
+        $this->serviceName = $serviceName;
+        $this->stateName = $stateName;
+        $this->servicePlan = $servicePlan;
+        $this->mdnZipCode = $mdnZipCode;
+    }
+
+    /**
+     * Returns Service Name.
+     * The name of a customer-defined service to push the devices to.
+     */
+    public function getServiceName(): string
+    {
+        return $this->serviceName;
+    }
+
+    /**
+     * Sets Service Name.
+     * The name of a customer-defined service to push the devices to.
+     *
+     * @required
+     * @maps serviceName
+     */
+    public function setServiceName(string $serviceName): void
+    {
+        $this->serviceName = $serviceName;
+    }
+
+    /**
+     * Returns State Name.
+     * The name of a customer-defined stage state to push the devices to.
+     */
+    public function getStateName(): string
+    {
+        return $this->stateName;
+    }
+
+    /**
+     * Sets State Name.
+     * The name of a customer-defined stage state to push the devices to.
+     *
+     * @required
+     * @maps stateName
+     */
+    public function setStateName(string $stateName): void
+    {
+        $this->stateName = $stateName;
+    }
+
+    /**
+     * Returns Service Plan.
+     * The service plan code that you want to assign to all specified devices in the new state.
+     */
+    public function getServicePlan(): string
+    {
+        return $this->servicePlan;
+    }
+
+    /**
+     * Sets Service Plan.
+     * The service plan code that you want to assign to all specified devices in the new state.
+     *
+     * @required
+     * @maps servicePlan
+     */
+    public function setServicePlan(string $servicePlan): void
+    {
+        $this->servicePlan = $servicePlan;
+    }
+
+    /**
+     * Returns Mdn Zip Code.
+     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
+     * you have been told to use with these devices. For accounts that are configured for geographic
+     * numbering, this is the ZIP code from which the MDN will be derived.
+     */
+    public function getMdnZipCode(): string
+    {
+        return $this->mdnZipCode;
+    }
+
+    /**
+     * Sets Mdn Zip Code.
+     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
+     * you have been told to use with these devices. For accounts that are configured for geographic
+     * numbering, this is the ZIP code from which the MDN will be derived.
+     *
+     * @required
+     * @maps mdnZipCode
+     */
+    public function setMdnZipCode(string $mdnZipCode): void
+    {
+        $this->mdnZipCode = $mdnZipCode;
+    }
 
     /**
      * Returns Devices.
@@ -120,90 +232,6 @@ class GoToStateRequest implements \JsonSerializable
     public function setFilter(?DeviceFilter $filter): void
     {
         $this->filter = $filter;
-    }
-
-    /**
-     * Returns Service Name.
-     * The name of a customer-defined service to push the devices to.
-     */
-    public function getServiceName(): ?string
-    {
-        return $this->serviceName;
-    }
-
-    /**
-     * Sets Service Name.
-     * The name of a customer-defined service to push the devices to.
-     *
-     * @maps serviceName
-     */
-    public function setServiceName(?string $serviceName): void
-    {
-        $this->serviceName = $serviceName;
-    }
-
-    /**
-     * Returns State Name.
-     * The name of a customer-defined stage state to push the devices to.
-     */
-    public function getStateName(): ?string
-    {
-        return $this->stateName;
-    }
-
-    /**
-     * Sets State Name.
-     * The name of a customer-defined stage state to push the devices to.
-     *
-     * @maps stateName
-     */
-    public function setStateName(?string $stateName): void
-    {
-        $this->stateName = $stateName;
-    }
-
-    /**
-     * Returns Service Plan.
-     * The service plan code that you want to assign to all specified devices in the new state.
-     */
-    public function getServicePlan(): ?string
-    {
-        return $this->servicePlan;
-    }
-
-    /**
-     * Sets Service Plan.
-     * The service plan code that you want to assign to all specified devices in the new state.
-     *
-     * @maps servicePlan
-     */
-    public function setServicePlan(?string $servicePlan): void
-    {
-        $this->servicePlan = $servicePlan;
-    }
-
-    /**
-     * Returns Mdn Zip Code.
-     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
-     * you have been told to use with these devices. For accounts that are configured for geographic
-     * numbering, this is the ZIP code from which the MDN will be derived.
-     */
-    public function getMdnZipCode(): ?string
-    {
-        return $this->mdnZipCode;
-    }
-
-    /**
-     * Sets Mdn Zip Code.
-     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
-     * you have been told to use with these devices. For accounts that are configured for geographic
-     * numbering, this is the ZIP code from which the MDN will be derived.
-     *
-     * @maps mdnZipCode
-     */
-    public function setMdnZipCode(?string $mdnZipCode): void
-    {
-        $this->mdnZipCode = $mdnZipCode;
     }
 
     /**
@@ -299,6 +327,52 @@ class GoToStateRequest implements \JsonSerializable
     }
 
     /**
+     * Returns Devices With Service Address.
+     * This is an array that associates an IP address with a device identifier. This variable is only
+     * relevant for Business Internet/Fixed Wireless Access
+     *
+     * @return array[]|null
+     */
+    public function getDevicesWithServiceAddress(): ?array
+    {
+        return $this->devicesWithServiceAddress;
+    }
+
+    /**
+     * Sets Devices With Service Address.
+     * This is an array that associates an IP address with a device identifier. This variable is only
+     * relevant for Business Internet/Fixed Wireless Access
+     *
+     * @maps devicesWithServiceAddress
+     *
+     * @param array[]|null $devicesWithServiceAddress
+     */
+    public function setDevicesWithServiceAddress(?array $devicesWithServiceAddress): void
+    {
+        $this->devicesWithServiceAddress = $devicesWithServiceAddress;
+    }
+
+    /**
+     * Returns Ip Address.
+     * The IP address of the device.
+     */
+    public function getIpAddress(): ?string
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * Sets Ip Address.
+     * The IP address of the device.
+     *
+     * @maps ipAddress
+     */
+    public function setIpAddress(?string $ipAddress): void
+    {
+        $this->ipAddress = $ipAddress;
+    }
+
+    /**
      * Returns Group Name.
      * The name of a device group that the devices should be added to.
      */
@@ -356,41 +430,39 @@ class GoToStateRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['serviceName']                   = $this->serviceName;
+        $json['stateName']                     = $this->stateName;
+        $json['servicePlan']                   = $this->servicePlan;
+        $json['mdnZipCode']                    = $this->mdnZipCode;
         if (isset($this->devices)) {
-            $json['devices']             = $this->devices;
+            $json['devices']                   = $this->devices;
         }
         if (isset($this->filter)) {
-            $json['filter']              = $this->filter;
-        }
-        if (isset($this->serviceName)) {
-            $json['serviceName']         = $this->serviceName;
-        }
-        if (isset($this->stateName)) {
-            $json['stateName']           = $this->stateName;
-        }
-        if (isset($this->servicePlan)) {
-            $json['servicePlan']         = $this->servicePlan;
-        }
-        if (isset($this->mdnZipCode)) {
-            $json['mdnZipCode']          = $this->mdnZipCode;
+            $json['filter']                    = $this->filter;
         }
         if (isset($this->carrierIpPoolName)) {
-            $json['carrierIpPoolName']   = $this->carrierIpPoolName;
+            $json['carrierIpPoolName']         = $this->carrierIpPoolName;
         }
         if (isset($this->publicIpRestriction)) {
-            $json['publicIpRestriction'] = $this->publicIpRestriction;
+            $json['publicIpRestriction']       = $this->publicIpRestriction;
         }
         if (isset($this->skuNumber)) {
-            $json['skuNumber']           = $this->skuNumber;
+            $json['skuNumber']                 = $this->skuNumber;
         }
         if (isset($this->customFields)) {
-            $json['customFields']        = $this->customFields;
+            $json['customFields']              = $this->customFields;
+        }
+        if (isset($this->devicesWithServiceAddress)) {
+            $json['devicesWithServiceAddress'] = $this->devicesWithServiceAddress;
+        }
+        if (isset($this->ipAddress)) {
+            $json['ipAddress']                 = $this->ipAddress;
         }
         if (isset($this->groupName)) {
-            $json['groupName']           = $this->groupName;
+            $json['groupName']                 = $this->groupName;
         }
         if (isset($this->primaryPlaceOfUse)) {
-            $json['primaryPlaceOfUse']   = $this->primaryPlaceOfUse;
+            $json['primaryPlaceOfUse']         = $this->primaryPlaceOfUse;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

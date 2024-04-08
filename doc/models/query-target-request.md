@@ -27,7 +27,9 @@ Search for targets by property values.
     "imei": "imei2"
   },
   "$selection": {
-    "key0": "$selection3"
+    "key0": "$selection3",
+    "key1": "$selection4",
+    "key2": "$selection5"
   }
 }
 ```

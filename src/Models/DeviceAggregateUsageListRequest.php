@@ -18,6 +18,16 @@ use stdClass;
 class DeviceAggregateUsageListRequest implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    private $startTime;
+
+    /**
+     * @var string
+     */
+    private $endTime;
+
+    /**
      * @var DeviceId[]|null
      */
     private $deviceIds;
@@ -33,14 +43,63 @@ class DeviceAggregateUsageListRequest implements \JsonSerializable
     private $groupName;
 
     /**
-     * @var string|null
+     * @var Label[]|null
      */
-    private $startTime;
+    private $label;
 
     /**
-     * @var string|null
+     * @param string $startTime
+     * @param string $endTime
      */
-    private $endTime;
+    public function __construct(string $startTime, string $endTime)
+    {
+        $this->startTime = $startTime;
+        $this->endTime = $endTime;
+    }
+
+    /**
+     * Returns Start Time.
+     * The beginning of the reporting period. The startTime cannot be more than 6 months before the current
+     * date.
+     */
+    public function getStartTime(): string
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * Sets Start Time.
+     * The beginning of the reporting period. The startTime cannot be more than 6 months before the current
+     * date.
+     *
+     * @required
+     * @maps startTime
+     */
+    public function setStartTime(string $startTime): void
+    {
+        $this->startTime = $startTime;
+    }
+
+    /**
+     * Returns End Time.
+     * The end of the reporting period. The endTime date must be within on month of the startTime date.
+     */
+    public function getEndTime(): string
+    {
+        return $this->endTime;
+    }
+
+    /**
+     * Sets End Time.
+     * The end of the reporting period. The endTime date must be within on month of the startTime date.
+     *
+     * @required
+     * @maps endTime
+     */
+    public function setEndTime(string $endTime): void
+    {
+        $this->endTime = $endTime;
+    }
 
     /**
      * Returns Device Ids.
@@ -107,45 +166,25 @@ class DeviceAggregateUsageListRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Start Time.
-     * The beginning of the reporting period. The startTime cannot be more than 6 months before the current
-     * date.
-     */
-    public function getStartTime(): ?string
-    {
-        return $this->startTime;
-    }
-
-    /**
-     * Sets Start Time.
-     * The beginning of the reporting period. The startTime cannot be more than 6 months before the current
-     * date.
+     * Returns Label.
      *
-     * @maps startTime
+     * @return Label[]|null
      */
-    public function setStartTime(?string $startTime): void
+    public function getLabel(): ?array
     {
-        $this->startTime = $startTime;
+        return $this->label;
     }
 
     /**
-     * Returns End Time.
-     * The end of the reporting period. The endTime date must be within on month of the startTime date.
-     */
-    public function getEndTime(): ?string
-    {
-        return $this->endTime;
-    }
-
-    /**
-     * Sets End Time.
-     * The end of the reporting period. The endTime date must be within on month of the startTime date.
+     * Sets Label.
      *
-     * @maps endTime
+     * @maps label
+     *
+     * @param Label[]|null $label
      */
-    public function setEndTime(?string $endTime): void
+    public function setLabel(?array $label): void
     {
-        $this->endTime = $endTime;
+        $this->label = $label;
     }
 
     /**
@@ -160,6 +199,8 @@ class DeviceAggregateUsageListRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['startTime']       = $this->startTime;
+        $json['endTime']         = $this->endTime;
         if (isset($this->deviceIds)) {
             $json['deviceIds']   = $this->deviceIds;
         }
@@ -169,11 +210,8 @@ class DeviceAggregateUsageListRequest implements \JsonSerializable
         if (isset($this->groupName)) {
             $json['groupName']   = $this->groupName;
         }
-        if (isset($this->startTime)) {
-            $json['startTime']   = $this->startTime;
-        }
-        if (isset($this->endTime)) {
-            $json['endTime']     = $this->endTime;
+        if (isset($this->label)) {
+            $json['label']       = $this->label;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

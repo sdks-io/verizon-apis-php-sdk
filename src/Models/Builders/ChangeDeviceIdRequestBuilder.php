@@ -33,9 +33,9 @@ class ChangeDeviceIdRequestBuilder
     /**
      * Initializes a new change device id request Builder object.
      */
-    public static function init(): self
+    public static function init(array $deviceIds): self
     {
-        return new self(new ChangeDeviceIdRequest());
+        return new self(new ChangeDeviceIdRequest($deviceIds));
     }
 
     /**
@@ -53,15 +53,6 @@ class ChangeDeviceIdRequestBuilder
     public function change4gOption(?string $value): self
     {
         $this->instance->setChange4gOption($value);
-        return $this;
-    }
-
-    /**
-     * Sets device ids field.
-     */
-    public function deviceIds(?array $value): self
-    {
-        $this->instance->setDeviceIds($value);
         return $this;
     }
 
@@ -98,6 +89,15 @@ class ChangeDeviceIdRequestBuilder
     public function zipCode(?string $value): self
     {
         $this->instance->setZipCode($value);
+        return $this;
+    }
+
+    /**
+     * Sets smsr oid field.
+     */
+    public function smsrOid(?string $value): self
+    {
+        $this->instance->setSmsrOid($value);
         return $this;
     }
 

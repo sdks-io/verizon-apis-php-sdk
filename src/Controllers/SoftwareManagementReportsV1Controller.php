@@ -24,6 +24,33 @@ use VerizonLib\Server;
 class SoftwareManagementReportsV1Controller extends BaseController
 {
     /**
+     * Returns an array of all devices in the specified account. Each device object includes information
+     * needed for managing firmware, including the device make and model, MDN and IMEI, and current
+     * firmware version.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param string $startIndex Only return devices with IMEIs larger than this value. Use 0 for
+     *        the first request. If `hasMoreData`=true in the response, use the `lastSeenDeviceId`
+     *        value from the response as the startIndex in the next request.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAccountDevices(string $account, string $startIndex): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/{account}/index/{startIndex}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(DeviceListQueryResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Returns a list of all upgrades with a specified status.
      *
      * @param string $account Account identifier in "##########-#####".
@@ -44,7 +71,7 @@ class SoftwareManagementReportsV1Controller extends BaseController
             '/reports/{account}/status/{upgradeStatus}/index/{startIndex}'
         )
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('upgradeStatus', $upgradeStatus)
@@ -55,33 +82,6 @@ class SoftwareManagementReportsV1Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(UpgradeListQueryResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns an array of all devices in the specified account. Each device object includes information
-     * needed for managing firmware, including the device make and model, MDN and IMEI, and current
-     * firmware version.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param string $startIndex Only return devices with IMEIs larger than this value. Use 0 for
-     *        the first request. If `hasMoreData`=true in the response, use the `lastSeenDeviceId`
-     *        value from the response as the startIndex in the next request.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAccountDevices(string $account, string $startIndex): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/{account}/index/{startIndex}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(DeviceListQueryResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -99,7 +99,7 @@ class SoftwareManagementReportsV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()

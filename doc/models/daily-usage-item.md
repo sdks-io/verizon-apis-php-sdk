@@ -19,9 +19,9 @@ Contains only dates when device had sessions.
 
 ```json
 {
-  "startTime": "startTime6",
-  "endTime": "endTime6",
-  "numBytes": 150
+  "startTime": "startTime0",
+  "endTime": "endTime2",
+  "numBytes": 200
 }
 ```
 

@@ -18,25 +18,37 @@ use stdClass;
 class DeviceProvisioningHistoryListRequest implements \JsonSerializable
 {
     /**
-     * @var DeviceId|null
+     * @var DeviceId
      */
     private $deviceId;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $earliest;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $latest;
+
+    /**
+     * @param DeviceId $deviceId
+     * @param string $earliest
+     * @param string $latest
+     */
+    public function __construct(DeviceId $deviceId, string $earliest, string $latest)
+    {
+        $this->deviceId = $deviceId;
+        $this->earliest = $earliest;
+        $this->latest = $latest;
+    }
 
     /**
      * Returns Device Id.
      * An identifier for a single device.
      */
-    public function getDeviceId(): ?DeviceId
+    public function getDeviceId(): DeviceId
     {
         return $this->deviceId;
     }
@@ -45,9 +57,10 @@ class DeviceProvisioningHistoryListRequest implements \JsonSerializable
      * Sets Device Id.
      * An identifier for a single device.
      *
+     * @required
      * @maps deviceId
      */
-    public function setDeviceId(?DeviceId $deviceId): void
+    public function setDeviceId(DeviceId $deviceId): void
     {
         $this->deviceId = $deviceId;
     }
@@ -56,7 +69,7 @@ class DeviceProvisioningHistoryListRequest implements \JsonSerializable
      * Returns Earliest.
      * The earliest date and time for which you want provisioning data.
      */
-    public function getEarliest(): ?string
+    public function getEarliest(): string
     {
         return $this->earliest;
     }
@@ -65,9 +78,10 @@ class DeviceProvisioningHistoryListRequest implements \JsonSerializable
      * Sets Earliest.
      * The earliest date and time for which you want provisioning data.
      *
+     * @required
      * @maps earliest
      */
-    public function setEarliest(?string $earliest): void
+    public function setEarliest(string $earliest): void
     {
         $this->earliest = $earliest;
     }
@@ -76,7 +90,7 @@ class DeviceProvisioningHistoryListRequest implements \JsonSerializable
      * Returns Latest.
      * The last date and time for which you want provisioning data.
      */
-    public function getLatest(): ?string
+    public function getLatest(): string
     {
         return $this->latest;
     }
@@ -85,9 +99,10 @@ class DeviceProvisioningHistoryListRequest implements \JsonSerializable
      * Sets Latest.
      * The last date and time for which you want provisioning data.
      *
+     * @required
      * @maps latest
      */
-    public function setLatest(?string $latest): void
+    public function setLatest(string $latest): void
     {
         $this->latest = $latest;
     }
@@ -104,15 +119,9 @@ class DeviceProvisioningHistoryListRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->deviceId)) {
-            $json['deviceId'] = $this->deviceId;
-        }
-        if (isset($this->earliest)) {
-            $json['earliest'] = $this->earliest;
-        }
-        if (isset($this->latest)) {
-            $json['latest']   = $this->latest;
-        }
+        $json['deviceId'] = $this->deviceId;
+        $json['earliest'] = $this->earliest;
+        $json['latest']   = $this->latest;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

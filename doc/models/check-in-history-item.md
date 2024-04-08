@@ -22,9 +22,9 @@ Check-in history for a device.
 ```json
 {
   "deviceId": "990013907835573",
-  "clientType": "clientType2",
-  "result": "result6",
-  "failureType": "failureType6",
+  "clientType": "clientType6",
+  "result": "result8",
+  "failureType": "failureType8",
   "timeCompleted": "10/22/2020 19:35:07"
 }
 ```

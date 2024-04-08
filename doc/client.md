@@ -5,8 +5,8 @@ The following parameters are configurable for the API Client:
 
 | Parameter | Type | Description |
 |  --- | --- | --- |
-| `vZM2mToken` | `string` | M2M Session Token |
-| `environment` | Environment | The API environment. <br> **Default: `Environment.PRODUCTION`** |
+| `vZM2mToken` | `string` | M2M Session Token ([How to generate an M2M session token?](page:getting-started/5g-edge-developer-creds-token#obtaining-a-vz-m2m-session-token-programmatically)) |
+| `environment` | `Environment` | The API environment. <br> **Default: `Environment.PRODUCTION`** |
 | `timeout` | `int` | Timeout for API calls in seconds.<br>*Default*: `0` |
 | `enableRetries` | `bool` | Whether to enable retries and backoff feature.<br>*Default*: `false` |
 | `numberOfRetries` | `int` | The number of retries to make.<br>*Default*: `0` |
@@ -16,35 +16,25 @@ The following parameters are configurable for the API Client:
 | `retryOnTimeout` | `bool` | Whether to retry on request timeout.<br>*Default*: `true` |
 | `httpStatusCodesToRetry` | `array` | Http status codes to retry against.<br>*Default*: `408, 413, 429, 500, 502, 503, 504, 521, 522, 524` |
 | `httpMethodsToRetry` | `array` | Http methods to retry against.<br>*Default*: `'GET', 'PUT'` |
-| `oauthClientId` | `string` | OAuth 2 Client ID |
-| `oauthClientSecret` | `string` | OAuth 2 Client Secret |
-| `oauthToken` | `OauthToken` | Object for storing information about the OAuth token |
-| `oauthScopes` | `string(OauthScopeEnum)[]` |  |
+| `clientCredentialsAuth` | [`ClientCredentialsAuth`]($a/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
 
 The API client can be initialized as follows:
 
 ```php
 $client = VerizonClientBuilder::init()
-    ->oauthClientId('OAuthClientId')
-    ->oauthClientSecret('OAuthClientSecret')
+    ->clientCredentialsAuthCredentials(
+        ClientCredentialsAuthCredentialsBuilder::init(
+            'OAuthClientId',
+            'OAuthClientSecret'
+        )
+            ->oauthScopes(
+                [
+                    OauthScopeEnum::DISCOVERYREAD,
+                    OauthScopeEnum::SERVICEPROFILEREAD
+                ]
+            )
+    )
     ->vZM2mToken('VZ-M2M-Token')
-    ->oauthScopes([
-        VerizonLib\Models\OauthScopeEnum::DISCOVERYREAD,
-        VerizonLib\Models\OauthScopeEnum::SERVICEPROFILEREAD,
-        VerizonLib\Models\OauthScopeEnum::SERVICEPROFILEWRITE,
-        VerizonLib\Models\OauthScopeEnum::SERVICEREGISTRYREAD,
-        VerizonLib\Models\OauthScopeEnum::SERVICEREGISTRYWRITE,
-        VerizonLib\Models\OauthScopeEnum::TS_MEC_FULLACCESS,
-        VerizonLib\Models\OauthScopeEnum::TS_MEC_LIMITACCESS,
-        VerizonLib\Models\OauthScopeEnum::TS_APPLICATION_RO,
-        VerizonLib\Models\OauthScopeEnum::EDGEDISCOVERYREAD,
-        VerizonLib\Models\OauthScopeEnum::EDGESERVICEPROFILEREAD,
-        VerizonLib\Models\OauthScopeEnum::EDGESERVICEPROFILEWRITE,
-        VerizonLib\Models\OauthScopeEnum::EDGESERVICEREGISTRYREAD,
-        VerizonLib\Models\OauthScopeEnum::EDGESERVICEREGISTRYWRITE,
-        VerizonLib\Models\OauthScopeEnum::READ,
-        VerizonLib\Models\OauthScopeEnum::WRITE
-    ])
     ->environment('Production')
     ->build();
 ```
@@ -76,9 +66,10 @@ The gateway for the SDK. This class acts as a factory for the Controllers and al
 | getConnectivityCallbacksController() | Gets ConnectivityCallbacksController |
 | getAccountRequestsController() | Gets AccountRequestsController |
 | getServicePlansController() | Gets ServicePlansController |
+| getDeviceDiagnosticsController() | Gets DeviceDiagnosticsController |
 | getDeviceProfileManagementController() | Gets DeviceProfileManagementController |
 | getDeviceMonitoringController() | Gets DeviceMonitoringController |
-| getUICCDeviceProfileManagementController() | Gets UICCDeviceProfileManagementController |
+| getEUICCDeviceProfileManagementController() | Gets EUICCDeviceProfileManagementController |
 | getDevicesLocationsController() | Gets DevicesLocationsController |
 | getExclusionsController() | Gets ExclusionsController |
 | getDevicesLocationSubscriptionsController() | Gets DevicesLocationSubscriptionsController |
@@ -122,15 +113,18 @@ The gateway for the SDK. This class acts as a factory for the Controllers and al
 | getHyperPreciseLocationCallbacksController() | Gets HyperPreciseLocationCallbacksController |
 | getAnomalySettingsController() | Gets AnomalySettingsController |
 | getAnomalyTriggersController() | Gets AnomalyTriggersController |
-| getMECSitesController() | Gets MECSitesController |
-| getServiceLaunchProfilesController() | Gets ServiceLaunchProfilesController |
-| getServiceLaunchRequestsController() | Gets ServiceLaunchRequestsController |
-| getServiceInstancesController() | Gets ServiceInstancesController |
-| getServiceInstanceOperationsController() | Gets ServiceInstanceOperationsController |
-| getServiceOnboardingController() | Gets ServiceOnboardingController |
-| getServiceMetadataController() | Gets ServiceMetadataController |
-| getRepositoriesController() | Gets RepositoriesController |
-| getCSPProfilesController() | Gets CSPProfilesController |
-| getServiceClaimsController() | Gets ServiceClaimsController |
+| getAnomalyTriggersV2Controller() | Gets AnomalyTriggersV2Controller |
+| getWirelessNetworkPerformanceController() | Gets WirelessNetworkPerformanceController |
+| getFixedWirelessQualificationController() | Gets FixedWirelessQualificationController |
+| getManagingESIMProfilesController() | Gets ManagingESIMProfilesController |
+| getDeviceSMSMessagingController() | Gets DeviceSMSMessagingController |
+| getDeviceActionsController() | Gets DeviceActionsController |
+| getThingSpaceQualityOfServiceAPIActionsController() | Gets ThingSpaceQualityOfServiceAPIActionsController |
+| getMECController() | Gets MECController |
+| getPromotionPeriodInformationController() | Gets PromotionPeriodInformationController |
+| getRetrieveTheTriggersController() | Gets RetrieveTheTriggersController |
+| getUpdateTriggersController() | Gets UpdateTriggersController |
+| getSIMActionsController() | Gets SIMActionsController |
+| getGlobalReportingController() | Gets GlobalReportingController |
 | getOauthAuthorizationController() | Gets OauthAuthorizationController |
 

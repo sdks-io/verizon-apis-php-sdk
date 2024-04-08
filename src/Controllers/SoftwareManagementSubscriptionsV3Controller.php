@@ -31,7 +31,7 @@ class SoftwareManagementSubscriptionsV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('acc', $acc));
 
         $_resHandler = $this->responseHandler()

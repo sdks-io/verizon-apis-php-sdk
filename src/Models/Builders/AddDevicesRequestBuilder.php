@@ -33,9 +33,9 @@ class AddDevicesRequestBuilder
     /**
      * Initializes a new add devices request Builder object.
      */
-    public static function init(): self
+    public static function init(string $state, array $devicesToAdd): self
     {
-        return new self(new AddDevicesRequest());
+        return new self(new AddDevicesRequest($state, $devicesToAdd));
     }
 
     /**
@@ -53,15 +53,6 @@ class AddDevicesRequestBuilder
     public function customFields(?array $value): self
     {
         $this->instance->setCustomFields($value);
-        return $this;
-    }
-
-    /**
-     * Sets devices to add field.
-     */
-    public function devicesToAdd(?array $value): self
-    {
-        $this->instance->setDevicesToAdd($value);
         return $this;
     }
 
@@ -84,11 +75,11 @@ class AddDevicesRequestBuilder
     }
 
     /**
-     * Sets state field.
+     * Sets smsr oid field.
      */
-    public function state(?string $value): self
+    public function smsrOid(?string $value): self
     {
-        $this->instance->setState($value);
+        $this->instance->setSmsrOid($value);
         return $this;
     }
 

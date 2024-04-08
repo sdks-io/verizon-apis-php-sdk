@@ -33,18 +33,9 @@ class AccountLabelsBuilder
     /**
      * Initializes a new account labels Builder object.
      */
-    public static function init(): self
+    public static function init(array $devices): self
     {
-        return new self(new AccountLabels());
-    }
-
-    /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
-        return $this;
+        return new self(new AccountLabels($devices));
     }
 
     /**

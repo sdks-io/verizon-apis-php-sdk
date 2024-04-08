@@ -11,8 +11,8 @@ The customer name and the address of the device's primary place of use. Leave th
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `address` | [`?Address`](../../doc/models/address.md) | Optional | The customer address for the line's primary place of use, for line usage taxation. | getAddress(): ?Address | setAddress(?Address address): void |
-| `customerName` | [`?CustomerName`](../../doc/models/customer-name.md) | Optional | The customer name to be used for line usage taxation. | getCustomerName(): ?CustomerName | setCustomerName(?CustomerName customerName): void |
+| `address` | [`Address`](../../doc/models/address.md) | Required | The customer address for the line's primary place of use, for line usage taxation. | getAddress(): Address | setAddress(Address address): void |
+| `customerName` | [`CustomerName`](../../doc/models/customer-name.md) | Required | The customer name to be used for line usage taxation. | getCustomerName(): CustomerName | setCustomerName(CustomerName customerName): void |
 
 ## Example (as JSON)
 

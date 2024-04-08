@@ -33,9 +33,27 @@ class LocationRequestBuilder
     /**
      * Initializes a new location request Builder object.
      */
-    public static function init(string $accountName, string $cacheMode, array $deviceList): self
+    public static function init(string $accountName, array $deviceList): self
     {
-        return new self(new LocationRequest($accountName, $cacheMode, $deviceList));
+        return new self(new LocationRequest($accountName, $deviceList));
+    }
+
+    /**
+     * Sets accuracy mode field.
+     */
+    public function accuracyMode(?string $value): self
+    {
+        $this->instance->setAccuracyMode($value);
+        return $this;
+    }
+
+    /**
+     * Sets cache mode field.
+     */
+    public function cacheMode(?string $value): self
+    {
+        $this->instance->setCacheMode($value);
+        return $this;
     }
 
     /**

@@ -3,21 +3,28 @@
     "description": "Use the Verizon API for connectivity management, device diagnostics, device location, edge discovery service, edge performance, software management and much more.",
     "type": "library",
     "keywords": [
-        "verizon",
-        "5gedge",
-        "thingspace"
+        "Verizon",
+        "SDK",
+        "API",
+        "Thingspace"
     ],
-    "homepage": "https://www.verizon.com",
+    "homepage": "https://www.verizon.com/business/5g-edge-portal/api-documentation.html",
     "license": [
         "MIT"
     ],
     "authors": [
         {
             "name": "developer-sdksio",
-            "email": "developer+sdksio@apimatic.io"
+            "email": "developer+sdksio@apimatic.io",
+            "homepage": "https://app.apimatic.io/",
+            "role": "developer"
         }
     ],
-    "support": {},
+    "support": {
+        "email": "developer+sdksio@apimatic.io",
+        "issues": "https://github.com/sdks-io/verizon-apis-php-sdk/issues",
+        "source": "https://github.com/sdks-io/verizon-apis-php-sdk"
+    },
     "require": {
         "php": "^7.2 || ^8.0",
         "ext-json": "*",

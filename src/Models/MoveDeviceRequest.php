@@ -18,7 +18,7 @@ use stdClass;
 class MoveDeviceRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
@@ -53,10 +53,18 @@ class MoveDeviceRequest implements \JsonSerializable
     private $servicePlan;
 
     /**
+     * @param string $accountName
+     */
+    public function __construct(string $accountName)
+    {
+        $this->accountName = $accountName;
+    }
+
+    /**
      * Returns Account Name.
      * The name of the billing account that you want to move the devices to.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -65,9 +73,10 @@ class MoveDeviceRequest implements \JsonSerializable
      * Sets Account Name.
      * The name of the billing account that you want to move the devices to.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -218,9 +227,7 @@ class MoveDeviceRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName']       = $this->accountName;
-        }
+        $json['accountName']           = $this->accountName;
         if (isset($this->filter)) {
             $json['filter']            = $this->filter;
         }

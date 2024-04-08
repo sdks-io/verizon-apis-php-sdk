@@ -21,20 +21,30 @@ use stdClass;
 class PlaceOfUse implements \JsonSerializable
 {
     /**
-     * @var Address|null
+     * @var Address
      */
     private $address;
 
     /**
-     * @var CustomerName|null
+     * @var CustomerName
      */
     private $customerName;
+
+    /**
+     * @param Address $address
+     * @param CustomerName $customerName
+     */
+    public function __construct(Address $address, CustomerName $customerName)
+    {
+        $this->address = $address;
+        $this->customerName = $customerName;
+    }
 
     /**
      * Returns Address.
      * The customer address for the line's primary place of use, for line usage taxation.
      */
-    public function getAddress(): ?Address
+    public function getAddress(): Address
     {
         return $this->address;
     }
@@ -43,9 +53,10 @@ class PlaceOfUse implements \JsonSerializable
      * Sets Address.
      * The customer address for the line's primary place of use, for line usage taxation.
      *
+     * @required
      * @maps address
      */
-    public function setAddress(?Address $address): void
+    public function setAddress(Address $address): void
     {
         $this->address = $address;
     }
@@ -54,7 +65,7 @@ class PlaceOfUse implements \JsonSerializable
      * Returns Customer Name.
      * The customer name to be used for line usage taxation.
      */
-    public function getCustomerName(): ?CustomerName
+    public function getCustomerName(): CustomerName
     {
         return $this->customerName;
     }
@@ -63,9 +74,10 @@ class PlaceOfUse implements \JsonSerializable
      * Sets Customer Name.
      * The customer name to be used for line usage taxation.
      *
+     * @required
      * @maps customerName
      */
-    public function setCustomerName(?CustomerName $customerName): void
+    public function setCustomerName(CustomerName $customerName): void
     {
         $this->customerName = $customerName;
     }
@@ -82,12 +94,8 @@ class PlaceOfUse implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->address)) {
-            $json['address']      = $this->address;
-        }
-        if (isset($this->customerName)) {
-            $json['customerName'] = $this->customerName;
-        }
+        $json['address']      = $this->address;
+        $json['customerName'] = $this->customerName;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

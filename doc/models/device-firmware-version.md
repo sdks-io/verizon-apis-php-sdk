@@ -24,7 +24,7 @@ Device and firmware information.
   "deviceId": "15-digit IMEI",
   "status": "FirmwareVersionUpdateSuccess",
   "firmwareVersion": "SR1.2.0.0-10657",
-  "reason": "reason4",
+  "reason": "reason6",
   "firmwareVersionUpdateTime": "2016-03-13T12:52:32.123Z"
 }
 ```

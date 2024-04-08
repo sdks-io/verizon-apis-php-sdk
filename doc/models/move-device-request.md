@@ -11,7 +11,7 @@ Request to move active devices from one billing account to another within a cust
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `accountName` | `?string` | Optional | The name of the billing account that you want to move the devices to. | getAccountName(): ?string | setAccountName(?string accountName): void |
+| `accountName` | `string` | Required | The name of the billing account that you want to move the devices to. | getAccountName(): string | setAccountName(string accountName): void |
 | `filter` | [`?DeviceFilter`](../../doc/models/device-filter.md) | Optional | Specify the kind of the device identifier, the type of match, and the string that you want to match. | getFilter(): ?DeviceFilter | setFilter(?DeviceFilter filter): void |
 | `customFields` | [`?(CustomFields[])`](../../doc/models/custom-fields.md) | Optional | Custom field names and values, if you want to only include devices that have matching values. | getCustomFields(): ?array | setCustomFields(?array customFields): void |
 | `devices` | [`?(AccountDeviceList[])`](../../doc/models/account-device-list.md) | Optional | Up to 10,000 devices that you want to move to a different account, specified by device identifier. | getDevices(): ?array | setDevices(?array devices): void |
@@ -40,43 +40,39 @@ Request to move active devices from one billing account to another within a cust
     {
       "key": "key0",
       "value": "value2"
-    },
-    {
-      "key": "key1",
-      "value": "value3"
-    },
-    {
-      "key": "key2",
-      "value": "value4"
     }
   ],
   "devices": [
     {
       "deviceIds": [
         {
-          "id": "id6",
-          "kind": "kind4"
-        },
-        {
-          "id": "id7",
-          "kind": "kind5"
-        },
-        {
-          "id": "id8",
-          "kind": "kind6"
+          "id": "id0",
+          "kind": "kind8"
         }
-      ]
+      ],
+      "ipAddress": "ipAddress4"
     },
     {
       "deviceIds": [
         {
-          "id": "id7",
-          "kind": "kind5"
+          "id": "id0",
+          "kind": "kind8"
         }
-      ]
+      ],
+      "ipAddress": "ipAddress4"
+    },
+    {
+      "deviceIds": [
+        {
+          "id": "id0",
+          "kind": "kind8"
+        }
+      ],
+      "ipAddress": "ipAddress4"
     }
   ],
-  "groupName": "groupName0"
+  "groupName": "groupName2",
+  "carrierIpPoolName": "carrierIpPoolName0"
 }
 ```
 

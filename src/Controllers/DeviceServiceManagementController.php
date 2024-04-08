@@ -35,7 +35,7 @@ class DeviceServiceManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/services')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(QueryParam::init('imei', $imei), QueryParam::init('accountNumber', $accountNumber));
 
         $_resHandler = $this->responseHandler()
@@ -80,7 +80,7 @@ class DeviceServiceManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/devices/services')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

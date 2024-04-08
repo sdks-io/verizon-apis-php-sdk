@@ -21,12 +21,8 @@
       "value": "value2"
     },
     {
-      "name": "name1",
-      "value": "value3"
-    },
-    {
-      "name": "name2",
-      "value": "value4"
+      "name": "name0",
+      "value": "value2"
     }
   ]
 }

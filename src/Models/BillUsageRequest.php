@@ -18,17 +18,17 @@ use stdClass;
 class BillUsageRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $startDate;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $endDate;
 
@@ -38,10 +38,22 @@ class BillUsageRequest implements \JsonSerializable
     private $usageForAllAccounts;
 
     /**
+     * @param string $accountName
+     * @param string $startDate
+     * @param string $endDate
+     */
+    public function __construct(string $accountName, string $startDate, string $endDate)
+    {
+        $this->accountName = $accountName;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
+
+    /**
      * Returns Account Name.
      * Account identifier.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -50,9 +62,10 @@ class BillUsageRequest implements \JsonSerializable
      * Sets Account Name.
      * Account identifier.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -61,7 +74,7 @@ class BillUsageRequest implements \JsonSerializable
      * Returns Start Date.
      * Start date to search for billable usage, mm-dd-yyyy.
      */
-    public function getStartDate(): ?string
+    public function getStartDate(): string
     {
         return $this->startDate;
     }
@@ -70,9 +83,10 @@ class BillUsageRequest implements \JsonSerializable
      * Sets Start Date.
      * Start date to search for billable usage, mm-dd-yyyy.
      *
+     * @required
      * @maps startDate
      */
-    public function setStartDate(?string $startDate): void
+    public function setStartDate(string $startDate): void
     {
         $this->startDate = $startDate;
     }
@@ -81,7 +95,7 @@ class BillUsageRequest implements \JsonSerializable
      * Returns End Date.
      * End date to search for billable usage, mm-dd-yyyy.
      */
-    public function getEndDate(): ?string
+    public function getEndDate(): string
     {
         return $this->endDate;
     }
@@ -90,9 +104,10 @@ class BillUsageRequest implements \JsonSerializable
      * Sets End Date.
      * End date to search for billable usage, mm-dd-yyyy.
      *
+     * @required
      * @maps endDate
      */
-    public function setEndDate(?string $endDate): void
+    public function setEndDate(string $endDate): void
     {
         $this->endDate = $endDate;
     }
@@ -129,15 +144,9 @@ class BillUsageRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName']         = $this->accountName;
-        }
-        if (isset($this->startDate)) {
-            $json['startDate']           = $this->startDate;
-        }
-        if (isset($this->endDate)) {
-            $json['endDate']             = $this->endDate;
-        }
+        $json['accountName']             = $this->accountName;
+        $json['startDate']               = $this->startDate;
+        $json['endDate']                 = $this->endDate;
         if (isset($this->usageForAllAccounts)) {
             $json['usageForAllAccounts'] = $this->usageForAllAccounts;
         }

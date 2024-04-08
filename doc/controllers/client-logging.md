@@ -10,51 +10,12 @@ $clientLoggingController = $client->getClientLoggingController();
 
 ## Methods
 
-* [Disable Device Logging](../../doc/controllers/client-logging.md#disable-device-logging)
 * [List Devices With Logging Enabled](../../doc/controllers/client-logging.md#list-devices-with-logging-enabled)
 * [Enable Logging for Devices](../../doc/controllers/client-logging.md#enable-logging-for-devices)
-* [List Device Logs](../../doc/controllers/client-logging.md#list-device-logs)
 * [Disable Logging for Devices](../../doc/controllers/client-logging.md#disable-logging-for-devices)
 * [Enable Device Logging](../../doc/controllers/client-logging.md#enable-device-logging)
-
-
-# Disable Device Logging
-
-Disables logging for a specific device.
-
-```php
-function disableDeviceLogging(string $account, string $deviceId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier. |
-| `deviceId` | `string` | Template, Required | Device IMEI identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance.
-
-## Example Usage
-
-```php
-$account = '0000123456-00001';
-
-$deviceId = '990013907835573';
-
-$apiResponse = $clientLoggingController->disableDeviceLogging(
-    $account,
-    $deviceId
-);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+* [Disable Device Logging](../../doc/controllers/client-logging.md#disable-device-logging)
+* [List Device Logs](../../doc/controllers/client-logging.md#list-device-logs)
 
 
 # List Devices With Logging Enabled
@@ -191,60 +152,6 @@ $apiResponse = $clientLoggingController->enableLoggingForDevices(
 | 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
 
 
-# List Device Logs
-
-Gets logs for a specific device.
-
-```php
-function listDeviceLogs(string $account, string $deviceId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier. |
-| `deviceId` | `string` | Template, Required | Device IMEI identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceLog[]`](../../doc/models/device-log.md).
-
-## Example Usage
-
-```php
-$account = '0000123456-00001';
-
-$deviceId = '990013907835573';
-
-$apiResponse = $clientLoggingController->listDeviceLogs(
-    $account,
-    $deviceId
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "deviceId": "990013907835573",
-    "logTime": "2020-10-22T19:29:50.901Z",
-    "logType": "string",
-    "eventLog": "string",
-    "binaryLogFileBase64": "string",
-    "binaryLogFilename": "string"
-  }
-]
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
-
-
 # Disable Logging for Devices
 
 Turn logging off for a list of devices.
@@ -323,6 +230,99 @@ $apiResponse = $clientLoggingController->enableDeviceLogging(
   "deviceId": "990013907835573",
   "expiryDate": "2020-10-19"
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
+# Disable Device Logging
+
+Disables logging for a specific device.
+
+```php
+function disableDeviceLogging(string $account, string $deviceId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier. |
+| `deviceId` | `string` | Template, Required | Device IMEI identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance.
+
+## Example Usage
+
+```php
+$account = '0000123456-00001';
+
+$deviceId = '990013907835573';
+
+$apiResponse = $clientLoggingController->disableDeviceLogging(
+    $account,
+    $deviceId
+);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
+# List Device Logs
+
+Gets logs for a specific device.
+
+```php
+function listDeviceLogs(string $account, string $deviceId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier. |
+| `deviceId` | `string` | Template, Required | Device IMEI identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceLog[]`](../../doc/models/device-log.md).
+
+## Example Usage
+
+```php
+$account = '0000123456-00001';
+
+$deviceId = '990013907835573';
+
+$apiResponse = $clientLoggingController->listDeviceLogs(
+    $account,
+    $deviceId
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "deviceId": "990013907835573",
+    "logTime": "2020-10-22T19:29:50.901Z",
+    "logType": "string",
+    "eventLog": "string",
+    "binaryLogFileBase64": "string",
+    "binaryLogFilename": "string"
+  }
+]
 ```
 
 ## Errors

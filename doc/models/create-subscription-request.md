@@ -33,10 +33,10 @@ The details of the subscription that you want to create.
   "streamkind": "ts.event",
   "targetid": "your target ID UUID such as ae110c40-2685-6c70-f46e-286f7370b8a9",
   "name": "name your subscription",
-  "description": "description0",
+  "description": "description8",
   "disabled": false,
-  "email": "email6",
-  "filter": "filter4"
+  "email": "email4",
+  "filter": "filter2"
 }
 ```
 

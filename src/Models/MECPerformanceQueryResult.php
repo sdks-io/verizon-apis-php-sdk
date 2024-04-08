@@ -23,7 +23,7 @@ class MECPerformanceQueryResult implements \JsonSerializable
     private $name;
 
     /**
-     * @var string[]|null
+     * @var array<string|null>|null
      */
     private $data;
 
@@ -51,7 +51,7 @@ class MECPerformanceQueryResult implements \JsonSerializable
      * Returns Data.
      * Parameter values.
      *
-     * @return string[]|null
+     * @return array<string|null>|null
      */
     public function getData(): ?array
     {
@@ -64,7 +64,7 @@ class MECPerformanceQueryResult implements \JsonSerializable
      *
      * @maps data
      *
-     * @param string[]|null $data
+     * @param array<string|null>|null $data
      */
     public function setData(?array $data): void
     {

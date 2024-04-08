@@ -22,8 +22,8 @@ Error message.
 {
   "httpStatusCode": "200 OK",
   "errorCode": "INVALID_ACCESS",
-  "errorMessage": "errorMessage8",
-  "detailErrorMessage": "detailErrorMessage2"
+  "errorMessage": "errorMessage4",
+  "detailErrorMessage": "detailErrorMessage6"
 }
 ```
 

@@ -36,12 +36,39 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('acc', $acc));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(FotaV3CallbackSummary::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows the user to update the HTTPS callback address.
+     *
+     * @param string $acc Account identifier.
+     * @param FotaV3CallbackRegistrationRequest $body Callback URL registration.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateCallback(string $acc, FotaV3CallbackRegistrationRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/callbacks/{acc}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('acc', $acc),
+                HeaderParam::init('Content-Type', 'application/json'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(FotaV3CallbackRegistrationResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -59,7 +86,7 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -85,39 +112,12 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('acc', $acc));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(FotaV3SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows the user to update the HTTPS callback address.
-     *
-     * @param string $acc Account identifier.
-     * @param FotaV3CallbackRegistrationRequest $body Callback URL registration.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateCallback(string $acc, FotaV3CallbackRegistrationRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/callbacks/{acc}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('acc', $acc),
-                HeaderParam::init('Content-Type', 'application/json'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(FotaV3CallbackRegistrationResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

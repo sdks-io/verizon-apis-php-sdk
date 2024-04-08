@@ -10,8 +10,47 @@ $configurationFilesController = $client->getConfigurationFilesController();
 
 ## Methods
 
-* [Upload Config File](../../doc/controllers/configuration-files.md#upload-config-file)
 * [Get List of Files](../../doc/controllers/configuration-files.md#get-list-of-files)
+* [Upload Config File](../../doc/controllers/configuration-files.md#upload-config-file)
+
+
+# Get List of Files
+
+You can retrieve a list of configuration or supplementary of files for an account.
+
+```php
+function getListOfFiles(string $acc, string $distributionType): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `acc` | `string` | Template, Required | Account identifier. |
+| `distributionType` | `string` | Query, Required | Filter the distributionType to only retrieve files for a specific distribution type. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RetrievesAvailableFilesResponseList`](../../doc/models/retrieves-available-files-response-list.md).
+
+## Example Usage
+
+```php
+$acc = '0402196254-00001';
+
+$distributionType = 'HTTP';
+
+$apiResponse = $configurationFilesController->getListOfFiles(
+    $acc,
+    $distributionType
+);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
 
 
 # Upload Config File
@@ -59,49 +98,11 @@ $localTargetPath = '/VZWFOTA/hello-world.txt';
 
 $apiResponse = $configurationFilesController->uploadConfigFile(
     $acc,
+    null,
     $fileVersion,
     $make,
     $model,
     $localTargetPath
-);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
-
-
-# Get List of Files
-
-You can retrieve a list of configuration or supplementary of files for an account.
-
-```php
-function getListOfFiles(string $acc, string $distributionType): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `distributionType` | `string` | Query, Required | Filter the distributionType to only retrieve files for a specific distribution type. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RetrievesAvailableFilesResponseList`](../../doc/models/retrieves-available-files-response-list.md).
-
-## Example Usage
-
-```php
-$acc = '0402196254-00001';
-
-$distributionType = 'HTTP';
-
-$apiResponse = $configurationFilesController->getListOfFiles(
-    $acc,
-    $distributionType
 );
 ```
 

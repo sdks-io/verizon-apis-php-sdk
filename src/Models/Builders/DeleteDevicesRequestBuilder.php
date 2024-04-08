@@ -33,9 +33,9 @@ class DeleteDevicesRequestBuilder
     /**
      * Initializes a new delete devices request Builder object.
      */
-    public static function init(): self
+    public static function init(array $devicesToDelete): self
     {
-        return new self(new DeleteDevicesRequest());
+        return new self(new DeleteDevicesRequest($devicesToDelete));
     }
 
     /**
@@ -44,15 +44,6 @@ class DeleteDevicesRequestBuilder
     public function accountName(?string $value): self
     {
         $this->instance->setAccountName($value);
-        return $this;
-    }
-
-    /**
-     * Sets devices to delete field.
-     */
-    public function devicesToDelete(?array $value): self
-    {
-        $this->instance->setDevicesToDelete($value);
         return $this;
     }
 

@@ -54,7 +54,6 @@ class DeviceId2 implements \JsonSerializable
      * Sets Kind.
      *
      * @maps kind
-     * @factory \VerizonLib\Models\Kind1Enum::checkValue
      */
     public function setKind(?string $kind): void
     {
@@ -77,7 +76,7 @@ class DeviceId2 implements \JsonSerializable
             $json['id']   = $this->id;
         }
         if (isset($this->kind)) {
-            $json['kind'] = Kind1Enum::checkValue($this->kind);
+            $json['kind'] = $this->kind;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

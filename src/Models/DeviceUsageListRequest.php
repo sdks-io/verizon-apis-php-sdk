@@ -18,19 +18,76 @@ use stdClass;
 class DeviceUsageListRequest implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    private $earliest;
+
+    /**
+     * @var string
+     */
+    private $latest;
+
+    /**
      * @var DeviceId|null
      */
     private $deviceId;
 
     /**
-     * @var string|null
+     * @var Label|null
      */
-    private $earliest;
+    private $label;
 
     /**
-     * @var string|null
+     * @param string $earliest
+     * @param string $latest
      */
-    private $latest;
+    public function __construct(string $earliest, string $latest)
+    {
+        $this->earliest = $earliest;
+        $this->latest = $latest;
+    }
+
+    /**
+     * Returns Earliest.
+     * The earliest date for which you want usage data.
+     */
+    public function getEarliest(): string
+    {
+        return $this->earliest;
+    }
+
+    /**
+     * Sets Earliest.
+     * The earliest date for which you want usage data.
+     *
+     * @required
+     * @maps earliest
+     */
+    public function setEarliest(string $earliest): void
+    {
+        $this->earliest = $earliest;
+    }
+
+    /**
+     * Returns Latest.
+     * The last date for which you want usage data.
+     */
+    public function getLatest(): string
+    {
+        return $this->latest;
+    }
+
+    /**
+     * Sets Latest.
+     * The last date for which you want usage data.
+     *
+     * @required
+     * @maps latest
+     */
+    public function setLatest(string $latest): void
+    {
+        $this->latest = $latest;
+    }
 
     /**
      * Returns Device Id.
@@ -53,43 +110,21 @@ class DeviceUsageListRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Earliest.
-     * The earliest date for which you want usage data.
+     * Returns Label.
      */
-    public function getEarliest(): ?string
+    public function getLabel(): ?Label
     {
-        return $this->earliest;
+        return $this->label;
     }
 
     /**
-     * Sets Earliest.
-     * The earliest date for which you want usage data.
+     * Sets Label.
      *
-     * @maps earliest
+     * @maps label
      */
-    public function setEarliest(?string $earliest): void
+    public function setLabel(?Label $label): void
     {
-        $this->earliest = $earliest;
-    }
-
-    /**
-     * Returns Latest.
-     * The last date for which you want usage data.
-     */
-    public function getLatest(): ?string
-    {
-        return $this->latest;
-    }
-
-    /**
-     * Sets Latest.
-     * The last date for which you want usage data.
-     *
-     * @maps latest
-     */
-    public function setLatest(?string $latest): void
-    {
-        $this->latest = $latest;
+        $this->label = $label;
     }
 
     /**
@@ -104,14 +139,13 @@ class DeviceUsageListRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['earliest']     = $this->earliest;
+        $json['latest']       = $this->latest;
         if (isset($this->deviceId)) {
             $json['deviceId'] = $this->deviceId;
         }
-        if (isset($this->earliest)) {
-            $json['earliest'] = $this->earliest;
-        }
-        if (isset($this->latest)) {
-            $json['latest']   = $this->latest;
+        if (isset($this->label)) {
+            $json['label']    = $this->label;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

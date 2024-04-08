@@ -19,23 +19,42 @@ A success response includes an array of all matching devices.
 {
   "DeviceProperty": [
     {
-      "billingaccountid": "billingaccountid0",
-      "createdon": "createdon8",
+      "billingaccountid": "billingaccountid4",
+      "createdon": "createdon6",
       "eventretention": "eventretention2",
       "fields": {
         "item": {
           "acceleration": {
-            "x": "x0",
-            "y": "y8",
-            "z": "z0"
+            "x": "x6",
+            "y": "y4",
+            "z": "z6"
           },
-          "battery": "battery2",
-          "humidity": "humidity6",
-          "light": "light8",
-          "pressure": "pressure4"
+          "battery": "battery0",
+          "humidity": "humidity4",
+          "light": "light6",
+          "pressure": "pressure2"
         }
       },
-      "iccid": "iccid0"
+      "iccid": "iccid4"
+    },
+    {
+      "billingaccountid": "billingaccountid4",
+      "createdon": "createdon6",
+      "eventretention": "eventretention2",
+      "fields": {
+        "item": {
+          "acceleration": {
+            "x": "x6",
+            "y": "y4",
+            "z": "z6"
+          },
+          "battery": "battery0",
+          "humidity": "humidity4",
+          "light": "light6",
+          "pressure": "pressure2"
+        }
+      },
+      "iccid": "iccid4"
     }
   ]
 }

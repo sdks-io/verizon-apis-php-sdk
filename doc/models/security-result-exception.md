@@ -19,9 +19,9 @@ Error response.
 
 ```json
 {
-  "errorCode": "errorCode6",
-  "errorMessage": "errorMessage8",
-  "errorUrl": "errorUrl4"
+  "errorCode": "errorCode8",
+  "errorMessage": "errorMessage0",
+  "errorUrl": "errorUrl8"
 }
 ```
 

@@ -31,9 +31,9 @@ class ServicePlansController extends BaseController
      */
     public function listAccountServicePlans(string $aname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/plans/{aname}')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/plans/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()

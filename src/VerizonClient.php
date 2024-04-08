@@ -15,12 +15,15 @@ use Core\Request\Parameters\HeaderParam;
 use Core\Utils\CoreHelper;
 use Unirest\Configuration;
 use Unirest\HttpClient;
+use VerizonLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
+use VerizonLib\Authentication\ClientCredentialsAuthManager;
 use VerizonLib\Controllers\AccountDevicesController;
 use VerizonLib\Controllers\AccountRequestsController;
 use VerizonLib\Controllers\AccountsController;
 use VerizonLib\Controllers\AccountSubscriptionsController;
 use VerizonLib\Controllers\AnomalySettingsController;
 use VerizonLib\Controllers\AnomalyTriggersController;
+use VerizonLib\Controllers\AnomalyTriggersV2Controller;
 use VerizonLib\Controllers\BillingController;
 use VerizonLib\Controllers\CampaignsV2Controller;
 use VerizonLib\Controllers\CampaignsV3Controller;
@@ -29,7 +32,8 @@ use VerizonLib\Controllers\CloudConnectorDevicesController;
 use VerizonLib\Controllers\CloudConnectorSubscriptionsController;
 use VerizonLib\Controllers\ConfigurationFilesController;
 use VerizonLib\Controllers\ConnectivityCallbacksController;
-use VerizonLib\Controllers\CSPProfilesController;
+use VerizonLib\Controllers\DeviceActionsController;
+use VerizonLib\Controllers\DeviceDiagnosticsController;
 use VerizonLib\Controllers\DeviceGroupsController;
 use VerizonLib\Controllers\DeviceLocationCallbacksController;
 use VerizonLib\Controllers\DeviceManagementController;
@@ -39,33 +43,33 @@ use VerizonLib\Controllers\DeviceReportsController;
 use VerizonLib\Controllers\DeviceServiceManagementController;
 use VerizonLib\Controllers\DevicesLocationsController;
 use VerizonLib\Controllers\DevicesLocationSubscriptionsController;
+use VerizonLib\Controllers\DeviceSMSMessagingController;
 use VerizonLib\Controllers\DiagnosticsCallbacksController;
 use VerizonLib\Controllers\DiagnosticsFactoryResetController;
 use VerizonLib\Controllers\DiagnosticsHistoryController;
 use VerizonLib\Controllers\DiagnosticsObservationsController;
 use VerizonLib\Controllers\DiagnosticsSettingsController;
 use VerizonLib\Controllers\DiagnosticsSubscriptionsController;
+use VerizonLib\Controllers\EUICCDeviceProfileManagementController;
 use VerizonLib\Controllers\ExclusionsController;
 use VerizonLib\Controllers\FirmwareV1Controller;
 use VerizonLib\Controllers\FirmwareV3Controller;
+use VerizonLib\Controllers\FixedWirelessQualificationController;
+use VerizonLib\Controllers\GlobalReportingController;
 use VerizonLib\Controllers\HyperPreciseLocationCallbacksController;
 use VerizonLib\Controllers\M5gEdgePlatformsController;
-use VerizonLib\Controllers\MECSitesController;
+use VerizonLib\Controllers\ManagingESIMProfilesController;
+use VerizonLib\Controllers\MECController;
 use VerizonLib\Controllers\OauthAuthorizationController;
 use VerizonLib\Controllers\PerformanceMetricsController;
-use VerizonLib\Controllers\RepositoriesController;
+use VerizonLib\Controllers\PromotionPeriodInformationController;
+use VerizonLib\Controllers\RetrieveTheTriggersController;
 use VerizonLib\Controllers\ServerLoggingController;
-use VerizonLib\Controllers\ServiceClaimsController;
 use VerizonLib\Controllers\ServiceEndpointsController;
-use VerizonLib\Controllers\ServiceInstanceOperationsController;
-use VerizonLib\Controllers\ServiceInstancesController;
-use VerizonLib\Controllers\ServiceLaunchProfilesController;
-use VerizonLib\Controllers\ServiceLaunchRequestsController;
-use VerizonLib\Controllers\ServiceMetadataController;
-use VerizonLib\Controllers\ServiceOnboardingController;
 use VerizonLib\Controllers\ServicePlansController;
 use VerizonLib\Controllers\ServiceProfilesController;
 use VerizonLib\Controllers\SessionManagementController;
+use VerizonLib\Controllers\SIMActionsController;
 use VerizonLib\Controllers\SIMSecureForIoTLicensesController;
 use VerizonLib\Controllers\SMSController;
 use VerizonLib\Controllers\SoftwareManagementCallbacksV1Controller;
@@ -81,8 +85,10 @@ use VerizonLib\Controllers\SoftwareManagementSubscriptionsV1Controller;
 use VerizonLib\Controllers\SoftwareManagementSubscriptionsV2Controller;
 use VerizonLib\Controllers\SoftwareManagementSubscriptionsV3Controller;
 use VerizonLib\Controllers\TargetsController;
-use VerizonLib\Controllers\UICCDeviceProfileManagementController;
+use VerizonLib\Controllers\ThingSpaceQualityOfServiceAPIActionsController;
+use VerizonLib\Controllers\UpdateTriggersController;
 use VerizonLib\Controllers\UsageTriggerManagementController;
+use VerizonLib\Controllers\WirelessNetworkPerformanceController;
 use VerizonLib\Utils\CompatibilityConverter;
 
 class VerizonClient implements ConfigurationInterface
@@ -109,11 +115,13 @@ class VerizonClient implements ConfigurationInterface
 
     private $servicePlans;
 
+    private $deviceDiagnostics;
+
     private $deviceProfileManagement;
 
     private $deviceMonitoring;
 
-    private $uICCDeviceProfileManagement;
+    private $eUICCDeviceProfileManagement;
 
     private $devicesLocations;
 
@@ -201,25 +209,31 @@ class VerizonClient implements ConfigurationInterface
 
     private $anomalyTriggers;
 
-    private $mECSites;
+    private $anomalyTriggersV2;
 
-    private $serviceLaunchProfiles;
+    private $wirelessNetworkPerformance;
 
-    private $serviceLaunchRequests;
+    private $fixedWirelessQualification;
 
-    private $serviceInstances;
+    private $managingESIMProfiles;
 
-    private $serviceInstanceOperations;
+    private $deviceSMSMessaging;
 
-    private $serviceOnboarding;
+    private $deviceActions;
 
-    private $serviceMetadata;
+    private $thingSpaceQualityOfServiceAPIActions;
 
-    private $repositories;
+    private $mEC;
 
-    private $cSPProfiles;
+    private $promotionPeriodInformation;
 
-    private $serviceClaims;
+    private $retrieveTheTriggers;
+
+    private $updateTriggers;
+
+    private $sIMActions;
+
+    private $globalReporting;
 
     private $oauthAuthorization;
 
@@ -252,7 +266,7 @@ class VerizonClient implements ConfigurationInterface
             ->userAgent('APIMATIC 3.0')
             ->globalConfig($this->getGlobalConfiguration())
             ->serverUrls(self::ENVIRONMENT_MAP[$this->getEnvironment()], Server::EDGE_DISCOVERY)
-            ->authManagers(['global' => $this->clientCredentialsAuthManager])
+            ->authManagers(['oAuth2' => $this->clientCredentialsAuthManager])
             ->build();
         $this->clientCredentialsAuthManager->setClient($this->client);
     }
@@ -264,7 +278,7 @@ class VerizonClient implements ConfigurationInterface
      */
     public function toBuilder(): VerizonClientBuilder
     {
-        return VerizonClientBuilder::init()
+        $builder = VerizonClientBuilder::init()
             ->timeout($this->getTimeout())
             ->enableRetries($this->shouldEnableRetries())
             ->numberOfRetries($this->getNumberOfRetries())
@@ -276,11 +290,13 @@ class VerizonClient implements ConfigurationInterface
             ->httpMethodsToRetry($this->getHttpMethodsToRetry())
             ->vZM2mToken($this->getVZM2mToken())
             ->environment($this->getEnvironment())
-            ->oauthClientId($this->clientCredentialsAuthManager->getOauthClientId())
-            ->oauthClientSecret($this->clientCredentialsAuthManager->getOauthClientSecret())
-            ->oauthToken($this->clientCredentialsAuthManager->getOauthToken())
-            ->oauthScopes($this->clientCredentialsAuthManager->getOauthScopes())
             ->httpCallback($this->config['httpCallback'] ?? null);
+
+        $clientCredentialsAuth = $this->getClientCredentialsAuthCredentialsBuilder();
+        if ($clientCredentialsAuth != null) {
+            $builder->clientCredentialsAuthCredentials($clientCredentialsAuth);
+        }
+        return $builder;
     }
 
     public function getTimeout(): int
@@ -338,9 +354,25 @@ class VerizonClient implements ConfigurationInterface
         return $this->config['environment'] ?? ConfigurationDefaults::ENVIRONMENT;
     }
 
-    public function getClientCredentialsAuth(): ?ClientCredentialsAuth
+    public function getClientCredentialsAuth(): ClientCredentialsAuth
     {
         return $this->clientCredentialsAuthManager;
+    }
+
+    public function getClientCredentialsAuthCredentialsBuilder(): ?ClientCredentialsAuthCredentialsBuilder
+    {
+        if (
+            empty($this->clientCredentialsAuthManager->getOauthClientId()) &&
+            empty($this->clientCredentialsAuthManager->getOauthClientSecret())
+        ) {
+            return null;
+        }
+        return ClientCredentialsAuthCredentialsBuilder::init(
+            $this->clientCredentialsAuthManager->getOauthClientId(),
+            $this->clientCredentialsAuthManager->getOauthClientSecret()
+        )
+            ->oauthToken($this->clientCredentialsAuthManager->getOauthToken())
+            ->oauthScopes($this->clientCredentialsAuthManager->getOauthScopes());
     }
 
     /**
@@ -368,7 +400,12 @@ class VerizonClient implements ConfigurationInterface
      */
     private function validateConfig(): void
     {
-        VerizonClientBuilder::init()->oauthScopes($this->clientCredentialsAuthManager->getOauthScopes());
+        $builder = VerizonClientBuilder::init();
+
+        $clientCredentialsAuth = $this->getClientCredentialsAuthCredentialsBuilder();
+        if ($clientCredentialsAuth != null) {
+            $builder->clientCredentialsAuthCredentials($clientCredentialsAuth);
+        }
     }
 
     /**
@@ -505,6 +542,17 @@ class VerizonClient implements ConfigurationInterface
     }
 
     /**
+     * Returns Device Diagnostics Controller
+     */
+    public function getDeviceDiagnosticsController(): DeviceDiagnosticsController
+    {
+        if ($this->deviceDiagnostics == null) {
+            $this->deviceDiagnostics = new DeviceDiagnosticsController($this->client);
+        }
+        return $this->deviceDiagnostics;
+    }
+
+    /**
      * Returns Device Profile Management Controller
      */
     public function getDeviceProfileManagementController(): DeviceProfileManagementController
@@ -527,14 +575,14 @@ class VerizonClient implements ConfigurationInterface
     }
 
     /**
-     * Returns UICC Device Profile Management Controller
+     * Returns EUICC Device Profile Management Controller
      */
-    public function getUICCDeviceProfileManagementController(): UICCDeviceProfileManagementController
+    public function getEUICCDeviceProfileManagementController(): EUICCDeviceProfileManagementController
     {
-        if ($this->uICCDeviceProfileManagement == null) {
-            $this->uICCDeviceProfileManagement = new UICCDeviceProfileManagementController($this->client);
+        if ($this->eUICCDeviceProfileManagement == null) {
+            $this->eUICCDeviceProfileManagement = new EUICCDeviceProfileManagementController($this->client);
         }
-        return $this->uICCDeviceProfileManagement;
+        return $this->eUICCDeviceProfileManagement;
     }
 
     /**
@@ -1017,113 +1065,148 @@ class VerizonClient implements ConfigurationInterface
     }
 
     /**
-     * Returns MEC Sites Controller
+     * Returns Anomaly Triggers V2 Controller
      */
-    public function getMECSitesController(): MECSitesController
+    public function getAnomalyTriggersV2Controller(): AnomalyTriggersV2Controller
     {
-        if ($this->mECSites == null) {
-            $this->mECSites = new MECSitesController($this->client);
+        if ($this->anomalyTriggersV2 == null) {
+            $this->anomalyTriggersV2 = new AnomalyTriggersV2Controller($this->client);
         }
-        return $this->mECSites;
+        return $this->anomalyTriggersV2;
     }
 
     /**
-     * Returns Service Launch Profiles Controller
+     * Returns Wireless Network Performance Controller
      */
-    public function getServiceLaunchProfilesController(): ServiceLaunchProfilesController
+    public function getWirelessNetworkPerformanceController(): WirelessNetworkPerformanceController
     {
-        if ($this->serviceLaunchProfiles == null) {
-            $this->serviceLaunchProfiles = new ServiceLaunchProfilesController($this->client);
+        if ($this->wirelessNetworkPerformance == null) {
+            $this->wirelessNetworkPerformance = new WirelessNetworkPerformanceController($this->client);
         }
-        return $this->serviceLaunchProfiles;
+        return $this->wirelessNetworkPerformance;
     }
 
     /**
-     * Returns Service Launch Requests Controller
+     * Returns Fixed Wireless Qualification Controller
      */
-    public function getServiceLaunchRequestsController(): ServiceLaunchRequestsController
+    public function getFixedWirelessQualificationController(): FixedWirelessQualificationController
     {
-        if ($this->serviceLaunchRequests == null) {
-            $this->serviceLaunchRequests = new ServiceLaunchRequestsController($this->client);
+        if ($this->fixedWirelessQualification == null) {
+            $this->fixedWirelessQualification = new FixedWirelessQualificationController($this->client);
         }
-        return $this->serviceLaunchRequests;
+        return $this->fixedWirelessQualification;
     }
 
     /**
-     * Returns Service Instances Controller
+     * Returns Managing ESIM Profiles Controller
      */
-    public function getServiceInstancesController(): ServiceInstancesController
+    public function getManagingESIMProfilesController(): ManagingESIMProfilesController
     {
-        if ($this->serviceInstances == null) {
-            $this->serviceInstances = new ServiceInstancesController($this->client);
+        if ($this->managingESIMProfiles == null) {
+            $this->managingESIMProfiles = new ManagingESIMProfilesController($this->client);
         }
-        return $this->serviceInstances;
+        return $this->managingESIMProfiles;
     }
 
     /**
-     * Returns Service Instance Operations Controller
+     * Returns Device SMS Messaging Controller
      */
-    public function getServiceInstanceOperationsController(): ServiceInstanceOperationsController
+    public function getDeviceSMSMessagingController(): DeviceSMSMessagingController
     {
-        if ($this->serviceInstanceOperations == null) {
-            $this->serviceInstanceOperations = new ServiceInstanceOperationsController($this->client);
+        if ($this->deviceSMSMessaging == null) {
+            $this->deviceSMSMessaging = new DeviceSMSMessagingController($this->client);
         }
-        return $this->serviceInstanceOperations;
+        return $this->deviceSMSMessaging;
     }
 
     /**
-     * Returns Service Onboarding Controller
+     * Returns Device Actions Controller
      */
-    public function getServiceOnboardingController(): ServiceOnboardingController
+    public function getDeviceActionsController(): DeviceActionsController
     {
-        if ($this->serviceOnboarding == null) {
-            $this->serviceOnboarding = new ServiceOnboardingController($this->client);
+        if ($this->deviceActions == null) {
+            $this->deviceActions = new DeviceActionsController($this->client);
         }
-        return $this->serviceOnboarding;
+        return $this->deviceActions;
     }
 
     /**
-     * Returns Service Metadata Controller
+     * Returns Thing Space Quality of Service API Actions Controller
      */
-    public function getServiceMetadataController(): ServiceMetadataController
+    public function getThingSpaceQualityOfServiceAPIActionsController(): ThingSpaceQualityOfServiceAPIActionsController
     {
-        if ($this->serviceMetadata == null) {
-            $this->serviceMetadata = new ServiceMetadataController($this->client);
+        if ($this->thingSpaceQualityOfServiceAPIActions == null) {
+            $this->thingSpaceQualityOfServiceAPIActions = new ThingSpaceQualityOfServiceAPIActionsController(
+                $this->client
+            );
         }
-        return $this->serviceMetadata;
+        return $this->thingSpaceQualityOfServiceAPIActions;
     }
 
     /**
-     * Returns Repositories Controller
+     * Returns MEC Controller
      */
-    public function getRepositoriesController(): RepositoriesController
+    public function getMECController(): MECController
     {
-        if ($this->repositories == null) {
-            $this->repositories = new RepositoriesController($this->client);
+        if ($this->mEC == null) {
+            $this->mEC = new MECController($this->client);
         }
-        return $this->repositories;
+        return $this->mEC;
     }
 
     /**
-     * Returns CSP Profiles Controller
+     * Returns Promotion Period Information Controller
      */
-    public function getCSPProfilesController(): CSPProfilesController
+    public function getPromotionPeriodInformationController(): PromotionPeriodInformationController
     {
-        if ($this->cSPProfiles == null) {
-            $this->cSPProfiles = new CSPProfilesController($this->client);
+        if ($this->promotionPeriodInformation == null) {
+            $this->promotionPeriodInformation = new PromotionPeriodInformationController($this->client);
         }
-        return $this->cSPProfiles;
+        return $this->promotionPeriodInformation;
     }
 
     /**
-     * Returns Service Claims Controller
+     * Returns Retrieve the Triggers Controller
      */
-    public function getServiceClaimsController(): ServiceClaimsController
+    public function getRetrieveTheTriggersController(): RetrieveTheTriggersController
     {
-        if ($this->serviceClaims == null) {
-            $this->serviceClaims = new ServiceClaimsController($this->client);
+        if ($this->retrieveTheTriggers == null) {
+            $this->retrieveTheTriggers = new RetrieveTheTriggersController($this->client);
         }
-        return $this->serviceClaims;
+        return $this->retrieveTheTriggers;
+    }
+
+    /**
+     * Returns Update Triggers Controller
+     */
+    public function getUpdateTriggersController(): UpdateTriggersController
+    {
+        if ($this->updateTriggers == null) {
+            $this->updateTriggers = new UpdateTriggersController($this->client);
+        }
+        return $this->updateTriggers;
+    }
+
+    /**
+     * Returns SIM Actions Controller
+     */
+    public function getSIMActionsController(): SIMActionsController
+    {
+        if ($this->sIMActions == null) {
+            $this->sIMActions = new SIMActionsController($this->client);
+        }
+        return $this->sIMActions;
+    }
+
+    /**
+     * Returns Global Reporting Controller
+     */
+    public function getGlobalReportingController(): GlobalReportingController
+    {
+        if ($this->globalReporting == null) {
+            $this->globalReporting = new GlobalReportingController($this->client);
+        }
+        return $this->globalReporting;
     }
 
     /**
@@ -1153,6 +1236,7 @@ class VerizonClient implements ConfigurationInterface
     private const ENVIRONMENT_MAP = [
         Environment::PRODUCTION => [
             Server::EDGE_DISCOVERY => 'https://5gedge.verizon.com/api/mec/eds',
+            Server::THINGSPACE => 'https://thingspace.verizon.com/api',
             Server::OAUTH_SERVER => 'https://thingspace.verizon.com/api/ts/v1',
             Server::M2M => 'https://thingspace.verizon.com/api/m2m',
             Server::DEVICE_LOCATION => 'https://thingspace.verizon.com/api/loc/v1',
@@ -1164,7 +1248,8 @@ class VerizonClient implements ConfigurationInterface
             Server::DEVICE_DIAGNOSTICS => 'https://thingspace.verizon.com/api/diagnostics/v1',
             Server::CLOUD_CONNECTOR => 'https://thingspace.verizon.com/api/cc/v1',
             Server::HYPER_PRECISE_LOCATION => 'https://thingspace.verizon.com/api/hyper-precise/v1',
-            Server::SERVICES => 'https://5gedge.verizon.com/api/mec/services'
+            Server::SERVICES => 'https://5gedge.verizon.com/api/mec/services',
+            Server::QUALITY_OF_SERVICE => 'https://thingspace.verizon.com/api/m2m/v1/devices'
         ]
     ];
 }

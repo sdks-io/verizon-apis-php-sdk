@@ -36,7 +36,7 @@ class ServerLoggingController extends BaseController
             '/logging/{account}/devices/{deviceId}/checkInHistory'
         )
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()

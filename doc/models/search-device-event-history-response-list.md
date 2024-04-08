@@ -19,13 +19,13 @@ A success response includes an array of all matching events.
 {
   "SearchDeviceEventHistory": [
     {
-      "action": "action8",
-      "createdon": "createdon8",
-      "deviceid": "deviceid6",
+      "action": "action4",
+      "createdon": "createdon4",
+      "deviceid": "deviceid8",
       "fields": {
-        "temperature": "temperature4"
+        "temperature": "temperature0"
       },
-      "id": "id4"
+      "id": "id8"
     }
   ]
 }

@@ -31,7 +31,7 @@ class DiagnosticsSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(QueryParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()

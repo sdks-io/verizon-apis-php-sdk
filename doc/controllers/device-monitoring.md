@@ -10,13 +10,61 @@ $deviceMonitoringController = $client->getDeviceMonitoringController();
 
 ## Methods
 
-* [Stop Device Reachability](../../doc/controllers/device-monitoring.md#stop-device-reachability)
 * [Device Reachability](../../doc/controllers/device-monitoring.md#device-reachability)
+* [Stop Device Reachability](../../doc/controllers/device-monitoring.md#stop-device-reachability)
+
+
+# Device Reachability
+
+```php
+function deviceReachability(NotificationReportRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`NotificationReportRequest`](../../doc/models/notification-report-request.md) | Body, Required | Create Reachability Report Request |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RequestResponse`](../../doc/models/request-response.md).
+
+## Example Usage
+
+```php
+$body = NotificationReportRequestBuilder::init(
+    '0242072320-00001',
+    'REACHABLE_FOR_DATA',
+    [
+        DeviceListBuilder::init()
+            ->deviceIds(
+                [
+                    DeviceIdBuilder::init(
+                        '89148000004292933820',
+                        'iccid'
+                    )->build(),
+                    DeviceIdBuilder::init(
+                        '89148000003164287919',
+                        'iccid'
+                    )->build()
+                ]
+            )->build()
+    ],
+    '2019-12-02T15:00:00-08:00Z'
+)->build();
+
+$apiResponse = $deviceMonitoringController->deviceReachability($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error Response | [`RestErrorResponseException`](../../doc/models/rest-error-response-exception.md) |
 
 
 # Stop Device Reachability
-
-Stop Device Reachability monitors.
 
 ```php
 function stopDeviceReachability(string $accountName, array $monitorIds): ApiResponse
@@ -47,59 +95,6 @@ $apiResponse = $deviceMonitoringController->stopDeviceReachability(
     $accountName,
     $monitorIds
 );
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error Response | [`RestErrorResponseException`](../../doc/models/rest-error-response-exception.md) |
-
-
-# Device Reachability
-
-Register for notification reports based on the request type.
-
-```php
-function deviceReachability(NotificationReportRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`NotificationReportRequest`](../../doc/models/notification-report-request.md) | Body, Required | Create Reachability Report Request |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RequestResponse`](../../doc/models/request-response.md).
-
-## Example Usage
-
-```php
-$body = NotificationReportRequestBuilder::init(
-    '0242072320-00001',
-    'REACHABLE_FOR_DATA',
-    [
-        DeviceListBuilder::init()
-            ->deviceIds(
-                [
-                    DeviceId1Builder::init()
-                        ->id('89148000004292933820')
-                        ->kind(KindEnum::ICCID)
-                        ->build(),
-                    DeviceId1Builder::init()
-                        ->id('89148000003164287919')
-                        ->kind(KindEnum::ICCID)
-                        ->build()
-                ]
-            )
-            ->build()
-    ],
-    '2019-12-02T15:00:00-08:00Z'
-)->build();
-
-$apiResponse = $deviceMonitoringController->deviceReachability($body);
 ```
 
 ## Errors

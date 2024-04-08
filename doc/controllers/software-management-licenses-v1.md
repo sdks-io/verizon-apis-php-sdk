@@ -10,11 +10,79 @@ $softwareManagementLicensesV1Controller = $client->getSoftwareManagementLicenses
 
 ## Methods
 
-* [Remove Licenses From Devices](../../doc/controllers/software-management-licenses-v1.md#remove-licenses-from-devices)
-* [Delete List of Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#delete-list-of-licenses-to-remove)
 * [Assign Licenses to Devices](../../doc/controllers/software-management-licenses-v1.md#assign-licenses-to-devices)
+* [Remove Licenses From Devices](../../doc/controllers/software-management-licenses-v1.md#remove-licenses-from-devices)
 * [Create List of Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#create-list-of-licenses-to-remove)
+* [Delete List of Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#delete-list-of-licenses-to-remove)
 * [List Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#list-licenses-to-remove)
+
+
+# Assign Licenses to Devices
+
+**This endpoint is deprecated.**
+
+Assigns licenses to a specified list of devices so that firmware upgrades can be scheduled for those devices.
+
+```php
+function assignLicensesToDevices(string $account, V1LicensesAssignedRemovedRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+| `body` | [`V1LicensesAssignedRemovedRequest`](../../doc/models/v1-licenses-assigned-removed-request.md) | Body, Required | IMEIs of the devices to assign licenses to. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V1LicensesAssignedRemovedResult`](../../doc/models/v1-licenses-assigned-removed-result.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$body = V1LicensesAssignedRemovedRequestBuilder::init(
+    [
+        '990003425730535',
+        '990000473475989'
+    ]
+)->build();
+
+$apiResponse = $softwareManagementLicensesV1Controller->assignLicensesToDevices(
+    $account,
+    $body
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "accountName": "0242078689-00001",
+  "licCount": 9000,
+  "licUsedCount": 1000,
+  "deviceList": [
+    {
+      "deviceId": "900000000000001",
+      "status": "LicenseAssignSuccess",
+      "Reason": "Success"
+    },
+    {
+      "deviceId": "900000000000999",
+      "status": "LicenseAssignSuccess",
+      "Reason": "Success"
+    }
+  ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
 
 
 # Remove Licenses From Devices
@@ -91,117 +159,6 @@ $apiResponse = $softwareManagementLicensesV1Controller->removeLicensesFromDevice
 | 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
 
 
-# Delete List of Licenses to Remove
-
-**This endpoint is deprecated.**
-
-Deletes the entire list of cancellation candidate devices.
-
-```php
-function deleteListOfLicensesToRemove(string $account): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV1SuccessResult`](../../doc/models/fota-v1-success-result.md).
-
-## Example Usage
-
-```php
-$account = '0242078689-00001';
-
-$apiResponse = $softwareManagementLicensesV1Controller->deleteListOfLicensesToRemove($account);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "success": true
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
-
-
-# Assign Licenses to Devices
-
-**This endpoint is deprecated.**
-
-Assigns licenses to a specified list of devices so that firmware upgrades can be scheduled for those devices.
-
-```php
-function assignLicensesToDevices(string $account, V1LicensesAssignedRemovedRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-| `body` | [`V1LicensesAssignedRemovedRequest`](../../doc/models/v1-licenses-assigned-removed-request.md) | Body, Required | IMEIs of the devices to assign licenses to. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V1LicensesAssignedRemovedResult`](../../doc/models/v1-licenses-assigned-removed-result.md).
-
-## Example Usage
-
-```php
-$account = '0242078689-00001';
-
-$body = V1LicensesAssignedRemovedRequestBuilder::init(
-    [
-        '990003425730535',
-        '990000473475989'
-    ]
-)->build();
-
-$apiResponse = $softwareManagementLicensesV1Controller->assignLicensesToDevices(
-    $account,
-    $body
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "accountName": "0242078689-00001",
-  "licCount": 9000,
-  "licUsedCount": 1000,
-  "deviceList": [
-    {
-      "deviceId": "900000000000001",
-      "status": "LicenseAssignSuccess",
-      "Reason": "Success"
-    },
-    {
-      "deviceId": "900000000000999",
-      "status": "LicenseAssignSuccess",
-      "Reason": "Success"
-    }
-  ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
-
-
 # Create List of Licenses to Remove
 
 **This endpoint is deprecated.**
@@ -252,6 +209,49 @@ $apiResponse = $softwareManagementLicensesV1Controller->createListOfLicensesToRe
     "900000000000001",
     "900000000000999"
   ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+
+
+# Delete List of Licenses to Remove
+
+**This endpoint is deprecated.**
+
+Deletes the entire list of cancellation candidate devices.
+
+```php
+function deleteListOfLicensesToRemove(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV1SuccessResult`](../../doc/models/fota-v1-success-result.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$apiResponse = $softwareManagementLicensesV1Controller->deleteListOfLicensesToRemove($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
 }
 ```
 

@@ -11,7 +11,7 @@ Request to a new, randomly generated password for the current username.
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `oldPassword` | `?string` | Optional | The current password for the username. | getOldPassword(): ?string | setOldPassword(?string oldPassword): void |
+| `oldPassword` | `string` | Required | The current password for the username. | getOldPassword(): string | setOldPassword(string oldPassword): void |
 
 ## Example (as JSON)
 

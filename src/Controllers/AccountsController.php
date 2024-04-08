@@ -24,30 +24,6 @@ use VerizonLib\Server;
 class AccountsController extends BaseController
 {
     /**
-     * When HTTP status is 202, a URL will be returned in the Location header of the form /leads/{aname}?
-     * next={token}. This URL can be used to request the next set of leads.
-     *
-     * @param string $aname Account name.
-     * @param int|null $next Continue the previous query from the pageUrl in Location Header.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAccountLeads(string $aname, ?int $next = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/leads/{aname}')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(AccountLeadsResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns information about a specified account.
      *
      * @param string $aname Account name.
@@ -56,9 +32,9 @@ class AccountsController extends BaseController
      */
     public function getAccountInformation(string $aname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/accounts/{aname}')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/accounts/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()
@@ -78,14 +54,38 @@ class AccountsController extends BaseController
      */
     public function listAccountStatesAndServices(string $aname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/accounts/{aname}/statesandservices')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/accounts/{aname}/statesandservices')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(AccountStatesAndServices::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * When HTTP status is 202, a URL will be returned in the Location header of the form /leads/{aname}?
+     * next={token}. This URL can be used to request the next set of leads.
+     *
+     * @param string $aname Account name.
+     * @param int|null $next Continue the previous query from the pageUrl in Location Header.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAccountLeads(string $aname, ?int $next = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/leads/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(AccountLeadsResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

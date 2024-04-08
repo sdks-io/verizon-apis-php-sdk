@@ -33,7 +33,7 @@ class SoftwareManagementSubscriptionsV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -60,7 +60,7 @@ class SoftwareManagementSubscriptionsV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}/index/{startIndex}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
 
         $_resHandler = $this->responseHandler()

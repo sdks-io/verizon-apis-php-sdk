@@ -28,7 +28,7 @@
   "host": {
     "hostandpath": "https:// myhost.com:1825"
   },
-  "scope": "scope2"
+  "scope": "scope0"
 }
 ```
 

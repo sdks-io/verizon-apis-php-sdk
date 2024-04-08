@@ -27,12 +27,8 @@ Details of the service plan.
   "carrierServicePlanCode": "84638",
   "extendedAttributes": [
     {
-      "key": "key9",
-      "value": "value1"
-    },
-    {
-      "key": "key0",
-      "value": "value2"
+      "key": "key8",
+      "value": "value0"
     }
   ]
 }

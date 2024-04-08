@@ -27,7 +27,9 @@ Fields and values to match.
     "imei": "imei2"
   },
   "$selection": {
-    "key0": "$selection3"
+    "key0": "$selection9",
+    "key1": "$selection0",
+    "key2": "$selection1"
   }
 }
 ```

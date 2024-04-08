@@ -25,8 +25,8 @@ Error reported by a device.
     "errorMessage": "errorMessage4",
     "detailErrorMessage": "detailErrorMessage6"
   },
-  "imei": "imei6",
-  "errorMessage": "errorMessage8"
+  "imei": "imei0",
+  "errorMessage": "errorMessage4"
 }
 ```
 

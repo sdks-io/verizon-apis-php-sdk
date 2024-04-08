@@ -20,8 +20,7 @@ Response on successful retrieval of all registered service endpoints.
 {
   "status": "success",
   "data": [
-    "data5",
-    "data6"
+    "data3"
   ]
 }
 ```

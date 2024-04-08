@@ -37,7 +37,7 @@ class AccountSubscriptionsController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/accounts/subscriptions/actions/list')
             ->server(Server::M2M)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 HeaderParam::init('Content-Type', 'application/json'),
                 BodyParam::init($body),

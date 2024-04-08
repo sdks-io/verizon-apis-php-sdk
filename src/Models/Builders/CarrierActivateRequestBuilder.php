@@ -34,9 +34,9 @@ class CarrierActivateRequestBuilder
     /**
      * Initializes a new carrier activate request Builder object.
      */
-    public static function init(): self
+    public static function init(array $devices, string $servicePlan, string $mdnZipCode): self
     {
-        return new self(new CarrierActivateRequest());
+        return new self(new CarrierActivateRequest($devices, $servicePlan, $mdnZipCode));
     }
 
     /**
@@ -85,15 +85,6 @@ class CarrierActivateRequestBuilder
     }
 
     /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
-        return $this;
-    }
-
-    /**
      * Sets group name field.
      */
     public function groupName(?string $value): self
@@ -112,15 +103,6 @@ class CarrierActivateRequestBuilder
     }
 
     /**
-     * Sets mdn zip code field.
-     */
-    public function mdnZipCode(?string $value): self
-    {
-        $this->instance->setMdnZipCode($value);
-        return $this;
-    }
-
-    /**
      * Sets primary place of use field.
      */
     public function primaryPlaceOfUse(?PlaceOfUse $value): self
@@ -135,15 +117,6 @@ class CarrierActivateRequestBuilder
     public function publicIpRestriction(?string $value): self
     {
         $this->instance->setPublicIpRestriction($value);
-        return $this;
-    }
-
-    /**
-     * Sets service plan field.
-     */
-    public function servicePlan(?string $value): self
-    {
-        $this->instance->setServicePlan($value);
         return $this;
     }
 

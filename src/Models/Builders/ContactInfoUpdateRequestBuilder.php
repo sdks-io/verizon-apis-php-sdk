@@ -12,6 +12,7 @@ namespace VerizonLib\Models\Builders;
 
 use Core\Utils\CoreHelper;
 use VerizonLib\Models\ContactInfoUpdateRequest;
+use VerizonLib\Models\PlaceOfUse;
 
 /**
  * Builder for model ContactInfoUpdateRequest
@@ -33,9 +34,9 @@ class ContactInfoUpdateRequestBuilder
     /**
      * Initializes a new contact info update request Builder object.
      */
-    public static function init(): self
+    public static function init(PlaceOfUse $primaryPlaceOfUse): self
     {
-        return new self(new ContactInfoUpdateRequest());
+        return new self(new ContactInfoUpdateRequest($primaryPlaceOfUse));
     }
 
     /**
@@ -53,15 +54,6 @@ class ContactInfoUpdateRequestBuilder
     public function devices(?array $value): self
     {
         $this->instance->setDevices($value);
-        return $this;
-    }
-
-    /**
-     * Sets primary place of use field.
-     */
-    public function primaryPlaceOfUse(?array $value): self
-    {
-        $this->instance->setPrimaryPlaceOfUse($value);
         return $this;
     }
 

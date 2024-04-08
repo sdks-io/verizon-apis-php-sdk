@@ -18,9 +18,19 @@ use stdClass;
 class CreateDeviceGroupRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
+
+    /**
+     * @var string
+     */
+    private $groupDescription;
+
+    /**
+     * @var string
+     */
+    private $groupName;
 
     /**
      * @var DeviceId[]|null
@@ -28,21 +38,23 @@ class CreateDeviceGroupRequest implements \JsonSerializable
     private $devicesToAdd;
 
     /**
-     * @var string|null
+     * @param string $accountName
+     * @param string $groupDescription
+     * @param string $groupName
      */
-    private $groupDescription;
-
-    /**
-     * @var string|null
-     */
-    private $groupName;
+    public function __construct(string $accountName, string $groupDescription, string $groupName)
+    {
+        $this->accountName = $accountName;
+        $this->groupDescription = $groupDescription;
+        $this->groupName = $groupName;
+    }
 
     /**
      * Returns Account Name.
      * The Verizon billing account that the device group will belong to. An account name is usually numeric,
      * and must include any leading zeros.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -52,11 +64,54 @@ class CreateDeviceGroupRequest implements \JsonSerializable
      * The Verizon billing account that the device group will belong to. An account name is usually numeric,
      * and must include any leading zeros.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
+    }
+
+    /**
+     * Returns Group Description.
+     * A description for the device group.
+     */
+    public function getGroupDescription(): string
+    {
+        return $this->groupDescription;
+    }
+
+    /**
+     * Sets Group Description.
+     * A description for the device group.
+     *
+     * @required
+     * @maps groupDescription
+     */
+    public function setGroupDescription(string $groupDescription): void
+    {
+        $this->groupDescription = $groupDescription;
+    }
+
+    /**
+     * Returns Group Name.
+     * The name for the new device group. This name must be unique within the specified account.
+     */
+    public function getGroupName(): string
+    {
+        return $this->groupName;
+    }
+
+    /**
+     * Sets Group Name.
+     * The name for the new device group. This name must be unique within the specified account.
+     *
+     * @required
+     * @maps groupName
+     */
+    public function setGroupName(string $groupName): void
+    {
+        $this->groupName = $groupName;
     }
 
     /**
@@ -86,46 +141,6 @@ class CreateDeviceGroupRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Group Description.
-     * A description for the device group.
-     */
-    public function getGroupDescription(): ?string
-    {
-        return $this->groupDescription;
-    }
-
-    /**
-     * Sets Group Description.
-     * A description for the device group.
-     *
-     * @maps groupDescription
-     */
-    public function setGroupDescription(?string $groupDescription): void
-    {
-        $this->groupDescription = $groupDescription;
-    }
-
-    /**
-     * Returns Group Name.
-     * The name for the new device group. This name must be unique within the specified account.
-     */
-    public function getGroupName(): ?string
-    {
-        return $this->groupName;
-    }
-
-    /**
-     * Sets Group Name.
-     * The name for the new device group. This name must be unique within the specified account.
-     *
-     * @maps groupName
-     */
-    public function setGroupName(?string $groupName): void
-    {
-        $this->groupName = $groupName;
-    }
-
-    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -137,17 +152,11 @@ class CreateDeviceGroupRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName']      = $this->accountName;
-        }
+        $json['accountName']      = $this->accountName;
+        $json['groupDescription'] = $this->groupDescription;
+        $json['groupName']        = $this->groupName;
         if (isset($this->devicesToAdd)) {
-            $json['devicesToAdd']     = $this->devicesToAdd;
-        }
-        if (isset($this->groupDescription)) {
-            $json['groupDescription'] = $this->groupDescription;
-        }
-        if (isset($this->groupName)) {
-            $json['groupName']        = $this->groupName;
+            $json['devicesToAdd'] = $this->devicesToAdd;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

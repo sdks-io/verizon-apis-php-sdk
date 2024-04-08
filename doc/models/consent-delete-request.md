@@ -18,8 +18,8 @@
 {
   "accountName": "MyAccount-1",
   "deviceList": [
-    "deviceList6",
-    "deviceList7"
+    "deviceList2",
+    "deviceList3"
   ]
 }
 ```

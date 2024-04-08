@@ -27,33 +27,6 @@ use VerizonLib\Server;
 class AccountDevicesController extends BaseController
 {
     /**
-     * Retrieve device information for a list of devices on an account.
-     *
-     * @param string $acc Account identifier.
-     * @param DeviceIMEI $body Request device list information.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAccountDevicesInformation(string $acc, DeviceIMEI $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/{acc}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('acc', $acc),
-                HeaderParam::init('Content-Type', 'application/json'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(DeviceListResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Retrieve account device information such as reported firmware on the devices.
      *
      * @param string $acc Account identifier.
@@ -69,7 +42,7 @@ class AccountDevicesController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId),
@@ -79,6 +52,33 @@ class AccountDevicesController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(V3AccountDeviceList::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Retrieve device information for a list of devices on an account.
+     *
+     * @param string $acc Account identifier.
+     * @param DeviceIMEI $body Request device list information.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAccountDevicesInformation(string $acc, DeviceIMEI $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/{acc}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('acc', $acc),
+                HeaderParam::init('Content-Type', 'application/json'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(DeviceListResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

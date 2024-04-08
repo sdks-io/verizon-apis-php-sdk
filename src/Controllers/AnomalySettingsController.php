@@ -33,32 +33,10 @@ class AnomalySettingsController extends BaseController
      */
     public function activateAnomalyDetection(AnomalyDetectionRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/v1/intelligence/anomaly/settings')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/intelligence/anomaly/settings')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('An error occurred.', IntelligenceResultException::class))
-            ->type(IntelligenceSuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Resets the thresholds to zero.
-     *
-     * @param string $accountName The name of the subscribed account.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function resetAnomalyDetectionParameters(string $accountName): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::PUT,
-            '/v1/intelligence/{accountName}/anomaly/settings/reset'
-        )->server(Server::M2M)->auth('global')->parameters(TemplateParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('An error occurred.', IntelligenceResultException::class))
@@ -77,14 +55,36 @@ class AnomalySettingsController extends BaseController
      */
     public function listAnomalyDetectionSettings(string $accountName): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/intelligence/{accountName}/anomaly/settings')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(TemplateParam::init('accountName', $accountName));
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::GET,
+            '/m2m/v1/intelligence/{accountName}/anomaly/settings'
+        )->server(Server::THINGSPACE)->auth('oAuth2')->parameters(TemplateParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('An error occurred.', IntelligenceResultException::class))
             ->type(AnomalyDetectionSettings::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Resets the thresholds to zero.
+     *
+     * @param string $accountName The name of the subscribed account.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function resetAnomalyDetectionParameters(string $accountName): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::PUT,
+            '/m2m/v1/intelligence/{accountName}/anomaly/settings/reset'
+        )->server(Server::THINGSPACE)->auth('oAuth2')->parameters(TemplateParam::init('accountName', $accountName));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('An error occurred.', IntelligenceResultException::class))
+            ->type(IntelligenceSuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

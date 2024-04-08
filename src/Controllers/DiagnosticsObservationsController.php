@@ -34,7 +34,7 @@ class DiagnosticsObservationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/attributes/actions/observe')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -57,7 +57,7 @@ class DiagnosticsObservationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/devices/attributes/actions/observe')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 QueryParam::init('transactionId', $transactionId),
                 QueryParam::init('accountName', $accountName)

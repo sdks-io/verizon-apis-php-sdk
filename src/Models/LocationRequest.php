@@ -24,29 +24,27 @@ class LocationRequest implements \JsonSerializable
     private $accountName;
 
     /**
-     * @var int
-     */
-    private $accuracyMode;
-
-    /**
-     * @var string
-     */
-    private $cacheMode;
-
-    /**
      * @var DeviceInfo[]
      */
     private $deviceList;
 
     /**
+     * @var string|null
+     */
+    private $accuracyMode;
+
+    /**
+     * @var string|null
+     */
+    private $cacheMode;
+
+    /**
      * @param string $accountName
-     * @param string $cacheMode
      * @param DeviceInfo[] $deviceList
      */
-    public function __construct(string $accountName, string $cacheMode, array $deviceList)
+    public function __construct(string $accountName, array $deviceList)
     {
         $this->accountName = $accountName;
-        $this->cacheMode = $cacheMode;
         $this->deviceList = $deviceList;
     }
 
@@ -69,48 +67,6 @@ class LocationRequest implements \JsonSerializable
     public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
-    }
-
-    /**
-     * Returns Accuracy Mode.
-     * Accurary, currently only 0-coarse supported.
-     */
-    public function getAccuracyMode(): int
-    {
-        return $this->accuracyMode;
-    }
-
-    /**
-     * Sets Accuracy Mode.
-     * Accurary, currently only 0-coarse supported.
-     *
-     * @maps accuracyMode
-     */
-    public function setAccuracyMode(int $accuracyMode): void
-    {
-        $this->accuracyMode = $accuracyMode;
-    }
-
-    /**
-     * Returns Cache Mode.
-     * Location cache mode.
-     */
-    public function getCacheMode(): string
-    {
-        return $this->cacheMode;
-    }
-
-    /**
-     * Sets Cache Mode.
-     * Location cache mode.
-     *
-     * @required
-     * @maps cacheMode
-     * @factory \VerizonLib\Models\CacheModeEnum::checkValue
-     */
-    public function setCacheMode(string $cacheMode): void
-    {
-        $this->cacheMode = $cacheMode;
     }
 
     /**
@@ -139,6 +95,48 @@ class LocationRequest implements \JsonSerializable
     }
 
     /**
+     * Returns Accuracy Mode.
+     * Accurary, currently only 0-coarse supported.
+     */
+    public function getAccuracyMode(): ?string
+    {
+        return $this->accuracyMode;
+    }
+
+    /**
+     * Sets Accuracy Mode.
+     * Accurary, currently only 0-coarse supported.
+     *
+     * @maps accuracyMode
+     * @factory \VerizonLib\Models\AccuracyModeEnum::checkValue
+     */
+    public function setAccuracyMode(?string $accuracyMode): void
+    {
+        $this->accuracyMode = $accuracyMode;
+    }
+
+    /**
+     * Returns Cache Mode.
+     * Location cache mode.
+     */
+    public function getCacheMode(): ?string
+    {
+        return $this->cacheMode;
+    }
+
+    /**
+     * Sets Cache Mode.
+     * Location cache mode.
+     *
+     * @maps cacheMode
+     * @factory \VerizonLib\Models\CacheModeEnum::checkValue
+     */
+    public function setCacheMode(?string $cacheMode): void
+    {
+        $this->cacheMode = $cacheMode;
+    }
+
+    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -150,10 +148,14 @@ class LocationRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        $json['accountName']  = $this->accountName;
-        $json['accuracyMode'] = $this->accuracyMode;
-        $json['cacheMode']    = CacheModeEnum::checkValue($this->cacheMode);
-        $json['deviceList']   = $this->deviceList;
+        $json['accountName']      = $this->accountName;
+        $json['deviceList']       = $this->deviceList;
+        if (isset($this->accuracyMode)) {
+            $json['accuracyMode'] = AccuracyModeEnum::checkValue($this->accuracyMode);
+        }
+        if (isset($this->cacheMode)) {
+            $json['cacheMode']    = CacheModeEnum::checkValue($this->cacheMode);
+        }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

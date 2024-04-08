@@ -11,9 +11,9 @@ Request to return the provisioning history of a specified device during a specif
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `deviceId` | [`?DeviceId`](../../doc/models/device-id.md) | Optional | An identifier for a single device. | getDeviceId(): ?DeviceId | setDeviceId(?DeviceId deviceId): void |
-| `earliest` | `?string` | Optional | The earliest date and time for which you want provisioning data. | getEarliest(): ?string | setEarliest(?string earliest): void |
-| `latest` | `?string` | Optional | The last date and time for which you want provisioning data. | getLatest(): ?string | setLatest(?string latest): void |
+| `deviceId` | [`DeviceId`](../../doc/models/device-id.md) | Required | An identifier for a single device. | getDeviceId(): DeviceId | setDeviceId(DeviceId deviceId): void |
+| `earliest` | `string` | Required | The earliest date and time for which you want provisioning data. | getEarliest(): string | setEarliest(string earliest): void |
+| `latest` | `string` | Required | The last date and time for which you want provisioning data. | getLatest(): string | setLatest(string latest): void |
 
 ## Example (as JSON)
 

@@ -27,13 +27,44 @@ use VerizonLib\Models\UpdateServiceProfileResult;
 class ServiceProfilesController extends BaseController
 {
     /**
+     * Creates a service profile that describes the resource requirements of a service.
+     *
+     * @param ResourcesServiceProfile $body The request body passes all of the needed parameters to
+     *        create a service profile. Parameters will be edited here rather than the
+     *        **Parameters** section above. The `maxLatencyMs` and `clientType` parameters are
+     *        both required in the request body. **Note:** The `maxLatencyMs` value must be
+     *        submitted in multiples of 5. Additionally, "GPU" is future functionality and the
+     *        values are not captured.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function createServiceProfile(ResourcesServiceProfile $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceprofiles')
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(CreateServiceProfileResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * List all service profiles registered under your API key.
      *
      * @return ApiResponse Response from the API call
      */
     public function listServiceProfiles(): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles')->auth('global');
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles')->auth('oAuth2');
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
@@ -49,22 +80,17 @@ class ServiceProfilesController extends BaseController
     }
 
     /**
-     * Creates a service profile that describes the resource requirements of a service.
+     * Returns a specified service profile.
      *
-     * @param ResourcesServiceProfile $body The request body passes all of the needed parameters to
-     *        create a service profile. Parameters will be edited here rather than the
-     *        **Parameters** section above. The `maxLatencyMs` and `clientType` parameters are
-     *        both required in the request body. **Note:** The `maxLatencyMs` value must be
-     *        submitted in multiples of 5. Additionally, "GPU" is future functionality and the
-     *        values are not captured.
+     * @param string $serviceProfileId
      *
      * @return ApiResponse Response from the API call
      */
-    public function createServiceProfile(ResourcesServiceProfile $body): ApiResponse
+    public function getServiceProfile(string $serviceProfileId): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceprofiles')
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles/{serviceProfileId}')
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
@@ -73,7 +99,7 @@ class ServiceProfilesController extends BaseController
                 '0',
                 ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
             )
-            ->type(CreateServiceProfileResult::class)
+            ->type(ResourcesServiceProfileWithId::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -94,7 +120,7 @@ class ServiceProfilesController extends BaseController
     public function updateServiceProfile(string $serviceProfileId, ResourcesServiceProfile $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/serviceprofiles/{serviceProfileId}')
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('serviceProfileId', $serviceProfileId),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -115,32 +141,6 @@ class ServiceProfilesController extends BaseController
     }
 
     /**
-     * Returns a specified service profile.
-     *
-     * @param string $serviceProfileId
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getServiceProfile(string $serviceProfileId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles/{serviceProfileId}')
-            ->auth('global')
-            ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(ResourcesServiceProfileWithId::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Delete Service Profile based on unique service profile ID.
      *
      * @param string $serviceProfileId
@@ -150,7 +150,7 @@ class ServiceProfilesController extends BaseController
     public function deleteServiceProfile(string $serviceProfileId): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceprofiles/{serviceProfileId}')
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
 
         $_resHandler = $this->responseHandler()

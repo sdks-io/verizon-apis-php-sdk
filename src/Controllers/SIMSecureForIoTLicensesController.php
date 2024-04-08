@@ -34,7 +34,7 @@ class SIMSecureForIoTLicensesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/license/actions/assign')
             ->server(Server::M2M)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 HeaderParam::init('Content-Type', 'application/json'),
                 BodyParam::init($body),
@@ -69,7 +69,7 @@ class SIMSecureForIoTLicensesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/v1/devices/license/actions/assign')
             ->server(Server::M2M)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('X-Request-ID', $xRequestID));
 
         $_resHandler = $this->responseHandler()

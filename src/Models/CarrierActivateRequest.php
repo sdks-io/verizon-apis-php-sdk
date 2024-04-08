@@ -18,6 +18,21 @@ use stdClass;
 class CarrierActivateRequest implements \JsonSerializable
 {
     /**
+     * @var AccountDeviceList[]
+     */
+    private $devices;
+
+    /**
+     * @var string
+     */
+    private $servicePlan;
+
+    /**
+     * @var string
+     */
+    private $mdnZipCode;
+
+    /**
      * @var string|null
      */
     private $accountName;
@@ -43,11 +58,6 @@ class CarrierActivateRequest implements \JsonSerializable
     private $customFields;
 
     /**
-     * @var AccountDeviceList[]|null
-     */
-    private $devices;
-
-    /**
      * @var string|null
      */
     private $groupName;
@@ -56,11 +66,6 @@ class CarrierActivateRequest implements \JsonSerializable
      * @var string|null
      */
     private $leadId;
-
-    /**
-     * @var string|null
-     */
-    private $mdnZipCode;
 
     /**
      * @var PlaceOfUse|null
@@ -75,12 +80,90 @@ class CarrierActivateRequest implements \JsonSerializable
     /**
      * @var string|null
      */
-    private $servicePlan;
+    private $skuNumber;
 
     /**
-     * @var string|null
+     * @param AccountDeviceList[] $devices
+     * @param string $servicePlan
+     * @param string $mdnZipCode
      */
-    private $skuNumber;
+    public function __construct(array $devices, string $servicePlan, string $mdnZipCode)
+    {
+        $this->devices = $devices;
+        $this->servicePlan = $servicePlan;
+        $this->mdnZipCode = $mdnZipCode;
+    }
+
+    /**
+     * Returns Devices.
+     * Up to 10,000 devices for which you want to activate service, specified by device identifier.
+     *
+     * @return AccountDeviceList[]
+     */
+    public function getDevices(): array
+    {
+        return $this->devices;
+    }
+
+    /**
+     * Sets Devices.
+     * Up to 10,000 devices for which you want to activate service, specified by device identifier.
+     *
+     * @required
+     * @maps devices
+     *
+     * @param AccountDeviceList[] $devices
+     */
+    public function setDevices(array $devices): void
+    {
+        $this->devices = $devices;
+    }
+
+    /**
+     * Returns Service Plan.
+     * The service plan code that you want to assign to all specified devices.
+     */
+    public function getServicePlan(): string
+    {
+        return $this->servicePlan;
+    }
+
+    /**
+     * Sets Service Plan.
+     * The service plan code that you want to assign to all specified devices.
+     *
+     * @required
+     * @maps servicePlan
+     */
+    public function setServicePlan(string $servicePlan): void
+    {
+        $this->servicePlan = $servicePlan;
+    }
+
+    /**
+     * Returns Mdn Zip Code.
+     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
+     * you have been told to use with these devices. For accounts that are configured for geographic
+     * numbering, this is the ZIP code from which the MDN will be derived.
+     */
+    public function getMdnZipCode(): string
+    {
+        return $this->mdnZipCode;
+    }
+
+    /**
+     * Sets Mdn Zip Code.
+     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
+     * you have been told to use with these devices. For accounts that are configured for geographic
+     * numbering, this is the ZIP code from which the MDN will be derived.
+     *
+     * @required
+     * @maps mdnZipCode
+     */
+    public function setMdnZipCode(string $mdnZipCode): void
+    {
+        $this->mdnZipCode = $mdnZipCode;
+    }
 
     /**
      * Returns Account Name.
@@ -187,30 +270,6 @@ class CarrierActivateRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Devices.
-     * Up to 10,000 devices for which you want to activate service, specified by device identifier.
-     *
-     * @return AccountDeviceList[]|null
-     */
-    public function getDevices(): ?array
-    {
-        return $this->devices;
-    }
-
-    /**
-     * Sets Devices.
-     * Up to 10,000 devices for which you want to activate service, specified by device identifier.
-     *
-     * @maps devices
-     *
-     * @param AccountDeviceList[]|null $devices
-     */
-    public function setDevices(?array $devices): void
-    {
-        $this->devices = $devices;
-    }
-
-    /**
      * Returns Group Name.
      * If you specify devices by ID in the devices parameters, this is the name of a device group that the
      * devices should be added to.If you don't specify individual devices with the devices parameter, you
@@ -254,30 +313,6 @@ class CarrierActivateRequest implements \JsonSerializable
     public function setLeadId(?string $leadId): void
     {
         $this->leadId = $leadId;
-    }
-
-    /**
-     * Returns Mdn Zip Code.
-     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
-     * you have been told to use with these devices. For accounts that are configured for geographic
-     * numbering, this is the ZIP code from which the MDN will be derived.
-     */
-    public function getMdnZipCode(): ?string
-    {
-        return $this->mdnZipCode;
-    }
-
-    /**
-     * Sets Mdn Zip Code.
-     * The Zip code of the location where the line of service will primarily be used, or a Zip code that
-     * you have been told to use with these devices. For accounts that are configured for geographic
-     * numbering, this is the ZIP code from which the MDN will be derived.
-     *
-     * @maps mdnZipCode
-     */
-    public function setMdnZipCode(?string $mdnZipCode): void
-    {
-        $this->mdnZipCode = $mdnZipCode;
     }
 
     /**
@@ -329,26 +364,6 @@ class CarrierActivateRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Service Plan.
-     * The service plan code that you want to assign to all specified devices.
-     */
-    public function getServicePlan(): ?string
-    {
-        return $this->servicePlan;
-    }
-
-    /**
-     * Sets Service Plan.
-     * The service plan code that you want to assign to all specified devices.
-     *
-     * @maps servicePlan
-     */
-    public function setServicePlan(?string $servicePlan): void
-    {
-        $this->servicePlan = $servicePlan;
-    }
-
-    /**
      * Returns Sku Number.
      * The Stock Keeping Unit (SKU) of a 4G device type can be used with ICCID device identifiers in lieu
      * of an IMEI when activating 4G devices. The SkuNumber will be used with all devices in the request,
@@ -384,6 +399,9 @@ class CarrierActivateRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['devices']                 = $this->devices;
+        $json['servicePlan']             = $this->servicePlan;
+        $json['mdnZipCode']              = $this->mdnZipCode;
         if (isset($this->accountName)) {
             $json['accountName']         = $this->accountName;
         }
@@ -399,26 +417,17 @@ class CarrierActivateRequest implements \JsonSerializable
         if (isset($this->customFields)) {
             $json['customFields']        = $this->customFields;
         }
-        if (isset($this->devices)) {
-            $json['devices']             = $this->devices;
-        }
         if (isset($this->groupName)) {
             $json['groupName']           = $this->groupName;
         }
         if (isset($this->leadId)) {
             $json['leadId']              = $this->leadId;
         }
-        if (isset($this->mdnZipCode)) {
-            $json['mdnZipCode']          = $this->mdnZipCode;
-        }
         if (isset($this->primaryPlaceOfUse)) {
             $json['primaryPlaceOfUse']   = $this->primaryPlaceOfUse;
         }
         if (isset($this->publicIpRestriction)) {
             $json['publicIpRestriction'] = $this->publicIpRestriction;
-        }
-        if (isset($this->servicePlan)) {
-            $json['servicePlan']         = $this->servicePlan;
         }
         if (isset($this->skuNumber)) {
             $json['skuNumber']           = $this->skuNumber;

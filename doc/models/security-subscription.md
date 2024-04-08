@@ -29,12 +29,12 @@ Subscription of the device.
   "licenseAvailable": 1,
   "extendedAttributes": [
     {
-      "key": "key9",
-      "value": "value1"
+      "key": "key8",
+      "value": "value0"
     },
     {
-      "key": "key0",
-      "value": "value2"
+      "key": "key8",
+      "value": "value0"
     }
   ]
 }

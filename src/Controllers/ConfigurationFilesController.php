@@ -25,6 +25,30 @@ use VerizonLib\Utils\FileWrapper;
 class ConfigurationFilesController extends BaseController
 {
     /**
+     * You can retrieve a list of configuration or supplementary of files for an account.
+     *
+     * @param string $acc Account identifier.
+     * @param string $distributionType Filter the distributionType to only retrieve files for a
+     *        specific distribution type.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getListOfFiles(string $acc, string $distributionType): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/files/{acc}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('acc', $acc), QueryParam::init('distributionType', $distributionType));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(RetrievesAvailableFilesResponseList::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Uploads a configuration/supplementary file for an account. ThingSpace generates a fileName after the
      * upload and is returned in the response.
      *
@@ -47,7 +71,7 @@ class ConfigurationFilesController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/files/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 FormParam::init('fileupload', $fileupload),
@@ -60,30 +84,6 @@ class ConfigurationFilesController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(UploadConfigurationFilesResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * You can retrieve a list of configuration or supplementary of files for an account.
-     *
-     * @param string $acc Account identifier.
-     * @param string $distributionType Filter the distributionType to only retrieve files for a
-     *        specific distribution type.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getListOfFiles(string $acc, string $distributionType): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/files/{acc}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(TemplateParam::init('acc', $acc), QueryParam::init('distributionType', $distributionType));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(RetrievesAvailableFilesResponseList::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

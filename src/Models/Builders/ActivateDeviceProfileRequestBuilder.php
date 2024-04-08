@@ -33,27 +33,9 @@ class ActivateDeviceProfileRequestBuilder
     /**
      * Initializes a new activate device profile request Builder object.
      */
-    public static function init(): self
+    public static function init(array $devices, string $accountName): self
     {
-        return new self(new ActivateDeviceProfileRequest());
-    }
-
-    /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
-        return $this;
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
+        return new self(new ActivateDeviceProfileRequest($devices, $accountName));
     }
 
     /**

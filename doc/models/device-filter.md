@@ -27,8 +27,8 @@ Specify the kind of the device identifier, the type of match, and the string tha
       "value": "East Region Trucks"
     }
   ],
-  "account": "account0",
-  "servicePlan": "servicePlan0"
+  "account": "account8",
+  "servicePlan": "servicePlan2"
 }
 ```
 

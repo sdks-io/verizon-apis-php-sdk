@@ -20,19 +20,15 @@ Filter for devices without account.
 ```json
 {
   "groupName": "suspended devices",
-  "servicePlan": "servicePlan0",
+  "servicePlan": "servicePlan4",
   "customFields": [
     {
       "key": "key0",
       "value": "value2"
     },
     {
-      "key": "key1",
-      "value": "value3"
-    },
-    {
-      "key": "key2",
-      "value": "value4"
+      "key": "key0",
+      "value": "value2"
     }
   ]
 }

@@ -34,36 +34,9 @@ class DeviceConnectionListRequestBuilder
     /**
      * Initializes a new device connection list request Builder object.
      */
-    public static function init(): self
+    public static function init(DeviceId $deviceId, string $earliest, string $latest): self
     {
-        return new self(new DeviceConnectionListRequest());
-    }
-
-    /**
-     * Sets device id field.
-     */
-    public function deviceId(?DeviceId $value): self
-    {
-        $this->instance->setDeviceId($value);
-        return $this;
-    }
-
-    /**
-     * Sets earliest field.
-     */
-    public function earliest(?string $value): self
-    {
-        $this->instance->setEarliest($value);
-        return $this;
-    }
-
-    /**
-     * Sets latest field.
-     */
-    public function latest(?string $value): self
-    {
-        $this->instance->setLatest($value);
-        return $this;
+        return new self(new DeviceConnectionListRequest($deviceId, $earliest, $latest));
     }
 
     /**

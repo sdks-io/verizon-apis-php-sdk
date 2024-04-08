@@ -25,7 +25,7 @@ Information about the resource requirements and service characteristics of an ed
 ```json
 {
   "serviceProfileId": "4054ea9a-593e-4776-b488-697b1bfa4f3b",
-  "clientType": "IoT",
+  "clientType": "ComputerVision",
   "ecspFilter": "Verizon",
   "clientSchedule": "time windows",
   "clientServiceArea": "BAY AREA",

@@ -37,7 +37,7 @@ class DeviceReportsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/aggregate')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -72,51 +72,6 @@ class DeviceReportsController extends BaseController
     }
 
     /**
-     * Detailed report of session duration and number of bytes transferred per day.
-     *
-     * @param SessionReportRequest $body Request for sessions report.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getSessionsReport(SessionReportRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/sessions')
-            ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Bad request.', HyperPreciseLocationResultException::class))
-            ->throwErrorOn(
-                '401',
-                ErrorType::init(
-                    'Unauthorized request. Access token is missing or invalid.',
-                    HyperPreciseLocationResultException::class
-                )
-            )
-            ->throwErrorOn(
-                '403',
-                ErrorType::init('Forbidden request.', HyperPreciseLocationResultException::class)
-            )
-            ->throwErrorOn(
-                '404',
-                ErrorType::init('Bad request. Not found.', HyperPreciseLocationResultException::class)
-            )
-            ->throwErrorOn(
-                '409',
-                ErrorType::init('Bad request. Conflict state.', HyperPreciseLocationResultException::class)
-            )
-            ->throwErrorOn(
-                '500',
-                ErrorType::init('Internal Server Error.', HyperPreciseLocationResultException::class)
-            )
-            ->type(SessionReport::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Calculate aggregated report per day with number of sessions and usage information. User will receive
      * an asynchronous callback for the specified list of devices (Max 10000) and date range (Max 180 days).
      *
@@ -128,7 +83,7 @@ class DeviceReportsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/async/aggregate')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -157,6 +112,51 @@ class DeviceReportsController extends BaseController
                 ErrorType::init('Internal Server Error.', HyperPreciseLocationResultException::class)
             )
             ->type(AggregatedReportCallbackResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Detailed report of session duration and number of bytes transferred per day.
+     *
+     * @param SessionReportRequest $body Request for sessions report.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getSessionsReport(SessionReportRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/sessions')
+            ->server(Server::HYPER_PRECISE_LOCATION)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Bad request.', HyperPreciseLocationResultException::class))
+            ->throwErrorOn(
+                '401',
+                ErrorType::init(
+                    'Unauthorized request. Access token is missing or invalid.',
+                    HyperPreciseLocationResultException::class
+                )
+            )
+            ->throwErrorOn(
+                '403',
+                ErrorType::init('Forbidden request.', HyperPreciseLocationResultException::class)
+            )
+            ->throwErrorOn(
+                '404',
+                ErrorType::init('Bad request. Not found.', HyperPreciseLocationResultException::class)
+            )
+            ->throwErrorOn(
+                '409',
+                ErrorType::init('Bad request. Conflict state.', HyperPreciseLocationResultException::class)
+            )
+            ->throwErrorOn(
+                '500',
+                ErrorType::init('Internal Server Error.', HyperPreciseLocationResultException::class)
+            )
+            ->type(SessionReport::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

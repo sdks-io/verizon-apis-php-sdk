@@ -19,9 +19,9 @@ OAuth 2 Authorization endpoint exception.
 
 ```json
 {
-  "error": "invalid_request",
-  "error_description": "error_description2",
-  "error_uri": "error_uri2"
+  "error": "unsupported_grant_type",
+  "error_description": "error_description8",
+  "error_uri": "error_uri8"
 }
 ```
 

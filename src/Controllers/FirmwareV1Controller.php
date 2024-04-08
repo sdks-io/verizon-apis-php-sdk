@@ -28,33 +28,23 @@ use VerizonLib\Server;
 class FirmwareV1Controller extends BaseController
 {
     /**
-     * Add or remove devices from a scheduled upgrade.
+     * Lists all device firmware images available for an account, based on the devices registered to that
+     * account.
      *
      * @param string $account Account identifier in "##########-#####".
-     * @param string $upgradeId The UUID of the upgrade, returned by POST /upgrades when the upgrade
-     *        was scheduled.
-     * @param FirmwareUpgradeChangeRequest $body List of devices to add or remove.
      *
      * @return ApiResponse Response from the API call
      */
-    public function updateFirmwareUpgradeDevices(
-        string $account,
-        string $upgradeId,
-        FirmwareUpgradeChangeRequest $body
-    ): ApiResponse {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/upgrades/{account}/upgrade/{upgradeId}')
+    public function listAvailableFirmware(string $account): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                TemplateParam::init('upgradeId', $upgradeId),
-                HeaderParam::init('Content-Type', '*/*'),
-                BodyParam::init($body)
-            );
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(FirmwareUpgradeChangeResult::class)
+            ->type(Firmware::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -71,58 +61,12 @@ class FirmwareV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/upgrades')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(FirmwareUpgrade::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Cancel a scheduled firmware upgrade.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param string $upgradeId The UUID of the scheduled upgrade that you want to cancel.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function cancelScheduledFirmwareUpgrade(string $account, string $upgradeId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/upgrades/{account}/upgrade/{upgradeId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(FotaV1SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Lists all device firmware images available for an account, based on the devices registered to that
-     * account.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAvailableFirmware(string $account): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(Firmware::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -142,12 +86,68 @@ class FirmwareV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/upgrades/{account}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(FirmwareUpgrade::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Add or remove devices from a scheduled upgrade.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param string $upgradeId The UUID of the upgrade, returned by POST /upgrades when the upgrade
+     *        was scheduled.
+     * @param FirmwareUpgradeChangeRequest $body List of devices to add or remove.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateFirmwareUpgradeDevices(
+        string $account,
+        string $upgradeId,
+        FirmwareUpgradeChangeRequest $body
+    ): ApiResponse {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/upgrades/{account}/upgrade/{upgradeId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                TemplateParam::init('upgradeId', $upgradeId),
+                HeaderParam::init('Content-Type', '*/*'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(FirmwareUpgradeChangeResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Cancel a scheduled firmware upgrade.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param string $upgradeId The UUID of the scheduled upgrade that you want to cancel.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function cancelScheduledFirmwareUpgrade(string $account, string $upgradeId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/upgrades/{account}/upgrade/{upgradeId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(FotaV1SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

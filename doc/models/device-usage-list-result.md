@@ -31,7 +31,7 @@ Response to return the daily network data usage of a single device during a spec
       "smsUsed": 0,
       "source": "Raw Usage",
       "timestamp": "2020-12-01T00:00:00Z",
-      "servicePlan": "servicePlan5"
+      "servicePlan": "servicePlan0"
     }
   ]
 }

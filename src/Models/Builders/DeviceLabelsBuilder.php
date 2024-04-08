@@ -33,27 +33,9 @@ class DeviceLabelsBuilder
     /**
      * Initializes a new device labels Builder object.
      */
-    public static function init(): self
+    public static function init(string $name, string $value): self
     {
-        return new self(new DeviceLabels());
-    }
-
-    /**
-     * Sets name field.
-     */
-    public function name(?string $value): self
-    {
-        $this->instance->setName($value);
-        return $this;
-    }
-
-    /**
-     * Sets value field.
-     */
-    public function value(?string $value): self
-    {
-        $this->instance->setValue($value);
-        return $this;
+        return new self(new DeviceLabels($name, $value));
     }
 
     /**

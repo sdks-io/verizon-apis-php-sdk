@@ -37,10 +37,50 @@ class TargetsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/query')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(Target::class, 1)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Remove a target from a ThingSpace account.
+     *
+     * @param DeleteTargetRequest $body The request body identifies the target to delete.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteTarget(DeleteTargetRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/delete')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Define a target to receive data streams, alerts, or callbacks. After creating the target resource,
+     * use its ID in a subscription to set up a data stream.
+     *
+     * @param CreateTargetRequest $body The request body provides the details of the target that you
+     *        want to create.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function createTarget(CreateTargetRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(Target::class)->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }
@@ -80,7 +120,7 @@ class TargetsController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/newaic')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 HeaderParam::init('BillingaccountID', $billingaccountID),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -88,46 +128,6 @@ class TargetsController extends BaseController
             );
 
         $_resHandler = $this->responseHandler()->type(CreateIoTApplicationResponse::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Define a target to receive data streams, alerts, or callbacks. After creating the target resource,
-     * use its ID in a subscription to set up a data stream.
-     *
-     * @param CreateTargetRequest $body The request body provides the details of the target that you
-     *        want to create.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function createTarget(CreateTargetRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(Target::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Remove a target from a ThingSpace account.
-     *
-     * @param DeleteTargetRequest $body The request body identifies the target to delete.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteTarget(DeleteTargetRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/delete')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }

@@ -57,7 +57,7 @@ Upgrade information.
       ]
     }
   ],
-  "lastSeenUpgradeId": 10
+  "lastSeenUpgradeId": 120
 }
 ```
 

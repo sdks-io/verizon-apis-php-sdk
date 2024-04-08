@@ -38,8 +38,9 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = ConsentRequestBuilder::init()
-    ->accountName('1234567890-00001')
+$body = ConsentRequestBuilder::init(
+    '1234567890-00001'
+)
     ->allDevice(false)
     ->type('replace')
     ->exclusion(

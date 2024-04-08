@@ -30,15 +30,15 @@ Used to filter data by time period or number of devices.
       "name": "MANUFACTURER"
     }
   },
-  "$limitNumber": 18,
+  "$limitNumber": 10,
   "$limitTime": {
     "startOn": "2016-03-13T12:52:32.123Z",
     "duration": {
-      "value": 212,
+      "value": 176,
       "unit": "SECOND"
     }
   },
-  "$page": "$page4"
+  "$page": "$page2"
 }
 ```
 

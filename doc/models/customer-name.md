@@ -24,8 +24,8 @@ The customer name to be used for line usage taxation.
   "title": "President",
   "firstName": "Zaffod",
   "lastName": "Beeblebrox",
-  "middleName": "middleName8",
-  "suffix": "suffix0"
+  "middleName": "middleName4",
+  "suffix": "suffix4"
 }
 ```
 

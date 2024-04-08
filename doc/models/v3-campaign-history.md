@@ -37,9 +37,9 @@ Campaign history.
           "endTime": 21
         }
       ],
-      "firmwareName": "firmwareName0",
-      "firmwareFrom": "firmwareFrom0",
-      "firmwareTo": "firmwareTo0",
+      "firmwareName": "firmwareName6",
+      "firmwareFrom": "firmwareFrom6",
+      "firmwareTo": "firmwareTo6",
       "protocol": "LWM2M"
     }
   ]

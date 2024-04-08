@@ -60,7 +60,6 @@ class Id implements \JsonSerializable
      * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      *
      * @maps kind
-     * @factory \VerizonLib\Models\KindEnum::checkValue
      */
     public function setKind(?string $kind): void
     {
@@ -83,7 +82,7 @@ class Id implements \JsonSerializable
             $json['id']   = $this->id;
         }
         if (isset($this->kind)) {
-            $json['kind'] = KindEnum::checkValue($this->kind);
+            $json['kind'] = $this->kind;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

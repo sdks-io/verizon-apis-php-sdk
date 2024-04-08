@@ -26,8 +26,8 @@ Request for obtaining a session report.
   "startDate": "2022-12-09T22:01:06.217Z",
   "endDate": "2022-12-09T22:01:08.734Z",
   "imei": "709312034493372",
-  "durationLow": 60,
-  "durationHigh": 192
+  "durationLow": 224,
+  "durationHigh": 92
 }
 ```
 

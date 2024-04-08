@@ -34,27 +34,9 @@ class AssociateLabelRequestBuilder
     /**
      * Initializes a new associate label request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, AccountLabels $labels): self
     {
-        return new self(new AssociateLabelRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
-    }
-
-    /**
-     * Sets labels field.
-     */
-    public function labels(?AccountLabels $value): self
-    {
-        $this->instance->setLabels($value);
-        return $this;
+        return new self(new AssociateLabelRequest($accountName, $labels));
     }
 
     /**

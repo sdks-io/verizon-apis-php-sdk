@@ -19,20 +19,30 @@ use stdClass;
 class LogInRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $username;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $password;
+
+    /**
+     * @param string $username
+     * @param string $password
+     */
+    public function __construct(string $username, string $password)
+    {
+        $this->username = $username;
+        $this->password = $password;
+    }
 
     /**
      * Returns Username.
      * The username for authentication.
      */
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -41,9 +51,10 @@ class LogInRequest implements \JsonSerializable
      * Sets Username.
      * The username for authentication.
      *
+     * @required
      * @maps username
      */
-    public function setUsername(?string $username): void
+    public function setUsername(string $username): void
     {
         $this->username = $username;
     }
@@ -52,7 +63,7 @@ class LogInRequest implements \JsonSerializable
      * Returns Password.
      * The password for authentication.
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -61,9 +72,10 @@ class LogInRequest implements \JsonSerializable
      * Sets Password.
      * The password for authentication.
      *
+     * @required
      * @maps password
      */
-    public function setPassword(?string $password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
@@ -80,12 +92,8 @@ class LogInRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->username)) {
-            $json['username'] = $this->username;
-        }
-        if (isset($this->password)) {
-            $json['password'] = $this->password;
-        }
+        $json['username'] = $this->username;
+        $json['password'] = $this->password;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

@@ -17,7 +17,7 @@ Data about additional service support information for the MEC platform.
 
 ```json
 {
-  "additionalInfo": "additionalInfo8"
+  "additionalInfo": "additionalInfo2"
 }
 ```
 

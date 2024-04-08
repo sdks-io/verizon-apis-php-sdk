@@ -33,27 +33,9 @@ class DeviceIdBuilder
     /**
      * Initializes a new device id Builder object.
      */
-    public static function init(): self
+    public static function init(string $id, string $kind): self
     {
-        return new self(new DeviceId());
-    }
-
-    /**
-     * Sets id field.
-     */
-    public function id(?string $value): self
-    {
-        $this->instance->setId($value);
-        return $this;
-    }
-
-    /**
-     * Sets kind field.
-     */
-    public function kind(?string $value): self
-    {
-        $this->instance->setKind($value);
-        return $this;
+        return new self(new DeviceId($id, $kind));
     }
 
     /**

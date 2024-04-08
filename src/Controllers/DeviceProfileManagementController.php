@@ -17,39 +17,14 @@ use CoreInterfaces\Core\Request\RequestMethod;
 use VerizonLib\Exceptions\RestErrorResponseException;
 use VerizonLib\Http\ApiResponse;
 use VerizonLib\Models\ActivateDeviceProfileRequest;
+use VerizonLib\Models\DeactivateDeviceProfileRequest;
 use VerizonLib\Models\ProfileRequest;
-use VerizonLib\Models\ProfileRequest2;
 use VerizonLib\Models\RequestResponse;
 use VerizonLib\Models\SetFallbackAttributeRequest;
 use VerizonLib\Server;
 
 class DeviceProfileManagementController extends BaseController
 {
-    /**
-     * Allows the profile to set the fallback attribute to the device.
-     *
-     * @param SetFallbackAttributeRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function profileToSetFallbackAttribute(SetFallbackAttributeRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/v1/devices/profile/actions/setfallbackattribute'
-        )
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Bad request', RestErrorResponseException::class))
-            ->type(RequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
     /**
      * Uses the profile to bring the device under management.
      *
@@ -59,9 +34,12 @@ class DeviceProfileManagementController extends BaseController
      */
     public function activateDeviceThroughProfile(ActivateDeviceProfileRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/profile/actions/activate_enable')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/profile/actions/activate_enable'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -81,9 +59,9 @@ class DeviceProfileManagementController extends BaseController
      */
     public function profileToActivateDevice(ProfileRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/profile/actions/activate')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/activate')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -97,15 +75,40 @@ class DeviceProfileManagementController extends BaseController
     /**
      * Uses the profile to deactivate the device.
      *
-     * @param ProfileRequest2 $body Device Profile Query
+     * @param DeactivateDeviceProfileRequest $body Device Profile Query
      *
      * @return ApiResponse Response from the API call
      */
-    public function profileToDeactivateDevice(ProfileRequest2 $body): ApiResponse
+    public function profileToDeactivateDevice(DeactivateDeviceProfileRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/profile/actions/deactivate')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/deactivate')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Bad request', RestErrorResponseException::class))
+            ->type(RequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Allows the profile to set the fallback attribute to the device.
+     *
+     * @param SetFallbackAttributeRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function profileToSetFallbackAttribute(SetFallbackAttributeRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/profile/actions/setfallbackattribute'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

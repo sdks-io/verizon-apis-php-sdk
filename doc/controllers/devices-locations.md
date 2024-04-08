@@ -13,9 +13,9 @@ $devicesLocationsController = $client->getDevicesLocationsController();
 * [List Devices Locations Synchronous](../../doc/controllers/devices-locations.md#list-devices-locations-synchronous)
 * [List Devices Locations Asynchronous](../../doc/controllers/devices-locations.md#list-devices-locations-asynchronous)
 * [Cancel Device Location Request](../../doc/controllers/devices-locations.md#cancel-device-location-request)
+* [Create Location Report](../../doc/controllers/devices-locations.md#create-location-report)
 * [Retrieve Location Report](../../doc/controllers/devices-locations.md#retrieve-location-report)
 * [Get Location Report Status](../../doc/controllers/devices-locations.md#get-location-report-status)
-* [Create Location Report](../../doc/controllers/devices-locations.md#create-location-report)
 * [Cancel Queued Location Report Generation](../../doc/controllers/devices-locations.md#cancel-queued-location-report-generation)
 
 
@@ -42,7 +42,6 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ```php
 $body = LocationRequestBuilder::init(
     '1234567890-00001',
-    CacheModeEnum::ENUM_1,
     [
         DeviceInfoBuilder::init(
             '980003420535573',
@@ -60,7 +59,10 @@ $body = LocationRequestBuilder::init(
             '7897650914'
         )->build()
     ]
-)->build();
+)
+    ->accuracyMode(AccuracyModeEnum::ENUM_0)
+    ->cacheMode(CacheModeEnum::ENUM_1)
+    ->build();
 
 $apiResponse = $devicesLocationsController->listDevicesLocationsSynchronous($body);
 ```
@@ -133,7 +135,6 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ```php
 $body = LocationRequestBuilder::init(
     '2234434445-32333',
-    CacheModeEnum::ENUM_2,
     [
         DeviceInfoBuilder::init(
             '354677790348290',
@@ -141,7 +142,10 @@ $body = LocationRequestBuilder::init(
             '5557337468'
         )->build()
     ]
-)->build();
+)
+    ->accuracyMode(AccuracyModeEnum::ENUM_0)
+    ->cacheMode(CacheModeEnum::ENUM_2)
+    ->build();
 
 $apiResponse = $devicesLocationsController->listDevicesLocationsAsynchronous($body);
 ```
@@ -199,6 +203,70 @@ $apiResponse = $devicesLocationsController->cancelDeviceLocationRequest(
 ```json
 {
   "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Unexpected error. | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
+
+
+# Create Location Report
+
+Request an asynchronous device location report.
+
+```php
+function createLocationReport(LocationRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`LocationRequest`](../../doc/models/location-request.md) | Body, Required | Request for device location report. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`AsynchronousLocationRequestResult`](../../doc/models/asynchronous-location-request-result.md).
+
+## Example Usage
+
+```php
+$body = LocationRequestBuilder::init(
+    '1234567890-00001',
+    [
+        DeviceInfoBuilder::init(
+            '980003420535573',
+            'imei',
+            '7892345678'
+        )->build(),
+        DeviceInfoBuilder::init(
+            '375535024300089',
+            'imei',
+            '7897654321'
+        )->build(),
+        DeviceInfoBuilder::init(
+            'A100003861E585',
+            'meid',
+            '7897650914'
+        )->build()
+    ]
+)
+    ->accuracyMode(AccuracyModeEnum::ENUM_0)
+    ->cacheMode(CacheModeEnum::ENUM_1)
+    ->build();
+
+$apiResponse = $devicesLocationsController->createLocationReport($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33",
+  "status": "QUEUED"
 }
 ```
 
@@ -334,68 +402,6 @@ $apiResponse = $devicesLocationsController->getLocationReportStatus(
 {
   "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33",
   "status": "INPROGRESS"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| Default | Unexpected error. | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
-
-
-# Create Location Report
-
-Request an asynchronous device location report.
-
-```php
-function createLocationReport(LocationRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`LocationRequest`](../../doc/models/location-request.md) | Body, Required | Request for device location report. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`AsynchronousLocationRequestResult`](../../doc/models/asynchronous-location-request-result.md).
-
-## Example Usage
-
-```php
-$body = LocationRequestBuilder::init(
-    '1234567890-00001',
-    CacheModeEnum::ENUM_1,
-    [
-        DeviceInfoBuilder::init(
-            '980003420535573',
-            'imei',
-            '7892345678'
-        )->build(),
-        DeviceInfoBuilder::init(
-            '375535024300089',
-            'imei',
-            '7897654321'
-        )->build(),
-        DeviceInfoBuilder::init(
-            'A100003861E585',
-            'meid',
-            '7897650914'
-        )->build()
-    ]
-)->build();
-
-$apiResponse = $devicesLocationsController->createLocationReport($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33",
-  "status": "QUEUED"
 }
 ```
 

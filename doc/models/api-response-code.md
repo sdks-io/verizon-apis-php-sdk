@@ -19,7 +19,7 @@ ResponseCode and/or a message indicating success or failure of the request.
 ```json
 {
   "responseCode": "INVALID_ACCESS",
-  "message": "message0"
+  "message": "message4"
 }
 ```
 

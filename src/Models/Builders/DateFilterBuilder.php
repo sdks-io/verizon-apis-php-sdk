@@ -33,27 +33,9 @@ class DateFilterBuilder
     /**
      * Initializes a new date filter Builder object.
      */
-    public static function init(): self
+    public static function init(string $earliest, string $latest): self
     {
-        return new self(new DateFilter());
-    }
-
-    /**
-     * Sets earliest field.
-     */
-    public function earliest(?string $value): self
-    {
-        $this->instance->setEarliest($value);
-        return $this;
-    }
-
-    /**
-     * Sets latest field.
-     */
-    public function latest(?string $value): self
-    {
-        $this->instance->setLatest($value);
-        return $this;
+        return new self(new DateFilter($earliest, $latest));
     }
 
     /**

@@ -28,63 +28,6 @@ use VerizonLib\Server;
 class SoftwareManagementLicensesV1Controller extends BaseController
 {
     /**
-     * Remove unused licenses from device.
-     *
-     * @deprecated
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param V1LicensesAssignedRemovedRequest $body IMEIs of the devices to remove licenses from.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function removeLicensesFromDevices(string $account, V1LicensesAssignedRemovedRequest $body): ApiResponse
-    {
-        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/remove')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                HeaderParam::init('Content-Type', 'application/json'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(V1LicensesAssignedRemovedResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Deletes the entire list of cancellation candidate devices.
-     *
-     * @deprecated
-     *
-     * @param string $account Account identifier in "##########-#####".
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteListOfLicensesToRemove(string $account): ApiResponse
-    {
-        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(FotaV1SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Assigns licenses to a specified list of devices so that firmware upgrades can be scheduled for those
      * devices.
      *
@@ -101,7 +44,38 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/assign')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                HeaderParam::init('Content-Type', 'application/json'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(V1LicensesAssignedRemovedResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Remove unused licenses from device.
+     *
+     * @deprecated
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param V1LicensesAssignedRemovedRequest $body IMEIs of the devices to remove licenses from.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function removeLicensesFromDevices(string $account, V1LicensesAssignedRemovedRequest $body): ApiResponse
+    {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
+
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/remove')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -133,7 +107,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/cancel')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -143,6 +117,32 @@ class SoftwareManagementLicensesV1Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(V1ListOfLicensesToRemoveResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Deletes the entire list of cancellation candidate devices.
+     *
+     * @deprecated
+     *
+     * @param string $account Account identifier in "##########-#####".
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteListOfLicensesToRemove(string $account): ApiResponse
+    {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
+
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(FotaV1SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -168,7 +168,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}/cancel/index/{startIndex}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
 
         $_resHandler = $this->responseHandler()

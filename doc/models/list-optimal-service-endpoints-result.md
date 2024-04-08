@@ -19,30 +19,17 @@ Response on successful retrieval of optimal service endpoints for clients.
 {
   "serviceEndpoints": [
     {
-      "ern": "ern7",
+      "ern": "ern0",
       "serviceEndpoint": {
-        "URI": "URI7",
-        "FQDN": "FQDN3",
-        "IPv4Address": "IPv4Address3",
-        "IPv6Address": "IPv6Address9",
-        "port": 199
+        "URI": "URI6",
+        "FQDN": "FQDN2",
+        "IPv4Address": "IPv4Address4",
+        "IPv6Address": "IPv6Address8",
+        "port": 16
       },
-      "applicationServerProviderId": "applicationServerProviderId9",
-      "applicationId": "applicationId1",
-      "serviceDescription": "serviceDescription5"
-    },
-    {
-      "ern": "ern8",
-      "serviceEndpoint": {
-        "URI": "URI8",
-        "FQDN": "FQDN4",
-        "IPv4Address": "IPv4Address2",
-        "IPv6Address": "IPv6Address0",
-        "port": 200
-      },
-      "applicationServerProviderId": "applicationServerProviderId0",
-      "applicationId": "applicationId2",
-      "serviceDescription": "serviceDescription4"
+      "applicationServerProviderId": "applicationServerProviderId2",
+      "applicationId": "applicationId4",
+      "serviceDescription": "serviceDescription2"
     }
   ]
 }

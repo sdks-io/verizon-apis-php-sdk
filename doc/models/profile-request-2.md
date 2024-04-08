@@ -21,36 +21,56 @@
 ```json
 {
   "accountName": "0000123456-00001",
-  "carrierName": "the name of the mobile service provider",
-  "reasonCode": "a short code for the reason action was taken",
+  "carrierName": "Verizon Wireless",
+  "reasonCode": "FF",
   "etfWaiver": true,
   "checkFallbackProfile": false,
   "devices": [
     {
       "ids": [
         {
-          "id": "id7",
-          "kind": "iccid"
+          "id": "id4",
+          "kind": "kind2"
         },
         {
-          "id": "id8",
-          "kind": "imei"
+          "id": "id4",
+          "kind": "kind2"
+        },
+        {
+          "id": "id4",
+          "kind": "kind2"
         }
       ]
     },
     {
       "ids": [
         {
-          "id": "id8",
-          "kind": "imei"
+          "id": "id4",
+          "kind": "kind2"
         },
         {
-          "id": "id9",
-          "kind": "eid"
+          "id": "id4",
+          "kind": "kind2"
         },
         {
-          "id": "id0",
-          "kind": "esn"
+          "id": "id4",
+          "kind": "kind2"
+        }
+      ]
+    },
+    {
+      "ids": [
+        {
+          "id": "id4",
+          "kind": "kind2"
+        },
+        {
+          "id": "id4",
+          "kind": "kind2"
+        },
+        {
+          "id": "id4",
+          "kind": "kind2"
         }
       ]
     }

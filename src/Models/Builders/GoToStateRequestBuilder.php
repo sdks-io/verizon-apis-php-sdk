@@ -35,9 +35,9 @@ class GoToStateRequestBuilder
     /**
      * Initializes a new go to state request Builder object.
      */
-    public static function init(): self
+    public static function init(string $serviceName, string $stateName, string $servicePlan, string $mdnZipCode): self
     {
-        return new self(new GoToStateRequest());
+        return new self(new GoToStateRequest($serviceName, $stateName, $servicePlan, $mdnZipCode));
     }
 
     /**
@@ -55,42 +55,6 @@ class GoToStateRequestBuilder
     public function filter(?DeviceFilter $value): self
     {
         $this->instance->setFilter($value);
-        return $this;
-    }
-
-    /**
-     * Sets service name field.
-     */
-    public function serviceName(?string $value): self
-    {
-        $this->instance->setServiceName($value);
-        return $this;
-    }
-
-    /**
-     * Sets state name field.
-     */
-    public function stateName(?string $value): self
-    {
-        $this->instance->setStateName($value);
-        return $this;
-    }
-
-    /**
-     * Sets service plan field.
-     */
-    public function servicePlan(?string $value): self
-    {
-        $this->instance->setServicePlan($value);
-        return $this;
-    }
-
-    /**
-     * Sets mdn zip code field.
-     */
-    public function mdnZipCode(?string $value): self
-    {
-        $this->instance->setMdnZipCode($value);
         return $this;
     }
 
@@ -127,6 +91,24 @@ class GoToStateRequestBuilder
     public function customFields(?array $value): self
     {
         $this->instance->setCustomFields($value);
+        return $this;
+    }
+
+    /**
+     * Sets devices with service address field.
+     */
+    public function devicesWithServiceAddress(?array $value): self
+    {
+        $this->instance->setDevicesWithServiceAddress($value);
+        return $this;
+    }
+
+    /**
+     * Sets ip address field.
+     */
+    public function ipAddress(?string $value): self
+    {
+        $this->instance->setIpAddress($value);
         return $this;
     }
 

@@ -32,25 +32,26 @@ Request to retrieve cost center value of a device.
           "id": "89148000000800139708",
           "kind": "iccid"
         }
-      ]
+      ],
+      "ipAddress": "ipAddress4"
     }
   ],
-  "accountName": "accountName4",
+  "accountName": "accountName6",
   "customFields": [
     {
       "key": "key0",
       "value": "value2"
     },
     {
-      "key": "key1",
-      "value": "value3"
+      "key": "key0",
+      "value": "value2"
     },
     {
-      "key": "key2",
-      "value": "value4"
+      "key": "key0",
+      "value": "value2"
     }
   ],
-  "groupName": "groupName0"
+  "groupName": "groupName8"
 }
 ```
 

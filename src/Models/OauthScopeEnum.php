@@ -57,16 +57,6 @@ class OauthScopeEnum
 
     public const TS_APPLICATION_RO = 'ts.application.ro';
 
-    public const EDGEDISCOVERYREAD = 'edge:discovery:read';
-
-    public const EDGESERVICEPROFILEREAD = 'edge:serviceprofile:read';
-
-    public const EDGESERVICEPROFILEWRITE = 'edge:serviceprofile:write';
-
-    public const EDGESERVICEREGISTRYREAD = 'edge:serviceregistry:read';
-
-    public const EDGESERVICEREGISTRYWRITE = 'edge:serviceregistry:write';
-
     /**
      * read access
      */
@@ -86,11 +76,6 @@ class OauthScopeEnum
         self::TS_MEC_FULLACCESS,
         self::TS_MEC_LIMITACCESS,
         self::TS_APPLICATION_RO,
-        self::EDGEDISCOVERYREAD,
-        self::EDGESERVICEPROFILEREAD,
-        self::EDGESERVICEPROFILEWRITE,
-        self::EDGESERVICEREGISTRYREAD,
-        self::EDGESERVICEREGISTRYWRITE,
         self::READ,
         self::WRITE
     ];

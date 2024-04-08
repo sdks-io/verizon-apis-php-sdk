@@ -18,6 +18,11 @@ use stdClass;
 class ContactInfoUpdateRequest implements \JsonSerializable
 {
     /**
+     * @var PlaceOfUse
+     */
+    private $primaryPlaceOfUse;
+
+    /**
      * @var string|null
      */
     private $accountName;
@@ -28,9 +33,39 @@ class ContactInfoUpdateRequest implements \JsonSerializable
     private $devices;
 
     /**
-     * @var array|null
+     * @param PlaceOfUse $primaryPlaceOfUse
      */
-    private $primaryPlaceOfUse;
+    public function __construct(PlaceOfUse $primaryPlaceOfUse)
+    {
+        $this->primaryPlaceOfUse = $primaryPlaceOfUse;
+    }
+
+    /**
+     * Returns Primary Place of Use.
+     * The customer name and the address of the device's primary place of use. Leave these fields empty to
+     * use the account profile address as the primary place of use. These values will be applied to all
+     * devices in the request.If the account is enabled for non-geographic MDNs and the device supports it,
+     * the primaryPlaceOfUse address will also be used to derive the MDN for the device.
+     */
+    public function getPrimaryPlaceOfUse(): PlaceOfUse
+    {
+        return $this->primaryPlaceOfUse;
+    }
+
+    /**
+     * Sets Primary Place of Use.
+     * The customer name and the address of the device's primary place of use. Leave these fields empty to
+     * use the account profile address as the primary place of use. These values will be applied to all
+     * devices in the request.If the account is enabled for non-geographic MDNs and the device supports it,
+     * the primaryPlaceOfUse address will also be used to derive the MDN for the device.
+     *
+     * @required
+     * @maps primaryPlaceOfUse
+     */
+    public function setPrimaryPlaceOfUse(PlaceOfUse $primaryPlaceOfUse): void
+    {
+        $this->primaryPlaceOfUse = $primaryPlaceOfUse;
+    }
 
     /**
      * Returns Account Name.
@@ -83,32 +118,6 @@ class ContactInfoUpdateRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Primary Place of Use.
-     * The customer name and the address of the device's primary place of use. These values are applied to
-     * all devices in the request.The Primary Place of Use location may affect taxation or have other legal
-     * implications. You may want to speak with legal and/or financial advisers before entering values for
-     * these fields.
-     */
-    public function getPrimaryPlaceOfUse(): ?array
-    {
-        return $this->primaryPlaceOfUse;
-    }
-
-    /**
-     * Sets Primary Place of Use.
-     * The customer name and the address of the device's primary place of use. These values are applied to
-     * all devices in the request.The Primary Place of Use location may affect taxation or have other legal
-     * implications. You may want to speak with legal and/or financial advisers before entering values for
-     * these fields.
-     *
-     * @maps primaryPlaceOfUse
-     */
-    public function setPrimaryPlaceOfUse(?array $primaryPlaceOfUse): void
-    {
-        $this->primaryPlaceOfUse = $primaryPlaceOfUse;
-    }
-
-    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -120,14 +129,12 @@ class ContactInfoUpdateRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['primaryPlaceOfUse'] = $this->primaryPlaceOfUse;
         if (isset($this->accountName)) {
-            $json['accountName']       = $this->accountName;
+            $json['accountName']   = $this->accountName;
         }
         if (isset($this->devices)) {
-            $json['devices']           = $this->devices;
-        }
-        if (isset($this->primaryPlaceOfUse)) {
-            $json['primaryPlaceOfUse'] = $this->primaryPlaceOfUse;
+            $json['devices']       = $this->devices;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

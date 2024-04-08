@@ -29,30 +29,6 @@ use VerizonLib\Server;
 class CampaignsV3Controller extends BaseController
 {
     /**
-     * This endpoint allows user to cancel a firmware campaign. A firmware campaign already started can not
-     * be cancelled.
-     *
-     * @param string $acc Account identifier.
-     * @param string $campaignId Firmware upgrade information.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function cancelCampaign(string $acc, string $campaignId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/campaigns/{acc}/{campaignId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
-            ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('campaignId', $campaignId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(FotaV3SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * This endpoint allows a user to schedule a firmware upgrade for a list of devices.
      *
      * @param string $acc Account identifier.
@@ -64,7 +40,7 @@ class CampaignsV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/firmware/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -95,7 +71,7 @@ class CampaignsV3Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/firmware/{acc}/{campaignId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 TemplateParam::init('campaignId', $campaignId),
@@ -128,7 +104,7 @@ class CampaignsV3Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/firmware/{acc}/{campaignId}/dates')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 TemplateParam::init('campaignId', $campaignId),
@@ -156,12 +132,36 @@ class CampaignsV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/campaigns/{acc}/{campaignId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('campaignId', $campaignId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(Campaign::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows user to cancel a firmware campaign. A firmware campaign already started can not
+     * be cancelled.
+     *
+     * @param string $acc Account identifier.
+     * @param string $campaignId Firmware upgrade information.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function cancelCampaign(string $acc, string $campaignId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/campaigns/{acc}/{campaignId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('campaignId', $campaignId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(FotaV3SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

@@ -18,14 +18,49 @@ use stdClass;
 class DeleteDevicesRequest implements \JsonSerializable
 {
     /**
+     * @var AccountDeviceList[]
+     */
+    private $devicesToDelete;
+
+    /**
      * @var string|null
      */
     private $accountName;
 
     /**
-     * @var AccountDeviceList[]|null
+     * @param AccountDeviceList[] $devicesToDelete
      */
-    private $devicesToDelete;
+    public function __construct(array $devicesToDelete)
+    {
+        $this->devicesToDelete = $devicesToDelete;
+    }
+
+    /**
+     * Returns Devices to Delete.
+     * A list of up to 100 devices that you want to delete, specified by device identifier. You only need
+     * to provide one identifier per device.
+     *
+     * @return AccountDeviceList[]
+     */
+    public function getDevicesToDelete(): array
+    {
+        return $this->devicesToDelete;
+    }
+
+    /**
+     * Sets Devices to Delete.
+     * A list of up to 100 devices that you want to delete, specified by device identifier. You only need
+     * to provide one identifier per device.
+     *
+     * @required
+     * @maps devicesToDelete
+     *
+     * @param AccountDeviceList[] $devicesToDelete
+     */
+    public function setDevicesToDelete(array $devicesToDelete): void
+    {
+        $this->devicesToDelete = $devicesToDelete;
+    }
 
     /**
      * Returns Account Name.
@@ -50,32 +85,6 @@ class DeleteDevicesRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Devices to Delete.
-     * A list of up to 100 devices that you want to delete, specified by device identifier. You only need
-     * to provide one identifier per device.
-     *
-     * @return AccountDeviceList[]|null
-     */
-    public function getDevicesToDelete(): ?array
-    {
-        return $this->devicesToDelete;
-    }
-
-    /**
-     * Sets Devices to Delete.
-     * A list of up to 100 devices that you want to delete, specified by device identifier. You only need
-     * to provide one identifier per device.
-     *
-     * @maps devicesToDelete
-     *
-     * @param AccountDeviceList[]|null $devicesToDelete
-     */
-    public function setDevicesToDelete(?array $devicesToDelete): void
-    {
-        $this->devicesToDelete = $devicesToDelete;
-    }
-
-    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -87,11 +96,9 @@ class DeleteDevicesRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['devicesToDelete'] = $this->devicesToDelete;
         if (isset($this->accountName)) {
-            $json['accountName']     = $this->accountName;
-        }
-        if (isset($this->devicesToDelete)) {
-            $json['devicesToDelete'] = $this->devicesToDelete;
+            $json['accountName'] = $this->accountName;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

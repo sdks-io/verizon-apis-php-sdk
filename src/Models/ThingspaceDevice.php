@@ -58,7 +58,7 @@ class ThingspaceDevice implements \JsonSerializable
     private $extendedAttributes;
 
     /**
-     * @var string[]|null
+     * @var array<string|null>|null
      */
     private $groupNames;
 
@@ -266,7 +266,7 @@ class ThingspaceDevice implements \JsonSerializable
      * Returns Group Names.
      * The device groups that the device belongs to.
      *
-     * @return string[]|null
+     * @return array<string|null>|null
      */
     public function getGroupNames(): ?array
     {
@@ -279,7 +279,7 @@ class ThingspaceDevice implements \JsonSerializable
      *
      * @maps groupNames
      *
-     * @param string[]|null $groupNames
+     * @param array<string|null>|null $groupNames
      */
     public function setGroupNames(?array $groupNames): void
     {

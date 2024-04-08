@@ -27,6 +27,29 @@ use VerizonLib\Server;
 class SMSController extends BaseController
 {
     /**
+     * The messages are queued on the ThingSpace Platform and sent as soon as possible, but they may be
+     * delayed due to traffic and routing considerations.
+     *
+     * @param SMSSendRequest $body Request to send SMS.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function sendSMSToDevice(SMSSendRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/sms')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * When HTTP status is 202, a URL will be returned in the Location header of the form
      * /sms/{aname}/history?next={token}. This URL can be used to request the next set of messages.
      *
@@ -37,37 +60,14 @@ class SMSController extends BaseController
      */
     public function listDevicesSMSMessages(string $aname, ?int $next = null): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/sms/{aname}/history')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/sms/{aname}/history')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(SMSMessagesQueryResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * The messages are queued on the ThingSpace Platform and sent as soon as possible, but they may be
-     * delayed due to traffic and routing considerations.
-     *
-     * @param SMSSendRequest $body Request to send SMS.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function sendSMSToDevice(SMSSendRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/sms')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceManagementResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -85,9 +85,9 @@ class SMSController extends BaseController
      */
     public function startQueuedSMSDelivery(string $aname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/v1/sms/{aname}/startCallbacks')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/sms/{aname}/startCallbacks')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()

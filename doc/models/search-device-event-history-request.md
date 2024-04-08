@@ -32,7 +32,7 @@ Search Device By Property resource definition.
     "imei": "imei2"
   },
   "$limitnumber": 2,
-  "$page": "$page4"
+  "$page": "$page6"
 }
 ```
 

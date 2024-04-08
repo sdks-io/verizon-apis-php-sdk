@@ -11,8 +11,8 @@ $firmwareV3Controller = $client->getFirmwareV3Controller();
 ## Methods
 
 * [List Available Firmware](../../doc/controllers/firmware-v3.md#list-available-firmware)
-* [Report Device Firmware](../../doc/controllers/firmware-v3.md#report-device-firmware)
 * [Synchronize Device Firmware](../../doc/controllers/firmware-v3.md#synchronize-device-firmware)
+* [Report Device Firmware](../../doc/controllers/firmware-v3.md#report-device-firmware)
 
 
 # List Available Firmware
@@ -71,45 +71,6 @@ $apiResponse = $firmwareV3Controller->listAvailableFirmware(
 | 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
 
 
-# Report Device Firmware
-
-Ask a device to report its firmware version asynchronously.
-
-```php
-function reportDeviceFirmware(string $acc, string $deviceId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `deviceId` | `string` | Template, Required | Device identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceFirmwareVersionUpdateResult`](../../doc/models/device-firmware-version-update-result.md).
-
-## Example Usage
-
-```php
-$acc = '0000123456-00001';
-
-$deviceId = '15-digit IMEI';
-
-$apiResponse = $firmwareV3Controller->reportDeviceFirmware(
-    $acc,
-    $deviceId
-);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
-
-
 # Synchronize Device Firmware
 
 Synchronize ThingSpace with the FOTA server for up to 100 devices.
@@ -159,6 +120,45 @@ $apiResponse = $firmwareV3Controller->synchronizeDeviceFirmware(
     }
   ]
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
+
+
+# Report Device Firmware
+
+Ask a device to report its firmware version asynchronously.
+
+```php
+function reportDeviceFirmware(string $acc, string $deviceId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `acc` | `string` | Template, Required | Account identifier. |
+| `deviceId` | `string` | Template, Required | Device identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceFirmwareVersionUpdateResult`](../../doc/models/device-firmware-version-update-result.md).
+
+## Example Usage
+
+```php
+$acc = '0000123456-00001';
+
+$deviceId = '15-digit IMEI';
+
+$apiResponse = $firmwareV3Controller->reportDeviceFirmware(
+    $acc,
+    $deviceId
+);
 ```
 
 ## Errors

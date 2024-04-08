@@ -19,14 +19,14 @@ use stdClass;
 class DeviceMismatchListRequest implements \JsonSerializable
 {
     /**
+     * @var DateFilter
+     */
+    private $filter;
+
+    /**
      * @var AccountDeviceList[]|null
      */
     private $devices;
-
-    /**
-     * @var DateFilter|null
-     */
-    private $filter;
 
     /**
      * @var string|null
@@ -37,6 +37,35 @@ class DeviceMismatchListRequest implements \JsonSerializable
      * @var string|null
      */
     private $groupName;
+
+    /**
+     * @param DateFilter $filter
+     */
+    public function __construct(DateFilter $filter)
+    {
+        $this->filter = $filter;
+    }
+
+    /**
+     * Returns Filter.
+     * Filter out the dates.
+     */
+    public function getFilter(): DateFilter
+    {
+        return $this->filter;
+    }
+
+    /**
+     * Sets Filter.
+     * Filter out the dates.
+     *
+     * @required
+     * @maps filter
+     */
+    public function setFilter(DateFilter $filter): void
+    {
+        $this->filter = $filter;
+    }
 
     /**
      * Returns Devices.
@@ -60,26 +89,6 @@ class DeviceMismatchListRequest implements \JsonSerializable
     public function setDevices(?array $devices): void
     {
         $this->devices = $devices;
-    }
-
-    /**
-     * Returns Filter.
-     * Filter out the dates.
-     */
-    public function getFilter(): ?DateFilter
-    {
-        return $this->filter;
-    }
-
-    /**
-     * Sets Filter.
-     * Filter out the dates.
-     *
-     * @maps filter
-     */
-    public function setFilter(?DateFilter $filter): void
-    {
-        $this->filter = $filter;
     }
 
     /**
@@ -136,11 +145,9 @@ class DeviceMismatchListRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['filter']          = $this->filter;
         if (isset($this->devices)) {
             $json['devices']     = $this->devices;
-        }
-        if (isset($this->filter)) {
-            $json['filter']      = $this->filter;
         }
         if (isset($this->accountName)) {
             $json['accountName'] = $this->accountName;

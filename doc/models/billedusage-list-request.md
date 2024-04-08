@@ -11,9 +11,9 @@ Information required to associate a usage segmentation label with a device to re
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `accountName` | `?string` | Optional | - | getAccountName(): ?string | setAccountName(?string accountName): void |
+| `accountName` | `string` | Required | - | getAccountName(): string | setAccountName(string accountName): void |
 | `labels` | [`?LabelsList`](../../doc/models/labels-list.md) | Optional | - | getLabels(): ?LabelsList | setLabels(?LabelsList labels): void |
-| `devices` | [`?(DeviceList[])`](../../doc/models/device-list.md) | Optional | - | getDevices(): ?array | setDevices(?array devices): void |
+| `deviceIds` | [`?(DeviceList[])`](../../doc/models/device-list.md) | Optional | - | getDeviceIds(): ?array | setDeviceIds(?array deviceIds): void |
 | `billingCycle` | [`?BillingCycle`](../../doc/models/billing-cycle.md) | Optional | - | getBillingCycle(): ?BillingCycle | setBillingCycle(?BillingCycle billingCycle): void |
 
 ## Example (as JSON)
@@ -24,40 +24,40 @@ Information required to associate a usage segmentation label with a device to re
   "labels": {
     "deviceIds": [
       {
-        "name": "name8",
-        "value": "value0"
+        "name": "name0",
+        "value": "value2"
       }
     ]
   },
-  "devices": [
+  "deviceIds": [
     {
       "deviceIds": [
         {
-          "id": "id6",
-          "kind": "imei"
+          "id": "id0",
+          "kind": "kind8"
         },
         {
-          "id": "id7",
-          "kind": "eid"
-        },
-        {
-          "id": "id8",
-          "kind": "esn"
+          "id": "id0",
+          "kind": "kind8"
         }
       ]
     },
     {
       "deviceIds": [
         {
-          "id": "id7",
-          "kind": "eid"
+          "id": "id0",
+          "kind": "kind8"
+        },
+        {
+          "id": "id0",
+          "kind": "kind8"
         }
       ]
     }
   ],
-  "BillingCycle": {
-    "year": "year0",
-    "month": "month8"
+  "billingCycle": {
+    "year": "year6",
+    "month": "month4"
   }
 }
 ```

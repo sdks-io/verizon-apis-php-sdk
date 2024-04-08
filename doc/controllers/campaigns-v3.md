@@ -10,58 +10,11 @@ $campaignsV3Controller = $client->getCampaignsV3Controller();
 
 ## Methods
 
-* [Cancel Campaign](../../doc/controllers/campaigns-v3.md#cancel-campaign)
 * [Schedule Campaign Firmware Upgrade](../../doc/controllers/campaigns-v3.md#schedule-campaign-firmware-upgrade)
 * [Update Campaign Firmware Devices](../../doc/controllers/campaigns-v3.md#update-campaign-firmware-devices)
 * [Update Campaign Dates](../../doc/controllers/campaigns-v3.md#update-campaign-dates)
 * [Get Campaign Information](../../doc/controllers/campaigns-v3.md#get-campaign-information)
-
-
-# Cancel Campaign
-
-This endpoint allows user to cancel a firmware campaign. A firmware campaign already started can not be cancelled.
-
-```php
-function cancelCampaign(string $acc, string $campaignId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `campaignId` | `string` | Template, Required | Firmware upgrade information. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV3SuccessResult`](../../doc/models/fota-v3-success-result.md).
-
-## Example Usage
-
-```php
-$acc = '0000123456-00001';
-
-$campaignId = 'f858b8c4-2153-11ec-8c44-aeb16d1aa652';
-
-$apiResponse = $campaignsV3Controller->cancelCampaign(
-    $acc,
-    $campaignId
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "success": true
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
+* [Cancel Campaign](../../doc/controllers/campaigns-v3.md#cancel-campaign)
 
 
 # Schedule Campaign Firmware Upgrade
@@ -348,6 +301,53 @@ $apiResponse = $campaignsV3Controller->getCampaignInformation(
       "endTime": 22
     }
   ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
+
+
+# Cancel Campaign
+
+This endpoint allows user to cancel a firmware campaign. A firmware campaign already started can not be cancelled.
+
+```php
+function cancelCampaign(string $acc, string $campaignId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `acc` | `string` | Template, Required | Account identifier. |
+| `campaignId` | `string` | Template, Required | Firmware upgrade information. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV3SuccessResult`](../../doc/models/fota-v3-success-result.md).
+
+## Example Usage
+
+```php
+$acc = '0000123456-00001';
+
+$campaignId = 'f858b8c4-2153-11ec-8c44-aeb16d1aa652';
+
+$apiResponse = $campaignsV3Controller->cancelCampaign(
+    $acc,
+    $campaignId
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
 }
 ```
 

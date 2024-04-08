@@ -18,9 +18,14 @@ use stdClass;
 class SMSSendRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
+
+    /**
+     * @var string
+     */
+    private $smsMessage;
 
     /**
      * @var CustomFields[]|null
@@ -48,15 +53,20 @@ class SMSSendRequest implements \JsonSerializable
     private $servicePlan;
 
     /**
-     * @var string|null
+     * @param string $accountName
+     * @param string $smsMessage
      */
-    private $smsMessage;
+    public function __construct(string $accountName, string $smsMessage)
+    {
+        $this->accountName = $accountName;
+        $this->smsMessage = $smsMessage;
+    }
 
     /**
      * Returns Account Name.
      * The name of a billing account.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -65,11 +75,35 @@ class SMSSendRequest implements \JsonSerializable
      * Sets Account Name.
      * The name of a billing account.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
+    }
+
+    /**
+     * Returns Sms Message.
+     * The contents of the SMS message. The SMS message is limited to 160 characters in 7-bit format, or
+     * 140 characters in 8-bit format.
+     */
+    public function getSmsMessage(): string
+    {
+        return $this->smsMessage;
+    }
+
+    /**
+     * Sets Sms Message.
+     * The contents of the SMS message. The SMS message is limited to 160 characters in 7-bit format, or
+     * 140 characters in 8-bit format.
+     *
+     * @required
+     * @maps smsMessage
+     */
+    public function setSmsMessage(string $smsMessage): void
+    {
+        $this->smsMessage = $smsMessage;
     }
 
     /**
@@ -183,28 +217,6 @@ class SMSSendRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Sms Message.
-     * The contents of the SMS message. The SMS message is limited to 160 characters in 7-bit format, or
-     * 140 characters in 8-bit format.
-     */
-    public function getSmsMessage(): ?string
-    {
-        return $this->smsMessage;
-    }
-
-    /**
-     * Sets Sms Message.
-     * The contents of the SMS message. The SMS message is limited to 160 characters in 7-bit format, or
-     * 140 characters in 8-bit format.
-     *
-     * @maps smsMessage
-     */
-    public function setSmsMessage(?string $smsMessage): void
-    {
-        $this->smsMessage = $smsMessage;
-    }
-
-    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -216,9 +228,8 @@ class SMSSendRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName']  = $this->accountName;
-        }
+        $json['accountName']      = $this->accountName;
+        $json['smsMessage']       = $this->smsMessage;
         if (isset($this->customFields)) {
             $json['customFields'] = $this->customFields;
         }
@@ -233,9 +244,6 @@ class SMSSendRequest implements \JsonSerializable
         }
         if (isset($this->servicePlan)) {
             $json['servicePlan']  = $this->servicePlan;
-        }
-        if (isset($this->smsMessage)) {
-            $json['smsMessage']   = $this->smsMessage;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

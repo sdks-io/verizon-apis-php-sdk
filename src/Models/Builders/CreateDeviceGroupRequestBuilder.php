@@ -33,18 +33,9 @@ class CreateDeviceGroupRequestBuilder
     /**
      * Initializes a new create device group request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, string $groupDescription, string $groupName): self
     {
-        return new self(new CreateDeviceGroupRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
+        return new self(new CreateDeviceGroupRequest($accountName, $groupDescription, $groupName));
     }
 
     /**
@@ -53,24 +44,6 @@ class CreateDeviceGroupRequestBuilder
     public function devicesToAdd(?array $value): self
     {
         $this->instance->setDevicesToAdd($value);
-        return $this;
-    }
-
-    /**
-     * Sets group description field.
-     */
-    public function groupDescription(?string $value): self
-    {
-        $this->instance->setGroupDescription($value);
-        return $this;
-    }
-
-    /**
-     * Sets group name field.
-     */
-    public function groupName(?string $value): self
-    {
-        $this->instance->setGroupName($value);
         return $this;
     }
 

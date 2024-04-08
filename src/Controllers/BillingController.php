@@ -29,29 +29,23 @@ use VerizonLib\Server;
 class BillingController extends BaseController
 {
     /**
-     * This endpoint allows user to retrieve the list of all accounts managed by a primary account.
+     * This endpoint allows user to add managed accounts to a primary account.
      *
-     * @param string $accountName Primary account identifier
-     * @param string $serviceName Service name
+     *
+     * @param ManagedAccountsAddRequest $body Service name and list of accounts to add
      *
      * @return ApiResponse Response from the API call
      */
-    public function listManagedAccount(string $accountName, string $serviceName): ApiResponse
+    public function addAccount(ManagedAccountsAddRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::GET,
-            '/managedaccounts/{accountName}/service/{serviceName}'
-        )
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/add')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('accountName', $accountName),
-                TemplateParam::init('serviceName', $serviceName)
-            );
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
-            ->type(ManagedAccountsGetAllResponse::class)
+            ->type(ManagedAccountsAddResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -68,7 +62,7 @@ class BillingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/provision')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -91,7 +85,7 @@ class BillingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/cancel')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -103,23 +97,29 @@ class BillingController extends BaseController
     }
 
     /**
-     * This endpoint allows user to add managed accounts to a primary account.
+     * This endpoint allows user to retrieve the list of all accounts managed by a primary account.
      *
-     *
-     * @param ManagedAccountsAddRequest $body Service name and list of accounts to add
+     * @param string $accountName Primary account identifier
+     * @param string $serviceName Service name
      *
      * @return ApiResponse Response from the API call
      */
-    public function addAccount(ManagedAccountsAddRequest $body): ApiResponse
+    public function listManagedAccount(string $accountName, string $serviceName): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/add')
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::GET,
+            '/managedaccounts/{accountName}/service/{serviceName}'
+        )
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('accountName', $accountName),
+                TemplateParam::init('serviceName', $serviceName)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
-            ->type(ManagedAccountsAddResponse::class)
+            ->type(ManagedAccountsGetAllResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

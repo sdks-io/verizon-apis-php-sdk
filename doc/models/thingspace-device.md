@@ -19,7 +19,7 @@ Device that exist in Verizon Mobile Device Management (MDM).
 | `customFields` | [`?(CustomFields[])`](../../doc/models/custom-fields.md) | Optional | The custom fields and values that have been set for the device. | getCustomFields(): ?array | setCustomFields(?array customFields): void |
 | `deviceIds` | [`?(DeviceId[])`](../../doc/models/device-id.md) | Optional | All identifiers for the device. | getDeviceIds(): ?array | setDeviceIds(?array deviceIds): void |
 | `extendedAttributes` | [`?(CustomFields[])`](../../doc/models/custom-fields.md) | Optional | Any extended attributes for the device, as Key and Value pairs. The pairs listed below are returned as part of the response for a single device, but are not included if the request was for information about multiple devices. | getExtendedAttributes(): ?array | setExtendedAttributes(?array extendedAttributes): void |
-| `groupNames` | `?(string[])` | Optional | The device groups that the device belongs to. | getGroupNames(): ?array | setGroupNames(?array groupNames): void |
+| `groupNames` | `?(array<?string>)` | Optional | The device groups that the device belongs to. | getGroupNames(): ?array | setGroupNames(?array groupNames): void |
 | `ipAddress` | `?string` | Optional | The IP address of the device. | getIpAddress(): ?string | setIpAddress(?string ipAddress): void |
 | `lastActivationBy` | `?string` | Optional | The user who last activated the device. | getLastActivationBy(): ?string | setLastActivationBy(?string lastActivationBy): void |
 | `lastActivationDate` | `?string` | Optional | The date and time that the device was last activated. | getLastActivationDate(): ?string | setLastActivationDate(?string lastActivationDate): void |

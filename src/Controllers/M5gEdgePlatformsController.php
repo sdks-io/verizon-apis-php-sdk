@@ -22,29 +22,6 @@ use VerizonLib\Models\UserEquipmentIdentityTypeEnum;
 class M5gEdgePlatformsController extends BaseController
 {
     /**
-     * List the geographical regions available, based on the user's bearer token. **Note:** Country code,
-     * Metropolitan area, Area and Zone are future functionality and will currently return a "null" value.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listRegions(): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/regions')->auth('global');
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(ListRegionsResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns a list of optimal MEC Platforms where you can register your deployed application. **Note:**
      * If a query is sent with all of the parameters, it will fail with a "400" error. You can search based
      * on the following parameter combinations - region plus Service Profile ID and subscriber density
@@ -69,7 +46,7 @@ class M5gEdgePlatformsController extends BaseController
         ?string $uEIdentity = null
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/mecplatforms')
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 QueryParam::init('region', $region),
                 QueryParam::init('serviceProfileId', $serviceProfileId),
@@ -87,6 +64,29 @@ class M5gEdgePlatformsController extends BaseController
                 ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
             )
             ->type(ListMECPlatformsResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * List the geographical regions available, based on the user's bearer token. **Note:** Country code,
+     * Metropolitan area, Area and Zone are future functionality and will currently return a "null" value.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listRegions(): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/regions')->auth('oAuth2');
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(ListRegionsResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

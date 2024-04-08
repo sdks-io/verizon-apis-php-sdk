@@ -18,20 +18,30 @@ use stdClass;
 class DeviceLabels implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $name;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $value;
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public function __construct(string $name, string $value)
+    {
+        $this->name = $name;
+        $this->value = $value;
+    }
 
     /**
      * Returns Name.
      * The label you want to associate with the device.
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -40,9 +50,10 @@ class DeviceLabels implements \JsonSerializable
      * Sets Name.
      * The label you want to associate with the device.
      *
+     * @required
      * @maps name
      */
-    public function setName(?string $name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -51,7 +62,7 @@ class DeviceLabels implements \JsonSerializable
      * Returns Value.
      * The value of label
      */
-    public function getValue(): ?string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -60,9 +71,10 @@ class DeviceLabels implements \JsonSerializable
      * Sets Value.
      * The value of label
      *
+     * @required
      * @maps value
      */
-    public function setValue(?string $value): void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -79,12 +91,8 @@ class DeviceLabels implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->name)) {
-            $json['name']  = $this->name;
-        }
-        if (isset($this->value)) {
-            $json['value'] = $this->value;
-        }
+        $json['name']  = $this->name;
+        $json['value'] = $this->value;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

@@ -18,7 +18,7 @@ use stdClass;
 class BilledusageListRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
@@ -30,7 +30,7 @@ class BilledusageListRequest implements \JsonSerializable
     /**
      * @var DeviceList[]|null
      */
-    private $devices;
+    private $deviceIds;
 
     /**
      * @var BillingCycle|null
@@ -38,9 +38,17 @@ class BilledusageListRequest implements \JsonSerializable
     private $billingCycle;
 
     /**
+     * @param string $accountName
+     */
+    public function __construct(string $accountName)
+    {
+        $this->accountName = $accountName;
+    }
+
+    /**
      * Returns Account Name.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -48,9 +56,10 @@ class BilledusageListRequest implements \JsonSerializable
     /**
      * Sets Account Name.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -74,25 +83,25 @@ class BilledusageListRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Devices.
+     * Returns Device Ids.
      *
      * @return DeviceList[]|null
      */
-    public function getDevices(): ?array
+    public function getDeviceIds(): ?array
     {
-        return $this->devices;
+        return $this->deviceIds;
     }
 
     /**
-     * Sets Devices.
+     * Sets Device Ids.
      *
-     * @maps devices
+     * @maps deviceIds
      *
-     * @param DeviceList[]|null $devices
+     * @param DeviceList[]|null $deviceIds
      */
-    public function setDevices(?array $devices): void
+    public function setDeviceIds(?array $deviceIds): void
     {
-        $this->devices = $devices;
+        $this->deviceIds = $deviceIds;
     }
 
     /**
@@ -106,7 +115,7 @@ class BilledusageListRequest implements \JsonSerializable
     /**
      * Sets Billing Cycle.
      *
-     * @maps BillingCycle
+     * @maps billingCycle
      */
     public function setBillingCycle(?BillingCycle $billingCycle): void
     {
@@ -125,17 +134,15 @@ class BilledusageListRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName']  = $this->accountName;
-        }
+        $json['accountName']      = $this->accountName;
         if (isset($this->labels)) {
             $json['labels']       = $this->labels;
         }
-        if (isset($this->devices)) {
-            $json['devices']      = $this->devices;
+        if (isset($this->deviceIds)) {
+            $json['deviceIds']    = $this->deviceIds;
         }
         if (isset($this->billingCycle)) {
-            $json['BillingCycle'] = $this->billingCycle;
+            $json['billingCycle'] = $this->billingCycle;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

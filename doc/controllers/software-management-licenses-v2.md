@@ -10,22 +10,20 @@ $softwareManagementLicensesV2Controller = $client->getSoftwareManagementLicenses
 
 ## Methods
 
-* [Delete List of Licenses to Remove](../../doc/controllers/software-management-licenses-v2.md#delete-list-of-licenses-to-remove)
-* [Assign Licenses to Devices](../../doc/controllers/software-management-licenses-v2.md#assign-licenses-to-devices)
 * [Get Account License Status](../../doc/controllers/software-management-licenses-v2.md#get-account-license-status)
+* [Assign Licenses to Devices](../../doc/controllers/software-management-licenses-v2.md#assign-licenses-to-devices)
 * [Remove Licenses From Devices](../../doc/controllers/software-management-licenses-v2.md#remove-licenses-from-devices)
 * [List Licenses to Remove](../../doc/controllers/software-management-licenses-v2.md#list-licenses-to-remove)
 * [Create List of Licenses to Remove](../../doc/controllers/software-management-licenses-v2.md#create-list-of-licenses-to-remove)
+* [Delete List of Licenses to Remove](../../doc/controllers/software-management-licenses-v2.md#delete-list-of-licenses-to-remove)
 
 
-# Delete List of Licenses to Remove
+# Get Account License Status
 
-**This endpoint is deprecated.**
-
-This endpoint allows user to delete a created cancel candidate device list.
+The endpoint allows user to list license usage.
 
 ```php
-function deleteListOfLicensesToRemove(string $account): ApiResponse
+function getAccountLicenseStatus(string $account, ?string $lastSeenDeviceId = null): ApiResponse
 ```
 
 ## Parameters
@@ -33,24 +31,53 @@ function deleteListOfLicensesToRemove(string $account): ApiResponse
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `account` | `string` | Template, Required | Account identifier. |
+| `lastSeenDeviceId` | `?string` | Query, Optional | Last seen device identifier. |
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV2SuccessResult`](../../doc/models/fota-v2-success-result.md).
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V2LicenseSummary`](../../doc/models/v2-license-summary.md).
 
 ## Example Usage
 
 ```php
-$account = '0242078689-00001';
+$account = '0000123456-00001';
 
-$apiResponse = $softwareManagementLicensesV2Controller->deleteListOfLicensesToRemove($account);
+$lastSeenDeviceId = '15-digit IMEI';
+
+$apiResponse = $softwareManagementLicensesV2Controller->getAccountLicenseStatus(
+    $account,
+    $lastSeenDeviceId
+);
 ```
 
 ## Example Response *(as JSON)*
 
 ```json
 {
-  "success": true
+  "accountName": "0402196254-00001",
+  "totalLicense": 5000,
+  "assignedLicenses": 4319,
+  "hasMoreData": true,
+  "lastSeenDeviceId": "1000",
+  "maxPageSize": 10,
+  "deviceList": [
+    {
+      "deviceId": "990003425730535",
+      "assignmentTime": "2017-11-29T16:03:42.000Z"
+    },
+    {
+      "deviceId": "990000473475989",
+      "assignmentTime": "2017-11-29T16:03:42.000Z"
+    },
+    {
+      "deviceId": "990000347475989",
+      "assignmentTime": "2017-11-29T16:03:42.000Z"
+    },
+    {
+      "deviceId": "990007303425535",
+      "assignmentTime": "2017-11-29T16:03:42.000Z"
+    }
+  ]
 }
 ```
 
@@ -117,76 +144,6 @@ $apiResponse = $softwareManagementLicensesV2Controller->assignLicensesToDevices(
       "deviceId": "990000473475967",
       "status": "Failure",
       "resultReason": "Device does not exist."
-    }
-  ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
-
-
-# Get Account License Status
-
-The endpoint allows user to list license usage.
-
-```php
-function getAccountLicenseStatus(string $account, ?string $lastSeenDeviceId = null): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier. |
-| `lastSeenDeviceId` | `?string` | Query, Optional | Last seen device identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V2LicenseSummary`](../../doc/models/v2-license-summary.md).
-
-## Example Usage
-
-```php
-$account = '0000123456-00001';
-
-$lastSeenDeviceId = '15-digit IMEI';
-
-$apiResponse = $softwareManagementLicensesV2Controller->getAccountLicenseStatus(
-    $account,
-    $lastSeenDeviceId
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "accountName": "0402196254-00001",
-  "totalLicense": 5000,
-  "assignedLicenses": 4319,
-  "hasMoreData": true,
-  "lastSeenDeviceId": "1000",
-  "maxPageSize": 10,
-  "deviceList": [
-    {
-      "deviceId": "990003425730535",
-      "assignmentTime": "2017-11-29T16:03:42.000Z"
-    },
-    {
-      "deviceId": "990000473475989",
-      "assignmentTime": "2017-11-29T16:03:42.000Z"
-    },
-    {
-      "deviceId": "990000347475989",
-      "assignmentTime": "2017-11-29T16:03:42.000Z"
-    },
-    {
-      "deviceId": "990007303425535",
-      "assignmentTime": "2017-11-29T16:03:42.000Z"
     }
   ]
 }
@@ -378,6 +335,49 @@ $apiResponse = $softwareManagementLicensesV2Controller->createListOfLicensesToRe
     "990003425730535",
     "990000473475989"
   ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
+# Delete List of Licenses to Remove
+
+**This endpoint is deprecated.**
+
+This endpoint allows user to delete a created cancel candidate device list.
+
+```php
+function deleteListOfLicensesToRemove(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV2SuccessResult`](../../doc/models/fota-v2-success-result.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$apiResponse = $softwareManagementLicensesV2Controller->deleteListOfLicensesToRemove($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
 }
 ```
 

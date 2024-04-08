@@ -24,7 +24,7 @@ Device logging information.
 {
   "deviceId": "990013907835573",
   "logTime": "10/22/2020 19:29:50",
-  "logType": "logType4",
+  "logType": "logType6",
   "eventLog": "eventLog0",
   "binaryLogFileBase64": "binaryLogFileBase644",
   "binaryLogFilename": "binaryLogFilename0"

@@ -18,20 +18,30 @@ use stdClass;
 class DeviceId implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $id;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $kind;
+
+    /**
+     * @param string $id
+     * @param string $kind
+     */
+    public function __construct(string $id, string $kind)
+    {
+        $this->id = $id;
+        $this->kind = $kind;
+    }
 
     /**
      * Returns Id.
      * The value of the device identifier.
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -40,9 +50,10 @@ class DeviceId implements \JsonSerializable
      * Sets Id.
      * The value of the device identifier.
      *
+     * @required
      * @maps id
      */
-    public function setId(?string $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
@@ -52,7 +63,7 @@ class DeviceId implements \JsonSerializable
      * The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20
      * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      */
-    public function getKind(): ?string
+    public function getKind(): string
     {
         return $this->kind;
     }
@@ -62,9 +73,10 @@ class DeviceId implements \JsonSerializable
      * The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20
      * digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN.
      *
+     * @required
      * @maps kind
      */
-    public function setKind(?string $kind): void
+    public function setKind(string $kind): void
     {
         $this->kind = $kind;
     }
@@ -81,12 +93,8 @@ class DeviceId implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->id)) {
-            $json['id']   = $this->id;
-        }
-        if (isset($this->kind)) {
-            $json['kind'] = $this->kind;
-        }
+        $json['id']   = $this->id;
+        $json['kind'] = $this->kind;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

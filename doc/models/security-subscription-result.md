@@ -28,12 +28,12 @@ Response for a subscription request.
       "licenseAvailable": 1,
       "extendedAttributes": [
         {
-          "key": "key4",
-          "value": "value6"
+          "key": "key8",
+          "value": "value0"
         },
         {
-          "key": "key5",
-          "value": "value7"
+          "key": "key8",
+          "value": "value0"
         }
       ]
     }

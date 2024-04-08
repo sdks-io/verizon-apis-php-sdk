@@ -18,17 +18,30 @@ use stdClass;
 class AccountDeviceList implements \JsonSerializable
 {
     /**
-     * @var DeviceId[]|null
+     * @var DeviceId[]
      */
     private $deviceIds;
+
+    /**
+     * @var string|null
+     */
+    private $ipAddress;
+
+    /**
+     * @param DeviceId[] $deviceIds
+     */
+    public function __construct(array $deviceIds)
+    {
+        $this->deviceIds = $deviceIds;
+    }
 
     /**
      * Returns Device Ids.
      * All identifiers for the device.
      *
-     * @return DeviceId[]|null
+     * @return DeviceId[]
      */
-    public function getDeviceIds(): ?array
+    public function getDeviceIds(): array
     {
         return $this->deviceIds;
     }
@@ -37,13 +50,32 @@ class AccountDeviceList implements \JsonSerializable
      * Sets Device Ids.
      * All identifiers for the device.
      *
+     * @required
      * @maps deviceIds
      *
-     * @param DeviceId[]|null $deviceIds
+     * @param DeviceId[] $deviceIds
      */
-    public function setDeviceIds(?array $deviceIds): void
+    public function setDeviceIds(array $deviceIds): void
     {
         $this->deviceIds = $deviceIds;
+    }
+
+    /**
+     * Returns Ip Address.
+     */
+    public function getIpAddress(): ?string
+    {
+        return $this->ipAddress;
+    }
+
+    /**
+     * Sets Ip Address.
+     *
+     * @maps ipAddress
+     */
+    public function setIpAddress(?string $ipAddress): void
+    {
+        $this->ipAddress = $ipAddress;
     }
 
     /**
@@ -58,8 +90,9 @@ class AccountDeviceList implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->deviceIds)) {
-            $json['deviceIds'] = $this->deviceIds;
+        $json['deviceIds']     = $this->deviceIds;
+        if (isset($this->ipAddress)) {
+            $json['ipAddress'] = $this->ipAddress;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

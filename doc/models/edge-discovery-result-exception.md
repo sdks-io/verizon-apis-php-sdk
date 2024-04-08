@@ -19,8 +19,8 @@ Base type for all errors.
 
 ```json
 {
-  "status": "status8",
-  "message": "message0",
+  "status": "status4",
+  "message": "message2",
   "data": {
     "additionalMessage": "additionalMessage2"
   }

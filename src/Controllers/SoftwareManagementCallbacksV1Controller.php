@@ -37,7 +37,7 @@ class SoftwareManagementCallbacksV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -61,7 +61,7 @@ class SoftwareManagementCallbacksV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -89,7 +89,7 @@ class SoftwareManagementCallbacksV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{account}/name/{service}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('service', $service)->serializeBy([CallbackServiceEnum::class, 'checkValue'])

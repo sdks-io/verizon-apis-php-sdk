@@ -23,7 +23,7 @@ Information about the resource requirements and service characteristics of an ed
 
 ```json
 {
-  "clientType": "IoT",
+  "clientType": "ComputerVision",
   "ecspFilter": "Verizon",
   "clientSchedule": "time windows",
   "clientServiceArea": "BAY AREA",
@@ -36,10 +36,10 @@ Information about the resource requirements and service characteristics of an ed
   },
   "computeResources": {
     "GPU": {
-      "minCoreClockMHz": 222,
-      "minMemoryClockMHz": 62,
-      "minBandwidthGBs": 54,
-      "minTFLOPS": 198
+      "minCoreClockMHz": 76,
+      "minMemoryClockMHz": 20,
+      "minBandwidthGBs": 96,
+      "minTFLOPS": 100
     },
     "minRAMGB": 192,
     "minStorageGB": 190

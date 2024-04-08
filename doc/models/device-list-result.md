@@ -36,8 +36,8 @@ Device list information.
       "statusTime": "2021-06-03 00:03:56.079 +0000 UTC",
       "refreshTime": "2021-06-03 00:03:56.079 +0000 UTC",
       "lastConnectionTime": "2012-04-23T18:25:43.511Z",
-      "requestStatus": "requestStatus6",
-      "resultReason": "resultReason6"
+      "requestStatus": "requestStatus2",
+      "resultReason": "resultReason2"
     }
   ]
 }

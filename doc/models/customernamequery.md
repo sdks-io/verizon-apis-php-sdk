@@ -17,25 +17,18 @@
 {
   "customerName": [
     {
-      "title": "title9",
-      "firstName": "firstName9",
-      "middleName": "middleName3",
-      "lastName": "lastName9",
-      "suffix": "suffix5"
+      "title": "title4",
+      "firstName": "firstName4",
+      "middleName": "middleName8",
+      "lastName": "lastName4",
+      "suffix": "suffix0"
     },
     {
-      "title": "title8",
-      "firstName": "firstName8",
-      "middleName": "middleName4",
-      "lastName": "lastName0",
-      "suffix": "suffix4"
-    },
-    {
-      "title": "title7",
-      "firstName": "firstName7",
-      "middleName": "middleName5",
-      "lastName": "lastName1",
-      "suffix": "suffix3"
+      "title": "title4",
+      "firstName": "firstName4",
+      "middleName": "middleName8",
+      "lastName": "lastName4",
+      "suffix": "suffix0"
     }
   ]
 }

@@ -25,8 +25,8 @@ Status of Hyper Precise Location on the device.
       "imei": "709312034493372",
       "BullseyeEnable": true,
       "responseType": {
-        "responseCode": "INVALID_ACCESS",
-        "message": "message4"
+        "responseCode": "INTERNAL_ERROR",
+        "message": "message8"
       }
     }
   ],

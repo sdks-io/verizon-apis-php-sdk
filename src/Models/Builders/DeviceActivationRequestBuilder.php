@@ -33,27 +33,9 @@ class DeviceActivationRequestBuilder
     /**
      * Initializes a new device activation request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, array $devices): self
     {
-        return new self(new DeviceActivationRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
-    }
-
-    /**
-     * Sets devices field.
-     */
-    public function devices(?array $value): self
-    {
-        $this->instance->setDevices($value);
-        return $this;
+        return new self(new DeviceActivationRequest($accountName, $devices));
     }
 
     /**

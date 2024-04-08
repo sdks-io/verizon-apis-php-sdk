@@ -34,7 +34,7 @@ class PerformanceMetricsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/performance/device/network/metrics')
             ->server(Server::PERFORMANCE)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

@@ -33,27 +33,9 @@ class CustomFieldsBuilder
     /**
      * Initializes a new custom fields Builder object.
      */
-    public static function init(): self
+    public static function init(string $key, string $value): self
     {
-        return new self(new CustomFields());
-    }
-
-    /**
-     * Sets key field.
-     */
-    public function key(?string $value): self
-    {
-        $this->instance->setKey($value);
-        return $this;
-    }
-
-    /**
-     * Sets value field.
-     */
-    public function value(?string $value): self
-    {
-        $this->instance->setValue($value);
-        return $this;
+        return new self(new CustomFields($key, $value));
     }
 
     /**

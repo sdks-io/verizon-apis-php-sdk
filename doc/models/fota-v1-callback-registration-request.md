@@ -22,8 +22,8 @@ Callback endpoint information.
 {
   "name": "Fota",
   "url": "https://10.120.102.183:50559/CallbackListener/FirmwareServiceMessages.asmx",
-  "username": "username0",
-  "password": "password4"
+  "username": "username2",
+  "password": "password2"
 }
 ```
 

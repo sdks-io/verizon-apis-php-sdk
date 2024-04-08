@@ -35,18 +35,9 @@ class BilledusageListRequestBuilder
     /**
      * Initializes a new billedusage list request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName): self
     {
-        return new self(new BilledusageListRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
+        return new self(new BilledusageListRequest($accountName));
     }
 
     /**
@@ -59,11 +50,11 @@ class BilledusageListRequestBuilder
     }
 
     /**
-     * Sets devices field.
+     * Sets device ids field.
      */
-    public function devices(?array $value): self
+    public function deviceIds(?array $value): self
     {
-        $this->instance->setDevices($value);
+        $this->instance->setDeviceIds($value);
         return $this;
     }
 

@@ -12,16 +12,16 @@ The body contains the the account name and list of devices that you want to loca
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
 | `accountName` | `string` | Required | Account identifier in "##########-#####". | getAccountName(): string | setAccountName(string accountName): void |
-| `accuracyMode` | `int` | Required, Constant | Accurary, currently only 0-coarse supported.<br>**Default**: `0` | getAccuracyMode(): int | setAccuracyMode(int accuracyMode): void |
-| `cacheMode` | [`string(CacheModeEnum)`](../../doc/models/cache-mode-enum.md) | Required | Location cache mode. | getCacheMode(): string | setCacheMode(string cacheMode): void |
 | `deviceList` | [`DeviceInfo[]`](../../doc/models/device-info.md) | Required | Device list. | getDeviceList(): array | setDeviceList(array deviceList): void |
+| `accuracyMode` | [`?string(AccuracyModeEnum)`](../../doc/models/accuracy-mode-enum.md) | Optional | Accurary, currently only 0-coarse supported. | getAccuracyMode(): ?string | setAccuracyMode(?string accuracyMode): void |
+| `cacheMode` | [`?string(CacheModeEnum)`](../../doc/models/cache-mode-enum.md) | Optional | Location cache mode. | getCacheMode(): ?string | setCacheMode(?string cacheMode): void |
 
 ## Example (as JSON)
 
 ```json
 {
   "accountName": "1234567890-00001",
-  "accuracyMode": 0,
+  "accuracyMode": "0",
   "cacheMode": "1",
   "deviceList": [
     {

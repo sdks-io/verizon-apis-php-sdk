@@ -13,6 +13,7 @@ namespace VerizonLib\Models\Builders;
 use Core\Utils\CoreHelper;
 use VerizonLib\Models\DeviceId;
 use VerizonLib\Models\DeviceUsageListRequest;
+use VerizonLib\Models\Label;
 
 /**
  * Builder for model DeviceUsageListRequest
@@ -34,9 +35,9 @@ class DeviceUsageListRequestBuilder
     /**
      * Initializes a new device usage list request Builder object.
      */
-    public static function init(): self
+    public static function init(string $earliest, string $latest): self
     {
-        return new self(new DeviceUsageListRequest());
+        return new self(new DeviceUsageListRequest($earliest, $latest));
     }
 
     /**
@@ -49,20 +50,11 @@ class DeviceUsageListRequestBuilder
     }
 
     /**
-     * Sets earliest field.
+     * Sets label field.
      */
-    public function earliest(?string $value): self
+    public function label(?Label $value): self
     {
-        $this->instance->setEarliest($value);
-        return $this;
-    }
-
-    /**
-     * Sets latest field.
-     */
-    public function latest(?string $value): self
-    {
-        $this->instance->setLatest($value);
+        $this->instance->setLabel($value);
         return $this;
     }
 

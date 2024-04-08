@@ -10,57 +10,9 @@ $connectivityCallbacksController = $client->getConnectivityCallbacksController()
 
 ## Methods
 
-* [Deregister Callback](../../doc/controllers/connectivity-callbacks.md#deregister-callback)
 * [List Registered Callbacks](../../doc/controllers/connectivity-callbacks.md#list-registered-callbacks)
 * [Register Callback](../../doc/controllers/connectivity-callbacks.md#register-callback)
-
-
-# Deregister Callback
-
-Stops ThingSpace from sending callback messages for the specified account and service.
-
-```php
-function deregisterCallback(string $aname, string $sname): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `aname` | `string` | Template, Required | Account name. |
-| `sname` | `string` | Template, Required | Service name. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CallbackActionResult`](../../doc/models/callback-action-result.md).
-
-## Example Usage
-
-```php
-$aname = '1223334444-00001';
-
-$sname = 'CarrierService';
-
-$apiResponse = $connectivityCallbacksController->deregisterCallback(
-    $aname,
-    $sname
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "accountName": "1223334444-00001",
-  "serviceName": "CarrierService"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+* [Deregister Callback](../../doc/controllers/connectivity-callbacks.md#deregister-callback)
 
 
 # List Registered Callbacks
@@ -139,10 +91,10 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ```php
 $aname = 'TestAccount-2';
 
-$body = RegisterCallbackRequestBuilder::init()
-    ->name('CarrierService')
-    ->url('http://10.120.102.183:50559/CallbackListener/CarrierServiceMessages.asmx')
-    ->build();
+$body = RegisterCallbackRequestBuilder::init(
+    'CarrierService',
+    'https://mock.thingspace.verizon.com/webhook'
+)->build();
 
 $apiResponse = $connectivityCallbacksController->registerCallback(
     $aname,
@@ -155,6 +107,54 @@ $apiResponse = $connectivityCallbacksController->registerCallback(
 ```json
 {
   "accountName": "122333444-00002",
+  "serviceName": "CarrierService"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Deregister Callback
+
+Stops ThingSpace from sending callback messages for the specified account and service.
+
+```php
+function deregisterCallback(string $aname, string $sname): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `aname` | `string` | Template, Required | Account name. |
+| `sname` | `string` | Template, Required | Service name. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CallbackActionResult`](../../doc/models/callback-action-result.md).
+
+## Example Usage
+
+```php
+$aname = '1223334444-00001';
+
+$sname = 'CarrierService';
+
+$apiResponse = $connectivityCallbacksController->deregisterCallback(
+    $aname,
+    $sname
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "accountName": "1223334444-00001",
   "serviceName": "CarrierService"
 }
 ```

@@ -30,16 +30,12 @@ Make changes to a device group, including changing the name and description, and
   ],
   "devicesToRemove": [
     {
-      "id": "id5",
-      "kind": "kind3"
+      "id": "id0",
+      "kind": "kind8"
     },
     {
-      "id": "id6",
-      "kind": "kind4"
-    },
-    {
-      "id": "id7",
-      "kind": "kind5"
+      "id": "id0",
+      "kind": "kind8"
     }
   ]
 }

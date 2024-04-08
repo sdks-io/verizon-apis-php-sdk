@@ -26,33 +26,6 @@ use VerizonLib\Server;
 class SoftwareManagementCallbacksV2Controller extends BaseController
 {
     /**
-     * This endpoint allows user to create the HTTPS callback address.
-     *
-     * @param string $account Account identifier.
-     * @param FotaV2CallbackRegistrationRequest $body Callback URL registration.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function registerCallback(string $account, FotaV2CallbackRegistrationRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                HeaderParam::init('Content-Type', '*/*'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(FotaV2CallbackRegistrationResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * This endpoint allows user to get the registered callback information.
      *
      * @param string $account Account identifier.
@@ -63,7 +36,7 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -86,7 +59,34 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                HeaderParam::init('Content-Type', '*/*'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(FotaV2CallbackRegistrationResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows user to create the HTTPS callback address.
+     *
+     * @param string $account Account identifier.
+     * @param FotaV2CallbackRegistrationRequest $body Callback URL registration.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function registerCallback(string $account, FotaV2CallbackRegistrationRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -112,7 +112,7 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()

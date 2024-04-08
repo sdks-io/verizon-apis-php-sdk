@@ -22,12 +22,12 @@ OAuth 2 Authorization endpoint response
 
 ```json
 {
-  "access_token": "access_token8",
-  "token_type": "token_type2",
-  "expires_in": 226,
-  "scope": "scope2",
-  "expiry": 192,
-  "refresh_token": "refresh_token0"
+  "access_token": "access_token4",
+  "token_type": "token_type6",
+  "expires_in": 74,
+  "scope": "scope6",
+  "expiry": 88,
+  "refresh_token": "refresh_token6"
 }
 ```
 

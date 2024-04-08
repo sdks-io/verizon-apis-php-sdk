@@ -26,28 +26,6 @@ use VerizonLib\Server;
 class ClientLoggingController extends BaseController
 {
     /**
-     * Disables logging for a specific device.
-     *
-     * @param string $account Account identifier.
-     * @param string $deviceId Device IMEI identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function disableDeviceLogging(string $account, string $deviceId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/logging/{account}/devices/{deviceId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns an array of all devices in the specified account for which logging is enabled.
      *
      * @param string $account Account identifier.
@@ -58,7 +36,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -81,7 +59,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/logging/{account}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -91,29 +69,6 @@ class ClientLoggingController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(DeviceLoggingStatus::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Gets logs for a specific device.
-     *
-     * @param string $account Account identifier.
-     * @param string $deviceId Device IMEI identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listDeviceLogs(string $account, string $deviceId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices/{deviceId}/logs')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(DeviceLog::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -131,7 +86,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/logging/{account}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), QueryParam::init('deviceIds', $deviceIds));
 
         $_resHandler = $this->responseHandler()
@@ -153,12 +108,57 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/logging/{account}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(DeviceLoggingStatus::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Disables logging for a specific device.
+     *
+     * @param string $account Account identifier.
+     * @param string $deviceId Device IMEI identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function disableDeviceLogging(string $account, string $deviceId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/logging/{account}/devices/{deviceId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Gets logs for a specific device.
+     *
+     * @param string $account Account identifier.
+     * @param string $deviceId Device IMEI identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listDeviceLogs(string $account, string $deviceId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices/{deviceId}/logs')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(DeviceLog::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

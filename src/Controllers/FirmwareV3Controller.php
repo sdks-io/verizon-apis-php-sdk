@@ -39,7 +39,7 @@ class FirmwareV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 QueryParam::init('protocol', $protocol)->serializeBy([FirmwareProtocolEnum::class, 'checkValue'])
@@ -48,29 +48,6 @@ class FirmwareV3Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(FirmwarePackage::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Ask a device to report its firmware version asynchronously.
-     *
-     * @param string $acc Account identifier.
-     * @param string $deviceId Device identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function reportDeviceFirmware(string $acc, string $deviceId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/firmware/{acc}/async/{deviceId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
-            ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('deviceId', $deviceId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(DeviceFirmwareVersionUpdateResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -88,7 +65,7 @@ class FirmwareV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/firmware/{acc}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -98,6 +75,29 @@ class FirmwareV3Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(DeviceFirmwareList::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Ask a device to report its firmware version asynchronously.
+     *
+     * @param string $acc Account identifier.
+     * @param string $deviceId Device identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function reportDeviceFirmware(string $acc, string $deviceId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/firmware/{acc}/async/{deviceId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('deviceId', $deviceId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(DeviceFirmwareVersionUpdateResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

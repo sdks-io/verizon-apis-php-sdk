@@ -66,6 +66,15 @@ class CarrierActionsRequestBuilder
     }
 
     /**
+     * Sets with billing field.
+     */
+    public function withBilling(?bool $value): self
+    {
+        $this->instance->setWithBilling($value);
+        return $this;
+    }
+
+    /**
      * Sets group name field.
      */
     public function groupName(?string $value): self

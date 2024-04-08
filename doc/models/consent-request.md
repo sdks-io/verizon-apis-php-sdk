@@ -9,7 +9,7 @@
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `accountName` | `?string` | Optional | Account identifier in "##########-#####". | getAccountName(): ?string | setAccountName(?string accountName): void |
+| `accountName` | `string` | Required | Account identifier in "##########-#####". | getAccountName(): string | setAccountName(string accountName): void |
 | `allDevice` | `?bool` | Optional | Exclude all devices or not. | getAllDevice(): ?bool | setAllDevice(?bool allDevice): void |
 | `type` | `?string` | Optional | The change to make: append or replace. | getType(): ?string | setType(?string type): void |
 | `exclusion` | `?(string[])` | Optional | Device ID list. | getExclusion(): ?array | setExclusion(?array exclusion): void |

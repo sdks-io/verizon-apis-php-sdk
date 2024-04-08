@@ -32,10 +32,10 @@ class AccountRequestsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(
             RequestMethod::GET,
-            '/v1/accounts/{aname}/requests/{requestId}/status'
+            '/m2m/v1/accounts/{aname}/requests/{requestId}/status'
         )
-            ->server(Server::M2M)
-            ->auth('global')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('requestId', $requestId));
 
         $_resHandler = $this->responseHandler()

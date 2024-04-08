@@ -33,36 +33,9 @@ class BillUsageRequestBuilder
     /**
      * Initializes a new bill usage request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, string $startDate, string $endDate): self
     {
-        return new self(new BillUsageRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
-    }
-
-    /**
-     * Sets start date field.
-     */
-    public function startDate(?string $value): self
-    {
-        $this->instance->setStartDate($value);
-        return $this;
-    }
-
-    /**
-     * Sets end date field.
-     */
-    public function endDate(?string $value): self
-    {
-        $this->instance->setEndDate($value);
-        return $this;
+        return new self(new BillUsageRequest($accountName, $startDate, $endDate));
     }
 
     /**

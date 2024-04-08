@@ -34,9 +34,9 @@ class DeviceMismatchListRequestBuilder
     /**
      * Initializes a new device mismatch list request Builder object.
      */
-    public static function init(): self
+    public static function init(DateFilter $filter): self
     {
-        return new self(new DeviceMismatchListRequest());
+        return new self(new DeviceMismatchListRequest($filter));
     }
 
     /**
@@ -45,15 +45,6 @@ class DeviceMismatchListRequestBuilder
     public function devices(?array $value): self
     {
         $this->instance->setDevices($value);
-        return $this;
-    }
-
-    /**
-     * Sets filter field.
-     */
-    public function filter(?DateFilter $value): self
-    {
-        $this->instance->setFilter($value);
         return $this;
     }
 

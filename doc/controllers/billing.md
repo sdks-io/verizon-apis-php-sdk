@@ -10,57 +10,67 @@ $billingController = $client->getBillingController();
 
 ## Methods
 
-* [List Managed Account](../../doc/controllers/billing.md#list-managed-account)
+* [Add Account](../../doc/controllers/billing.md#add-account)
 * [Managed Account Action](../../doc/controllers/billing.md#managed-account-action)
 * [Cancel Managed Account Action](../../doc/controllers/billing.md#cancel-managed-account-action)
-* [Add Account](../../doc/controllers/billing.md#add-account)
+* [List Managed Account](../../doc/controllers/billing.md#list-managed-account)
 
 
-# List Managed Account
+# Add Account
 
-This endpoint allows user to retrieve the list of all accounts managed by a primary account.
+This endpoint allows user to add managed accounts to a primary account.
 
 ```php
-function listManagedAccount(string $accountName, string $serviceName): ApiResponse
+function addAccount(ManagedAccountsAddRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `accountName` | `string` | Template, Required | Primary account identifier |
-| `serviceName` | `string` | Template, Required | Service name |
+| `body` | [`ManagedAccountsAddRequest`](../../doc/models/managed-accounts-add-request.md) | Body, Required | Service name and list of accounts to add |
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ManagedAccountsGetAllResponse`](../../doc/models/managed-accounts-get-all-response.md).
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ManagedAccountsAddResponse`](../../doc/models/managed-accounts-add-response.md).
 
 ## Example Usage
 
 ```php
-$accountName = '1223334444-00001';
+$body = ManagedAccountsAddRequestBuilder::init(
+    '1234567890-00001',
+    ServiceNameEnum::LOCATION,
+    'TS-LOC-COARSE-CellID-Aggr',
+    [
+        '1223334444-00001',
+        '2334445555-00001',
+        '3445556666-00001'
+    ]
+)->build();
 
-$serviceName = 'serviceName8';
-
-$apiResponse = $billingController->listManagedAccount(
-    $accountName,
-    $serviceName
-);
+$apiResponse = $billingController->addAccount($body);
 ```
 
 ## Example Response *(as JSON)*
 
 ```json
 {
-  "accountName": "2024009649-00001",
-  "ManagedAccAddedList": [
+  "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33",
+  "statusList": [
     {
       "id": "1223334444-00001",
-      "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33"
+      "status": "Success",
+      "reason": "Success"
     },
     {
       "id": "2334445555-00001",
-      "txid": "d4fbff33-ece4-9f02-42ef-2c90bd287e3b"
+      "status": "Success",
+      "reason": "Success"
+    },
+    {
+      "id": "3445556666-00001",
+      "status": "Success",
+      "reason": "Success"
     }
   ]
 }
@@ -177,61 +187,51 @@ $apiResponse = $billingController->cancelManagedAccountAction($body);
 | 400 | Unexpected error | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
 
 
-# Add Account
+# List Managed Account
 
-This endpoint allows user to add managed accounts to a primary account.
+This endpoint allows user to retrieve the list of all accounts managed by a primary account.
 
 ```php
-function addAccount(ManagedAccountsAddRequest $body): ApiResponse
+function listManagedAccount(string $accountName, string $serviceName): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`ManagedAccountsAddRequest`](../../doc/models/managed-accounts-add-request.md) | Body, Required | Service name and list of accounts to add |
+| `accountName` | `string` | Template, Required | Primary account identifier |
+| `serviceName` | `string` | Template, Required | Service name |
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ManagedAccountsAddResponse`](../../doc/models/managed-accounts-add-response.md).
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ManagedAccountsGetAllResponse`](../../doc/models/managed-accounts-get-all-response.md).
 
 ## Example Usage
 
 ```php
-$body = ManagedAccountsAddRequestBuilder::init(
-    '1234567890-00001',
-    ServiceNameEnum::LOCATION,
-    'TS-LOC-COARSE-CellID-Aggr',
-    [
-        '1223334444-00001',
-        '2334445555-00001',
-        '3445556666-00001'
-    ]
-)->build();
+$accountName = '1223334444-00001';
 
-$apiResponse = $billingController->addAccount($body);
+$serviceName = 'serviceName8';
+
+$apiResponse = $billingController->listManagedAccount(
+    $accountName,
+    $serviceName
+);
 ```
 
 ## Example Response *(as JSON)*
 
 ```json
 {
-  "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33",
-  "statusList": [
+  "accountName": "2024009649-00001",
+  "ManagedAccAddedList": [
     {
       "id": "1223334444-00001",
-      "status": "Success",
-      "reason": "Success"
+      "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33"
     },
     {
       "id": "2334445555-00001",
-      "status": "Success",
-      "reason": "Success"
-    },
-    {
-      "id": "3445556666-00001",
-      "status": "Success",
-      "reason": "Success"
+      "txid": "d4fbff33-ece4-9f02-42ef-2c90bd287e3b"
     }
   ]
 }

@@ -15,21 +15,31 @@ use stdClass;
 class AssociateLabelRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
     /**
-     * @var AccountLabels|null
+     * @var AccountLabels
      */
     private $labels;
+
+    /**
+     * @param string $accountName
+     * @param AccountLabels $labels
+     */
+    public function __construct(string $accountName, AccountLabels $labels)
+    {
+        $this->accountName = $accountName;
+        $this->labels = $labels;
+    }
 
     /**
      * Returns Account Name.
      * The name of a billing account. An account name is usually numeric, and must include any leading
      * zeros.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -39,9 +49,10 @@ class AssociateLabelRequest implements \JsonSerializable
      * The name of a billing account. An account name is usually numeric, and must include any leading
      * zeros.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -50,7 +61,7 @@ class AssociateLabelRequest implements \JsonSerializable
      * Returns Labels.
      * Maximum of 2,000 objects are allowed in the array.
      */
-    public function getLabels(): ?AccountLabels
+    public function getLabels(): AccountLabels
     {
         return $this->labels;
     }
@@ -59,9 +70,10 @@ class AssociateLabelRequest implements \JsonSerializable
      * Sets Labels.
      * Maximum of 2,000 objects are allowed in the array.
      *
+     * @required
      * @maps labels
      */
-    public function setLabels(?AccountLabels $labels): void
+    public function setLabels(AccountLabels $labels): void
     {
         $this->labels = $labels;
     }
@@ -78,12 +90,8 @@ class AssociateLabelRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName'] = $this->accountName;
-        }
-        if (isset($this->labels)) {
-            $json['labels']      = $this->labels;
-        }
+        $json['accountName'] = $this->accountName;
+        $json['labels']      = $this->labels;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

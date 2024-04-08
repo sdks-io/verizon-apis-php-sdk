@@ -24,7 +24,7 @@ List of all devices.
       "kind": "IMEI"
     }
   ],
-  "ipAddress": "ipAddress0"
+  "ipAddress": "ipAddress4"
 }
 ```
 

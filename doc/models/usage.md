@@ -32,7 +32,7 @@ The daily network data usage of a single device during a specified time period.
   "smsUsed": 0,
   "source": "Raw Usage",
   "timestamp": "2020-12-01T00:00:00Z",
-  "servicePlan": "servicePlan0"
+  "servicePlan": "servicePlan6"
 }
 ```
 

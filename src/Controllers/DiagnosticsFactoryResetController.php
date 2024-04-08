@@ -33,7 +33,7 @@ class DiagnosticsFactoryResetController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/restart')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

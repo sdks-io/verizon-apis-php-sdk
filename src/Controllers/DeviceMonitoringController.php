@@ -24,23 +24,16 @@ use VerizonLib\Server;
 class DeviceMonitoringController extends BaseController
 {
     /**
-     * Stop Device Reachability monitors.
-     *
-     * @param string $accountName The numeric name of the account.
-     * @param string[] $monitorIds The array contains the monitorIDs (UUID) for which the monitor is
-     *        to be deleted.
+     * @param NotificationReportRequest $body Create Reachability Report Request
      *
      * @return ApiResponse Response from the API call
      */
-    public function stopDeviceReachability(string $accountName, array $monitorIds): ApiResponse
+    public function deviceReachability(NotificationReportRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/v1/diagnostics/basic/devicereachability')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(
-                QueryParam::init('accountName', $accountName),
-                QueryParam::init('monitorIds', $monitorIds)
-            );
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/diagnostics/basic/devicereachability')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error Response', RestErrorResponseException::class))
@@ -51,18 +44,21 @@ class DeviceMonitoringController extends BaseController
     }
 
     /**
-     * Register for notification reports based on the request type.
-     *
-     * @param NotificationReportRequest $body Create Reachability Report Request
+     * @param string $accountName The numeric name of the account.
+     * @param string[] $monitorIds The array contains the monitorIDs (UUID) for which the monitor is
+     *        to be deleted.
      *
      * @return ApiResponse Response from the API call
      */
-    public function deviceReachability(NotificationReportRequest $body): ApiResponse
+    public function stopDeviceReachability(string $accountName, array $monitorIds): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/diagnostics/basic/devicereachability')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/diagnostics/basic/devicereachability')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(
+                QueryParam::init('accountName', $accountName),
+                QueryParam::init('monitorIds', $monitorIds)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error Response', RestErrorResponseException::class))

@@ -57,15 +57,6 @@ class SessionReportBuilder
     }
 
     /**
-     * Sets example field.
-     */
-    public function example(?array $value): self
-    {
-        $this->instance->setExample($value);
-        return $this;
-    }
-
-    /**
      * Initializes a new session report object.
      */
     public function build(): SessionReport

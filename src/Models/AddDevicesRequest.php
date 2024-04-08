@@ -18,6 +18,16 @@ use stdClass;
 class AddDevicesRequest implements \JsonSerializable
 {
     /**
+     * @var string
+     */
+    private $state;
+
+    /**
+     * @var AccountDeviceList[]
+     */
+    private $devicesToAdd;
+
+    /**
      * @var string|null
      */
     private $accountName;
@@ -26,11 +36,6 @@ class AddDevicesRequest implements \JsonSerializable
      * @var CustomFields[]|null
      */
     private $customFields;
-
-    /**
-     * @var AccountDeviceList[]|null
-     */
-    private $devicesToAdd;
 
     /**
      * @var string|null
@@ -45,7 +50,63 @@ class AddDevicesRequest implements \JsonSerializable
     /**
      * @var string|null
      */
-    private $state;
+    private $smsrOid;
+
+    /**
+     * @param string $state
+     * @param AccountDeviceList[] $devicesToAdd
+     */
+    public function __construct(string $state, array $devicesToAdd)
+    {
+        $this->state = $state;
+        $this->devicesToAdd = $devicesToAdd;
+    }
+
+    /**
+     * Returns State.
+     * The initial service state for the devices. The only valid state is “Preactive.”
+     */
+    public function getState(): string
+    {
+        return $this->state;
+    }
+
+    /**
+     * Sets State.
+     * The initial service state for the devices. The only valid state is “Preactive.”
+     *
+     * @required
+     * @maps state
+     */
+    public function setState(string $state): void
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Returns Devices to Add.
+     * The devices that you want to add.
+     *
+     * @return AccountDeviceList[]
+     */
+    public function getDevicesToAdd(): array
+    {
+        return $this->devicesToAdd;
+    }
+
+    /**
+     * Sets Devices to Add.
+     * The devices that you want to add.
+     *
+     * @required
+     * @maps devicesToAdd
+     *
+     * @param AccountDeviceList[] $devicesToAdd
+     */
+    public function setDevicesToAdd(array $devicesToAdd): void
+    {
+        $this->devicesToAdd = $devicesToAdd;
+    }
 
     /**
      * Returns Account Name.
@@ -94,30 +155,6 @@ class AddDevicesRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Devices to Add.
-     * The devices that you want to add.
-     *
-     * @return AccountDeviceList[]|null
-     */
-    public function getDevicesToAdd(): ?array
-    {
-        return $this->devicesToAdd;
-    }
-
-    /**
-     * Sets Devices to Add.
-     * The devices that you want to add.
-     *
-     * @maps devicesToAdd
-     *
-     * @param AccountDeviceList[]|null $devicesToAdd
-     */
-    public function setDevicesToAdd(?array $devicesToAdd): void
-    {
-        $this->devicesToAdd = $devicesToAdd;
-    }
-
-    /**
      * Returns Group Name.
      * The name of a device group to add the devices to. They are added to the default device group if you
      * don't include this parameter.
@@ -160,23 +197,21 @@ class AddDevicesRequest implements \JsonSerializable
     }
 
     /**
-     * Returns State.
-     * The initial service state for the devices. The only valid state is “Preactive.”
+     * Returns Smsr Oid.
      */
-    public function getState(): ?string
+    public function getSmsrOid(): ?string
     {
-        return $this->state;
+        return $this->smsrOid;
     }
 
     /**
-     * Sets State.
-     * The initial service state for the devices. The only valid state is “Preactive.”
+     * Sets Smsr Oid.
      *
-     * @maps state
+     * @maps smsrOid
      */
-    public function setState(?string $state): void
+    public function setSmsrOid(?string $smsrOid): void
     {
-        $this->state = $state;
+        $this->smsrOid = $smsrOid;
     }
 
     /**
@@ -191,14 +226,13 @@ class AddDevicesRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['state']            = $this->state;
+        $json['devicesToAdd']     = $this->devicesToAdd;
         if (isset($this->accountName)) {
             $json['accountName']  = $this->accountName;
         }
         if (isset($this->customFields)) {
             $json['customFields'] = $this->customFields;
-        }
-        if (isset($this->devicesToAdd)) {
-            $json['devicesToAdd'] = $this->devicesToAdd;
         }
         if (isset($this->groupName)) {
             $json['groupName']    = $this->groupName;
@@ -206,8 +240,8 @@ class AddDevicesRequest implements \JsonSerializable
         if (isset($this->skuNumber)) {
             $json['skuNumber']    = $this->skuNumber;
         }
-        if (isset($this->state)) {
-            $json['state']        = $this->state;
+        if (isset($this->smsrOid)) {
+            $json['smsrOid']      = $this->smsrOid;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

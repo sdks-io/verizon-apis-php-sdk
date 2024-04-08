@@ -40,7 +40,7 @@ class SoftwareManagementReportsV3Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{acc}/firmware/campaigns')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 QueryParam::init('campaignStatus', $campaignStatus)
@@ -68,7 +68,7 @@ class SoftwareManagementReportsV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{acc}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
@@ -95,7 +95,7 @@ class SoftwareManagementReportsV3Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{acc}/campaigns/{campaignId}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 TemplateParam::init('campaignId', $campaignId),

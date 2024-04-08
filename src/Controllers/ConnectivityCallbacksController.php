@@ -25,29 +25,6 @@ use VerizonLib\Server;
 class ConnectivityCallbacksController extends BaseController
 {
     /**
-     * Stops ThingSpace from sending callback messages for the specified account and service.
-     *
-     * @param string $aname Account name.
-     * @param string $sname Service name.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deregisterCallback(string $aname, string $sname): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/v1/callbacks/{aname}/name/{sname}')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('sname', $sname));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(CallbackActionResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns the name and endpoint URL of the callback listening services registered for a given account.
      *
      * @param string $aname Account name.
@@ -56,9 +33,9 @@ class ConnectivityCallbacksController extends BaseController
      */
     public function listRegisteredCallbacks(string $aname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/callbacks/{aname}')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/callbacks/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()
@@ -79,14 +56,37 @@ class ConnectivityCallbacksController extends BaseController
      */
     public function registerCallback(string $aname, RegisterCallbackRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/callbacks/{aname}')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/callbacks/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('aname', $aname),
                 HeaderParam::init('Content-Type', 'application/json'),
                 BodyParam::init($body)
             );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(CallbackActionResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Stops ThingSpace from sending callback messages for the specified account and service.
+     *
+     * @param string $aname Account name.
+     * @param string $sname Service name.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deregisterCallback(string $aname, string $sname): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/callbacks/{aname}/name/{sname}')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('sname', $sname));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))

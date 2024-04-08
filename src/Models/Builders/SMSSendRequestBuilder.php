@@ -33,18 +33,9 @@ class SMSSendRequestBuilder
     /**
      * Initializes a new smssend request Builder object.
      */
-    public static function init(): self
+    public static function init(string $accountName, string $smsMessage): self
     {
-        return new self(new SMSSendRequest());
-    }
-
-    /**
-     * Sets account name field.
-     */
-    public function accountName(?string $value): self
-    {
-        $this->instance->setAccountName($value);
-        return $this;
+        return new self(new SMSSendRequest($accountName, $smsMessage));
     }
 
     /**
@@ -89,15 +80,6 @@ class SMSSendRequestBuilder
     public function servicePlan(?string $value): self
     {
         $this->instance->setServicePlan($value);
-        return $this;
-    }
-
-    /**
-     * Sets sms message field.
-     */
-    public function smsMessage(?string $value): self
-    {
-        $this->instance->setSmsMessage($value);
         return $this;
     }
 

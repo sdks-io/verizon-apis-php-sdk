@@ -18,20 +18,30 @@ use stdClass;
 class DateFilter implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $earliest;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $latest;
+
+    /**
+     * @param string $earliest
+     * @param string $latest
+     */
+    public function __construct(string $earliest, string $latest)
+    {
+        $this->earliest = $earliest;
+        $this->latest = $latest;
+    }
 
     /**
      * Returns Earliest.
      * Only include devices that were added after this date and time.
      */
-    public function getEarliest(): ?string
+    public function getEarliest(): string
     {
         return $this->earliest;
     }
@@ -40,9 +50,10 @@ class DateFilter implements \JsonSerializable
      * Sets Earliest.
      * Only include devices that were added after this date and time.
      *
+     * @required
      * @maps earliest
      */
-    public function setEarliest(?string $earliest): void
+    public function setEarliest(string $earliest): void
     {
         $this->earliest = $earliest;
     }
@@ -51,7 +62,7 @@ class DateFilter implements \JsonSerializable
      * Returns Latest.
      * Only include devices that were added before this date and time.
      */
-    public function getLatest(): ?string
+    public function getLatest(): string
     {
         return $this->latest;
     }
@@ -60,9 +71,10 @@ class DateFilter implements \JsonSerializable
      * Sets Latest.
      * Only include devices that were added before this date and time.
      *
+     * @required
      * @maps latest
      */
-    public function setLatest(?string $latest): void
+    public function setLatest(string $latest): void
     {
         $this->latest = $latest;
     }
@@ -79,12 +91,8 @@ class DateFilter implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->earliest)) {
-            $json['earliest'] = $this->earliest;
-        }
-        if (isset($this->latest)) {
-            $json['latest']   = $this->latest;
-        }
+        $json['earliest'] = $this->earliest;
+        $json['latest']   = $this->latest;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

@@ -50,7 +50,7 @@ Subscription resource definition.
   "targetid": "4e211a0e-e39d-6c32-e15b-d6f07f9e2ec8",
   "version": "1.0",
   "versionid": "5ed6063f-04e0-11e9-8279-02420a5e1b0b",
-  "description": "description0",
+  "description": "description4",
   "disabled": false
 }
 ```

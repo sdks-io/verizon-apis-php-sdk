@@ -26,30 +26,6 @@ use VerizonLib\Server;
 class SessionManagementController extends BaseController
 {
     /**
-     * The new password is effective immediately. Passwords do not expire, but Verizon recommends changing
-     * your password every 90 days.
-     *
-     * @param SessionResetPasswordRequest $body Request with current password that needs to be
-     *        reset.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function resetConnectivityManagementPassword(SessionResetPasswordRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/v1/session/password/actions/reset')
-            ->server(Server::M2M)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(SessionResetPasswordResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Initiates a Connectivity Management session and returns a VZ-M2M session token that is required in
      * subsequent API requests.
      *
@@ -59,9 +35,9 @@ class SessionManagementController extends BaseController
      */
     public function startConnectivityManagementSession(?LogInRequest $body = null): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/session/login')
-            ->server(Server::M2M)
-            ->auth('global')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/session/login')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -79,13 +55,37 @@ class SessionManagementController extends BaseController
      */
     public function endConnectivityManagementSession(): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/session/logout')
-            ->server(Server::M2M)
-            ->auth('global');
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/session/logout')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2');
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(LogOutRequest::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * The new password is effective immediately. Passwords do not expire, but Verizon recommends changing
+     * your password every 90 days.
+     *
+     * @param SessionResetPasswordRequest $body Request with current password that needs to be
+     *        reset.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function resetConnectivityManagementPassword(SessionResetPasswordRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/session/password/actions/reset')
+            ->server(Server::THINGSPACE)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(SessionResetPasswordResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

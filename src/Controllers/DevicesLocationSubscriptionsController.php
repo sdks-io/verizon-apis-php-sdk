@@ -24,27 +24,6 @@ use VerizonLib\Server;
 class DevicesLocationSubscriptionsController extends BaseController
 {
     /**
-     * This endpoint allows user to search for billable usage for accounts based on the provided date range.
-     *
-     * @param BillUsageRequest $body Request to obtain billable usage for accounts.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getLocationServiceUsage(BillUsageRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage')
-            ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
-            ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * This subscriptions endpoint retrieves an account's current location subscription status.
      *
      * @param string $account Account identifier in "##########-#####".
@@ -55,12 +34,33 @@ class DevicesLocationSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
             ->type(DeviceLocationSubscription::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows user to search for billable usage for accounts based on the provided date range.
+     *
+     * @param BillUsageRequest $body Request to obtain billable usage for accounts.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getLocationServiceUsage(BillUsageRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage')
+            ->server(Server::DEVICE_LOCATION)
+            ->auth('oAuth2')
+            ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

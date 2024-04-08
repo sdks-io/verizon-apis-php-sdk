@@ -20,8 +20,9 @@ Response on successful retrieval of service profiles.
 {
   "status": "Success",
   "data": [
-    "data5",
-    "data6"
+    "data3",
+    "data4",
+    "data5"
   ]
 }
 ```

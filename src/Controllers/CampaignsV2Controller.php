@@ -31,6 +31,33 @@ use VerizonLib\Server;
 class CampaignsV2Controller extends BaseController
 {
     /**
+     * This endpoint allows user to schedule a software upgrade.
+     *
+     * @param string $account Account identifier.
+     * @param CampaignSoftwareUpgrade $body Software upgrade information.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function scheduleCampaignFirmwareUpgrade(string $account, CampaignSoftwareUpgrade $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                HeaderParam::init('Content-Type', '*/*'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(CampaignSoftware::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * This endpoint allows user to get information of a software upgrade.
      *
      * @param string $account Account identifier.
@@ -42,12 +69,69 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/campaigns/{account}/{campaignId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('campaignId', $campaignId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(CampaignSoftware::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows user to Add or Remove devices to an existing software upgrade.
+     *
+     * @param string $account Account identifier.
+     * @param string $campaignId Software upgrade information.
+     * @param V2AddOrRemoveDeviceRequest $body Request to add or remove device to existing software
+     *        upgrade information.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateCampaignFirmwareDevices(
+        string $account,
+        string $campaignId,
+        V2AddOrRemoveDeviceRequest $body
+    ): ApiResponse {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                TemplateParam::init('campaignId', $campaignId),
+                HeaderParam::init('Content-Type', '*/*'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(V2AddOrRemoveDeviceResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows user to cancel software upgrade. A software upgrade already started can not be
+     * cancelled.
+     *
+     * @param string $account Account identifier.
+     * @param string $campaignId Unique identifier of campaign.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function cancelCampaign(string $account, string $campaignId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/campaigns/{account}/{campaignId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('campaignId', $campaignId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(FotaV2SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -70,7 +154,7 @@ class CampaignsV2Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}/dates')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('campaignId', $campaignId),
@@ -98,7 +182,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/files/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -108,90 +192,6 @@ class CampaignsV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(UploadAndScheduleFileResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows user to Add or Remove devices to an existing software upgrade.
-     *
-     * @param string $account Account identifier.
-     * @param string $campaignId Software upgrade information.
-     * @param V2AddOrRemoveDeviceRequest $body Request to add or remove device to existing software
-     *        upgrade information.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateCampaignFirmwareDevices(
-        string $account,
-        string $campaignId,
-        V2AddOrRemoveDeviceRequest $body
-    ): ApiResponse {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                TemplateParam::init('campaignId', $campaignId),
-                HeaderParam::init('Content-Type', '*/*'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(V2AddOrRemoveDeviceResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows user to schedule a software upgrade.
-     *
-     * @param string $account Account identifier.
-     * @param CampaignSoftwareUpgrade $body Software upgrade information.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function scheduleCampaignFirmwareUpgrade(string $account, CampaignSoftwareUpgrade $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                HeaderParam::init('Content-Type', '*/*'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(CampaignSoftware::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows user to cancel software upgrade. A software upgrade already started can not be
-     * cancelled.
-     *
-     * @param string $account Account identifier.
-     * @param string $campaignId Unique identifier of campaign.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function cancelCampaign(string $account, string $campaignId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/campaigns/{account}/{campaignId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('campaignId', $campaignId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(FotaV2SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -210,7 +210,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/software/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),

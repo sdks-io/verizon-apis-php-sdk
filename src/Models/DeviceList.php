@@ -15,14 +15,14 @@ use stdClass;
 class DeviceList implements \JsonSerializable
 {
     /**
-     * @var DeviceId1[]|null
+     * @var DeviceId[]|null
      */
     private $deviceIds;
 
     /**
      * Returns Device Ids.
      *
-     * @return DeviceId1[]|null
+     * @return DeviceId[]|null
      */
     public function getDeviceIds(): ?array
     {
@@ -34,7 +34,7 @@ class DeviceList implements \JsonSerializable
      *
      * @maps deviceIds
      *
-     * @param DeviceId1[]|null $deviceIds
+     * @param DeviceId[]|null $deviceIds
      */
     public function setDeviceIds(?array $deviceIds): void
     {

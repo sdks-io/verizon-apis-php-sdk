@@ -18,7 +18,7 @@ use stdClass;
 class AccountLabels implements \JsonSerializable
 {
     /**
-     * @var DeviceList[]|null
+     * @var DeviceList[]
      */
     private $devices;
 
@@ -28,11 +28,19 @@ class AccountLabels implements \JsonSerializable
     private $label;
 
     /**
+     * @param DeviceList[] $devices
+     */
+    public function __construct(array $devices)
+    {
+        $this->devices = $devices;
+    }
+
+    /**
      * Returns Devices.
      *
-     * @return DeviceList[]|null
+     * @return DeviceList[]
      */
-    public function getDevices(): ?array
+    public function getDevices(): array
     {
         return $this->devices;
     }
@@ -40,11 +48,12 @@ class AccountLabels implements \JsonSerializable
     /**
      * Sets Devices.
      *
+     * @required
      * @maps devices
      *
-     * @param DeviceList[]|null $devices
+     * @param DeviceList[] $devices
      */
-    public function setDevices(?array $devices): void
+    public function setDevices(array $devices): void
     {
         $this->devices = $devices;
     }
@@ -83,11 +92,9 @@ class AccountLabels implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->devices)) {
-            $json['devices'] = $this->devices;
-        }
+        $json['devices']   = $this->devices;
         if (isset($this->label)) {
-            $json['label']   = $this->label;
+            $json['label'] = $this->label;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

@@ -33,18 +33,9 @@ class AccountDeviceListFilterBuilder
     /**
      * Initializes a new account device list filter Builder object.
      */
-    public static function init(): self
+    public static function init(array $deviceIdentifierFilters): self
     {
-        return new self(new AccountDeviceListFilter());
-    }
-
-    /**
-     * Sets device identifier filters field.
-     */
-    public function deviceIdentifierFilters(?array $value): self
-    {
-        $this->instance->setDeviceIdentifierFilters($value);
-        return $this;
+        return new self(new AccountDeviceListFilter($deviceIdentifierFilters));
     }
 
     /**

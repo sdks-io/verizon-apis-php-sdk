@@ -11,8 +11,8 @@ Filter out the dates.
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `earliest` | `?string` | Optional | Only include devices that were added after this date and time. | getEarliest(): ?string | setEarliest(?string earliest): void |
-| `latest` | `?string` | Optional | Only include devices that were added before this date and time. | getLatest(): ?string | setLatest(?string latest): void |
+| `earliest` | `string` | Required | Only include devices that were added after this date and time. | getEarliest(): string | setEarliest(string earliest): void |
+| `latest` | `string` | Required | Only include devices that were added before this date and time. | getLatest(): string | setLatest(string latest): void |
 
 ## Example (as JSON)
 

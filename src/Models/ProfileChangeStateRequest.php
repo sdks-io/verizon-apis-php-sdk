@@ -15,26 +15,38 @@ use stdClass;
 class ProfileChangeStateRequest implements \JsonSerializable
 {
     /**
-     * @var DeviceList[]|null
+     * @var DeviceList[]
      */
     private $devices;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $smsrOid;
 
     /**
+     * @param DeviceList[] $devices
+     * @param string $accountName
+     * @param string $smsrOid
+     */
+    public function __construct(array $devices, string $accountName, string $smsrOid)
+    {
+        $this->devices = $devices;
+        $this->accountName = $accountName;
+        $this->smsrOid = $smsrOid;
+    }
+
+    /**
      * Returns Devices.
      *
-     * @return DeviceList[]|null
+     * @return DeviceList[]
      */
-    public function getDevices(): ?array
+    public function getDevices(): array
     {
         return $this->devices;
     }
@@ -42,11 +54,12 @@ class ProfileChangeStateRequest implements \JsonSerializable
     /**
      * Sets Devices.
      *
+     * @required
      * @maps devices
      *
-     * @param DeviceList[]|null $devices
+     * @param DeviceList[] $devices
      */
-    public function setDevices(?array $devices): void
+    public function setDevices(array $devices): void
     {
         $this->devices = $devices;
     }
@@ -54,7 +67,7 @@ class ProfileChangeStateRequest implements \JsonSerializable
     /**
      * Returns Account Name.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -62,9 +75,10 @@ class ProfileChangeStateRequest implements \JsonSerializable
     /**
      * Sets Account Name.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
     }
@@ -72,7 +86,7 @@ class ProfileChangeStateRequest implements \JsonSerializable
     /**
      * Returns Smsr Oid.
      */
-    public function getSmsrOid(): ?string
+    public function getSmsrOid(): string
     {
         return $this->smsrOid;
     }
@@ -80,9 +94,10 @@ class ProfileChangeStateRequest implements \JsonSerializable
     /**
      * Sets Smsr Oid.
      *
+     * @required
      * @maps smsrOid
      */
-    public function setSmsrOid(?string $smsrOid): void
+    public function setSmsrOid(string $smsrOid): void
     {
         $this->smsrOid = $smsrOid;
     }
@@ -99,15 +114,9 @@ class ProfileChangeStateRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->devices)) {
-            $json['devices']     = $this->devices;
-        }
-        if (isset($this->accountName)) {
-            $json['accountName'] = $this->accountName;
-        }
-        if (isset($this->smsrOid)) {
-            $json['smsrOid']     = $this->smsrOid;
-        }
+        $json['devices']     = $this->devices;
+        $json['accountName'] = $this->accountName;
+        $json['smsrOid']     = $this->smsrOid;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

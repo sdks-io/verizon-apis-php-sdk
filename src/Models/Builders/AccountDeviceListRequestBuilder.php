@@ -122,6 +122,24 @@ class AccountDeviceListRequestBuilder
     }
 
     /**
+     * Sets max number of devices field.
+     */
+    public function maxNumberOfDevices(?int $value): self
+    {
+        $this->instance->setMaxNumberOfDevices($value);
+        return $this;
+    }
+
+    /**
+     * Sets largest device id seen field.
+     */
+    public function largestDeviceIdSeen(?int $value): self
+    {
+        $this->instance->setLargestDeviceIdSeen($value);
+        return $this;
+    }
+
+    /**
      * Initializes a new account device list request object.
      */
     public function build(): AccountDeviceListRequest

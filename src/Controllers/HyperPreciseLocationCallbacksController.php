@@ -35,7 +35,7 @@ class HyperPreciseLocationCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(QueryParam::init('accountNumber', $accountNumber));
 
         $_resHandler = $this->responseHandler()
@@ -84,7 +84,7 @@ class HyperPreciseLocationCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 QueryParam::init('accountNumber', $accountNumber),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -134,7 +134,7 @@ class HyperPreciseLocationCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(QueryParam::init('accountNumber', $accountNumber), QueryParam::init('service', $service));
 
         $_resHandler = $this->responseHandler()

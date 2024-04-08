@@ -18,19 +18,24 @@ use stdClass;
 class CarrierDeactivateRequest implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $accountName;
+
+    /**
+     * @var AccountDeviceList[]
+     */
+    private $devices;
+
+    /**
+     * @var string
+     */
+    private $reasonCode;
 
     /**
      * @var CustomFields[]|null
      */
     private $customFields;
-
-    /**
-     * @var AccountDeviceList[]|null
-     */
-    private $devices;
 
     /**
      * @var bool|null
@@ -45,18 +50,30 @@ class CarrierDeactivateRequest implements \JsonSerializable
     /**
      * @var string|null
      */
-    private $reasonCode;
+    private $servicePlan;
 
     /**
-     * @var string|null
+     * @var bool|null
      */
-    private $servicePlan;
+    private $deleteAfterDeactivation;
+
+    /**
+     * @param string $accountName
+     * @param AccountDeviceList[] $devices
+     * @param string $reasonCode
+     */
+    public function __construct(string $accountName, array $devices, string $reasonCode)
+    {
+        $this->accountName = $accountName;
+        $this->devices = $devices;
+        $this->reasonCode = $reasonCode;
+    }
 
     /**
      * Returns Account Name.
      * The name of a billing account.
      */
-    public function getAccountName(): ?string
+    public function getAccountName(): string
     {
         return $this->accountName;
     }
@@ -65,11 +82,60 @@ class CarrierDeactivateRequest implements \JsonSerializable
      * Sets Account Name.
      * The name of a billing account.
      *
+     * @required
      * @maps accountName
      */
-    public function setAccountName(?string $accountName): void
+    public function setAccountName(string $accountName): void
     {
         $this->accountName = $accountName;
+    }
+
+    /**
+     * Returns Devices.
+     * The devices for which you want to deactivate service, specified by device identifier.
+     *
+     * @return AccountDeviceList[]
+     */
+    public function getDevices(): array
+    {
+        return $this->devices;
+    }
+
+    /**
+     * Sets Devices.
+     * The devices for which you want to deactivate service, specified by device identifier.
+     *
+     * @required
+     * @maps devices
+     *
+     * @param AccountDeviceList[] $devices
+     */
+    public function setDevices(array $devices): void
+    {
+        $this->devices = $devices;
+    }
+
+    /**
+     * Returns Reason Code.
+     * Code identifying the reason for the deactivation. Currently the only valid reason code is “FF”,
+     * which corresponds to General Admin/Maintenance.
+     */
+    public function getReasonCode(): string
+    {
+        return $this->reasonCode;
+    }
+
+    /**
+     * Sets Reason Code.
+     * Code identifying the reason for the deactivation. Currently the only valid reason code is “FF”,
+     * which corresponds to General Admin/Maintenance.
+     *
+     * @required
+     * @maps reasonCode
+     */
+    public function setReasonCode(string $reasonCode): void
+    {
+        $this->reasonCode = $reasonCode;
     }
 
     /**
@@ -94,30 +160,6 @@ class CarrierDeactivateRequest implements \JsonSerializable
     public function setCustomFields(?array $customFields): void
     {
         $this->customFields = $customFields;
-    }
-
-    /**
-     * Returns Devices.
-     * The devices for which you want to deactivate service, specified by device identifier.
-     *
-     * @return AccountDeviceList[]|null
-     */
-    public function getDevices(): ?array
-    {
-        return $this->devices;
-    }
-
-    /**
-     * Sets Devices.
-     * The devices for which you want to deactivate service, specified by device identifier.
-     *
-     * @maps devices
-     *
-     * @param AccountDeviceList[]|null $devices
-     */
-    public function setDevices(?array $devices): void
-    {
-        $this->devices = $devices;
     }
 
     /**
@@ -163,28 +205,6 @@ class CarrierDeactivateRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Reason Code.
-     * Code identifying the reason for the deactivation. Currently the only valid reason code is “FF”,
-     * which corresponds to General Admin/Maintenance.
-     */
-    public function getReasonCode(): ?string
-    {
-        return $this->reasonCode;
-    }
-
-    /**
-     * Sets Reason Code.
-     * Code identifying the reason for the deactivation. Currently the only valid reason code is “FF”,
-     * which corresponds to General Admin/Maintenance.
-     *
-     * @maps reasonCode
-     */
-    public function setReasonCode(?string $reasonCode): void
-    {
-        $this->reasonCode = $reasonCode;
-    }
-
-    /**
      * Returns Service Plan.
      * The name of a service plan, if you want to only include devices that have that service plan.
      */
@@ -205,6 +225,24 @@ class CarrierDeactivateRequest implements \JsonSerializable
     }
 
     /**
+     * Returns Delete After Deactivation.
+     */
+    public function getDeleteAfterDeactivation(): ?bool
+    {
+        return $this->deleteAfterDeactivation;
+    }
+
+    /**
+     * Sets Delete After Deactivation.
+     *
+     * @maps deleteAfterDeactivation
+     */
+    public function setDeleteAfterDeactivation(?bool $deleteAfterDeactivation): void
+    {
+        $this->deleteAfterDeactivation = $deleteAfterDeactivation;
+    }
+
+    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -216,26 +254,23 @@ class CarrierDeactivateRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountName)) {
-            $json['accountName']  = $this->accountName;
-        }
+        $json['accountName']                 = $this->accountName;
+        $json['devices']                     = $this->devices;
+        $json['reasonCode']                  = $this->reasonCode;
         if (isset($this->customFields)) {
-            $json['customFields'] = $this->customFields;
-        }
-        if (isset($this->devices)) {
-            $json['devices']      = $this->devices;
+            $json['customFields']            = $this->customFields;
         }
         if (isset($this->etfWaiver)) {
-            $json['etfWaiver']    = $this->etfWaiver;
+            $json['etfWaiver']               = $this->etfWaiver;
         }
         if (isset($this->groupName)) {
-            $json['groupName']    = $this->groupName;
-        }
-        if (isset($this->reasonCode)) {
-            $json['reasonCode']   = $this->reasonCode;
+            $json['groupName']               = $this->groupName;
         }
         if (isset($this->servicePlan)) {
-            $json['servicePlan']  = $this->servicePlan;
+            $json['servicePlan']             = $this->servicePlan;
+        }
+        if (isset($this->deleteAfterDeactivation)) {
+            $json['deleteAfterDeactivation'] = $this->deleteAfterDeactivation;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

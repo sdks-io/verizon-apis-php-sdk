@@ -35,27 +35,9 @@ class PlaceOfUseBuilder
     /**
      * Initializes a new place of use Builder object.
      */
-    public static function init(): self
+    public static function init(Address $address, CustomerName $customerName): self
     {
-        return new self(new PlaceOfUse());
-    }
-
-    /**
-     * Sets address field.
-     */
-    public function address(?Address $value): self
-    {
-        $this->instance->setAddress($value);
-        return $this;
-    }
-
-    /**
-     * Sets customer name field.
-     */
-    public function customerName(?CustomerName $value): self
-    {
-        $this->instance->setCustomerName($value);
-        return $this;
+        return new self(new PlaceOfUse($address, $customerName));
     }
 
     /**

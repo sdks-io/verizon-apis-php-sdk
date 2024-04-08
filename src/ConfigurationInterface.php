@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace VerizonLib;
 
 use CoreInterfaces\Http\HttpConfigurations;
+use VerizonLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
 
 /**
  * An interface for all configuration parameters required by the SDK.
@@ -18,7 +19,10 @@ use CoreInterfaces\Http\HttpConfigurations;
 interface ConfigurationInterface extends HttpConfigurations
 {
     /**
-     * Get m2M Session Token
+     * Get m2M Session Token ([How to generate an M2M session token?](page:getting-started/5g-edge-
+     * developer-
+     *
+     * * creds-token#obtaining-a-vz-m2m-session-token-programmatically))
      */
     public function getVZM2mToken(): string;
 
@@ -30,7 +34,12 @@ interface ConfigurationInterface extends HttpConfigurations
     /**
      * Get the credentials to use with ClientCredentialsAuth
      */
-    public function getClientCredentialsAuth(): ?ClientCredentialsAuth;
+    public function getClientCredentialsAuth(): ClientCredentialsAuth;
+
+    /**
+     * Get the credentials builder instance to update credentials for ClientCredentialsAuth
+     */
+    public function getClientCredentialsAuthCredentialsBuilder(): ?ClientCredentialsAuthCredentialsBuilder;
 
     /**
      * Get the base uri for a given server in the current environment.

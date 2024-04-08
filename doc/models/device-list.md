@@ -9,7 +9,7 @@
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `deviceIds` | [`?(DeviceId1[])`](../../doc/models/device-id-1.md) | Optional | **Constraints**: *Maximum Items*: `100` | getDeviceIds(): ?array | setDeviceIds(?array deviceIds): void |
+| `deviceIds` | [`?(DeviceId[])`](../../doc/models/device-id.md) | Optional | **Constraints**: *Maximum Items*: `100` | getDeviceIds(): ?array | setDeviceIds(?array deviceIds): void |
 
 ## Example (as JSON)
 
@@ -18,15 +18,15 @@
   "deviceIds": [
     {
       "id": "id0",
-      "kind": "imei"
+      "kind": "kind8"
     },
     {
-      "id": "id1",
-      "kind": "eid"
+      "id": "id0",
+      "kind": "kind8"
     },
     {
-      "id": "id2",
-      "kind": "esn"
+      "id": "id0",
+      "kind": "kind8"
     }
   ]
 }

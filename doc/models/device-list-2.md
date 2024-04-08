@@ -9,7 +9,7 @@
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `ids` | [`?(Id[])`](../../doc/models/id.md) | Optional | **Constraints**: *Maximum Items*: `100` | getIds(): ?array | setIds(?array ids): void |
+| `ids` | [`?(ESIMDeviceId[])`](../../doc/models/esim-device-id.md) | Optional | **Constraints**: *Maximum Items*: `100` | getIds(): ?array | setIds(?array ids): void |
 
 ## Example (as JSON)
 
@@ -17,12 +17,12 @@
 {
   "ids": [
     {
-      "id": "id1",
-      "kind": "iccid"
+      "id": "id4",
+      "kind": "kind2"
     },
     {
-      "id": "id2",
-      "kind": "imei"
+      "id": "id4",
+      "kind": "kind2"
     }
   ]
 }

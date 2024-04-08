@@ -36,7 +36,7 @@ class ExclusionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/consents')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -60,7 +60,7 @@ class ExclusionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/consents')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 QueryParam::init('accountName', $accountName),
                 QueryParam::init('deviceList', $deviceList)
@@ -86,7 +86,7 @@ class ExclusionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/consents/{account}/index/{startIndex}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
 
         $_resHandler = $this->responseHandler()

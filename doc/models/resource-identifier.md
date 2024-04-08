@@ -19,7 +19,7 @@ The ID of the target to delete, in the format {"id": "dd1682d3-2d80-cefc-f3ee-25
 ```json
 {
   "id": "2e61a17d-8fd1-6816-e995-e4c2528bf535",
-  "imei": "imei6"
+  "imei": "imei8"
 }
 ```
 

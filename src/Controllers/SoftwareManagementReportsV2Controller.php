@@ -38,7 +38,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/software/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 QueryParam::init('distributionType', $distributionType)
@@ -47,37 +47,6 @@ class SoftwareManagementReportsV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(SoftwarePackage::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * The report endpoint allows user to get campaign history of an account for specified status.
-     *
-     * @param string $account Account identifier.
-     * @param string $campaignStatus Status of the campaign.
-     * @param string|null $lastSeenCampaignId Last seen campaign Id.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getCampaignHistoryByStatus(
-        string $account,
-        string $campaignStatus,
-        ?string $lastSeenCampaignId = null
-    ): ApiResponse {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/campaigns')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
-            ->parameters(
-                TemplateParam::init('account', $account),
-                QueryParam::init('campaignStatus', $campaignStatus),
-                QueryParam::init('lastSeenCampaignId', $lastSeenCampaignId)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(V2CampaignHistory::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -100,7 +69,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId),
@@ -127,12 +96,43 @@ class SoftwareManagementReportsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(DeviceSoftwareUpgrade::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * The report endpoint allows user to get campaign history of an account for specified status.
+     *
+     * @param string $account Account identifier.
+     * @param string $campaignStatus Status of the campaign.
+     * @param string|null $lastSeenCampaignId Last seen campaign Id.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getCampaignHistoryByStatus(
+        string $account,
+        string $campaignStatus,
+        ?string $lastSeenCampaignId = null
+    ): ApiResponse {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/campaigns')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth('oAuth2')
+            ->parameters(
+                TemplateParam::init('account', $account),
+                QueryParam::init('campaignStatus', $campaignStatus),
+                QueryParam::init('lastSeenCampaignId', $lastSeenCampaignId)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(V2CampaignHistory::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -157,7 +157,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
             '/reports/{account}/campaigns/{campaignId}/devices'
         )
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('global')
+            ->auth('oAuth2')
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('campaignId', $campaignId),

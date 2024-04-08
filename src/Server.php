@@ -17,6 +17,8 @@ class Server
 {
     public const EDGE_DISCOVERY = 'Edge Discovery';
 
+    public const THINGSPACE = 'Thingspace';
+
     public const OAUTH_SERVER = 'OAuth Server';
 
     public const M2M = 'M2M';
@@ -40,4 +42,6 @@ class Server
     public const HYPER_PRECISE_LOCATION = 'Hyper Precise Location';
 
     public const SERVICES = 'Services';
+
+    public const QUALITY_OF_SERVICE = 'Quality Of Service';
 }

@@ -33,6 +33,11 @@ class CarrierActionsRequest implements \JsonSerializable
     private $devices;
 
     /**
+     * @var bool|null
+     */
+    private $withBilling;
+
+    /**
      * @var string|null
      */
     private $groupName;
@@ -111,6 +116,26 @@ class CarrierActionsRequest implements \JsonSerializable
     }
 
     /**
+     * Returns With Billing.
+     * set to "true" to suspend with billing, set to "false" to suspend without billing
+     */
+    public function getWithBilling(): ?bool
+    {
+        return $this->withBilling;
+    }
+
+    /**
+     * Sets With Billing.
+     * set to "true" to suspend with billing, set to "false" to suspend without billing
+     *
+     * @maps withBilling
+     */
+    public function setWithBilling(?bool $withBilling): void
+    {
+        $this->withBilling = $withBilling;
+    }
+
+    /**
      * Returns Group Name.
      * The name of a device group, if you want to restore service for all devices in that group.
      */
@@ -170,6 +195,9 @@ class CarrierActionsRequest implements \JsonSerializable
         }
         if (isset($this->devices)) {
             $json['devices']      = $this->devices;
+        }
+        if (isset($this->withBilling)) {
+            $json['withBilling']  = $this->withBilling;
         }
         if (isset($this->groupName)) {
             $json['groupName']    = $this->groupName;

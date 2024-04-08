@@ -31,9 +31,9 @@ Request for getting an aggregated session report.
     "709312034493372"
   ],
   "deviceGroup": "deviceGroup4",
-  "dataPlan": "dataPlan8",
+  "dataPlan": "dataPlan2",
   "noSessionFlag": "false",
-  "deviceLabel": "deviceLabel6"
+  "deviceLabel": "deviceLabel4"
 }
 ```
 

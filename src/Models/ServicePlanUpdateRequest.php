@@ -11,12 +11,18 @@ declare(strict_types=1);
 namespace VerizonLib\Models;
 
 use stdClass;
+use VerizonLib\Utils\DateTimeHelper;
 
 /**
  * Request to update service plan.
  */
 class ServicePlanUpdateRequest implements \JsonSerializable
 {
+    /**
+     * @var string
+     */
+    private $servicePlan;
+
     /**
      * @var string|null
      */
@@ -45,7 +51,41 @@ class ServicePlanUpdateRequest implements \JsonSerializable
     /**
      * @var string|null
      */
-    private $servicePlan;
+    private $carrierIpPoolName;
+
+    /**
+     * @var \DateTime|null
+     */
+    private $takeEffect;
+
+    /**
+     * @param string $servicePlan
+     */
+    public function __construct(string $servicePlan)
+    {
+        $this->servicePlan = $servicePlan;
+    }
+
+    /**
+     * Returns Service Plan.
+     * The service plan code that you want to assign to all specified devices.
+     */
+    public function getServicePlan(): string
+    {
+        return $this->servicePlan;
+    }
+
+    /**
+     * Sets Service Plan.
+     * The service plan code that you want to assign to all specified devices.
+     *
+     * @required
+     * @maps servicePlan
+     */
+    public function setServicePlan(string $servicePlan): void
+    {
+        $this->servicePlan = $servicePlan;
+    }
 
     /**
      * Returns Account Name.
@@ -156,23 +196,40 @@ class ServicePlanUpdateRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Service Plan.
-     * The service plan code that you want to assign to all specified devices.
+     * Returns Carrier Ip Pool Name.
      */
-    public function getServicePlan(): ?string
+    public function getCarrierIpPoolName(): ?string
     {
-        return $this->servicePlan;
+        return $this->carrierIpPoolName;
     }
 
     /**
-     * Sets Service Plan.
-     * The service plan code that you want to assign to all specified devices.
+     * Sets Carrier Ip Pool Name.
      *
-     * @maps servicePlan
+     * @maps carrierIpPoolName
      */
-    public function setServicePlan(?string $servicePlan): void
+    public function setCarrierIpPoolName(?string $carrierIpPoolName): void
     {
-        $this->servicePlan = $servicePlan;
+        $this->carrierIpPoolName = $carrierIpPoolName;
+    }
+
+    /**
+     * Returns Take Effect.
+     */
+    public function getTakeEffect(): ?\DateTime
+    {
+        return $this->takeEffect;
+    }
+
+    /**
+     * Sets Take Effect.
+     *
+     * @maps takeEffect
+     * @factory \VerizonLib\Utils\DateTimeHelper::fromRfc3339DateTime
+     */
+    public function setTakeEffect(?\DateTime $takeEffect): void
+    {
+        $this->takeEffect = $takeEffect;
     }
 
     /**
@@ -187,6 +244,7 @@ class ServicePlanUpdateRequest implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
+        $json['servicePlan']            = $this->servicePlan;
         if (isset($this->accountName)) {
             $json['accountName']        = $this->accountName;
         }
@@ -202,8 +260,11 @@ class ServicePlanUpdateRequest implements \JsonSerializable
         if (isset($this->groupName)) {
             $json['groupName']          = $this->groupName;
         }
-        if (isset($this->servicePlan)) {
-            $json['servicePlan']        = $this->servicePlan;
+        if (isset($this->carrierIpPoolName)) {
+            $json['carrierIpPoolName']  = $this->carrierIpPoolName;
+        }
+        if (isset($this->takeEffect)) {
+            $json['takeEffect']         = DateTimeHelper::toRfc3339DateTime($this->takeEffect);
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

@@ -33,17 +33,17 @@ class AccountDeviceListBuilder
     /**
      * Initializes a new account device list Builder object.
      */
-    public static function init(): self
+    public static function init(array $deviceIds): self
     {
-        return new self(new AccountDeviceList());
+        return new self(new AccountDeviceList($deviceIds));
     }
 
     /**
-     * Sets device ids field.
+     * Sets ip address field.
      */
-    public function deviceIds(?array $value): self
+    public function ipAddress(?string $value): self
     {
-        $this->instance->setDeviceIds($value);
+        $this->instance->setIpAddress($value);
         return $this;
     }
 

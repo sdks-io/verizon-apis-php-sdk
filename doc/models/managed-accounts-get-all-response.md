@@ -20,30 +20,14 @@
   "accountName": "0212312345-00001",
   "ManagedAccAddedList": [
     {
-      "id": "id3",
-      "txid": "txid9"
-    },
-    {
-      "id": "id4",
-      "txid": "txid8"
-    },
-    {
-      "id": "id5",
-      "txid": "txid7"
+      "id": "id6",
+      "txid": "txid6"
     }
   ],
   "managedAccProvisionedList": [
     {
-      "id": "id1",
-      "txid": "txid1"
-    },
-    {
       "id": "id2",
       "txid": "txid0"
-    },
-    {
-      "id": "id3",
-      "txid": "txid9"
     }
   ]
 }
