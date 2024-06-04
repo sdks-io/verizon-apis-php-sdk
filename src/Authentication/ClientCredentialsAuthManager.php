@@ -14,6 +14,7 @@ use CoreInterfaces\Core\Request\TypeValidatorInterface;
 use Core\Authentication\CoreAuth;
 use Core\Client;
 use Core\Request\Parameters\HeaderParam;
+use Core\Utils\CoreHelper;
 use InvalidArgumentException;
 use VerizonLib\Models\OauthToken;
 use VerizonLib\Controllers\OauthAuthorizationController;
@@ -53,7 +54,10 @@ class ClientCredentialsAuthManager extends CoreAuth implements ClientCredentials
         if ($oauthToken instanceof OauthToken) {
             $this->oauthToken = $oauthToken;
             parent::__construct(
-                HeaderParam::init('Authorization', 'Bearer ' . $oauthToken->getAccessToken())->required()
+                HeaderParam::init(
+                    'Authorization',
+                    CoreHelper::getBearerAuthString($oauthToken->getAccessToken())
+                )->requiredNonEmpty()
             );
         }
         if (is_array($oauthScopes)) {
