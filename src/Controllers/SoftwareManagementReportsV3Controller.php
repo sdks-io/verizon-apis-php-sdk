@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\QueryParam;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
@@ -40,7 +41,7 @@ class SoftwareManagementReportsV3Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{acc}/firmware/campaigns')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 QueryParam::init('campaignStatus', $campaignStatus)
@@ -68,7 +69,7 @@ class SoftwareManagementReportsV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{acc}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
@@ -95,7 +96,7 @@ class SoftwareManagementReportsV3Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{acc}/campaigns/{campaignId}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 TemplateParam::init('campaignId', $campaignId),

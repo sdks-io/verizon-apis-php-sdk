@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Response\Types\ErrorType;
@@ -38,7 +39,7 @@ class EUICCDeviceProfileManagementController extends BaseController
             '/m2m/v1/devices/profile/actions/download_enable'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -63,7 +64,7 @@ class EUICCDeviceProfileManagementController extends BaseController
             '/m2m/v1/devices/profile/actions/download_disable'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -85,7 +86,7 @@ class EUICCDeviceProfileManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/enable')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -108,7 +109,7 @@ class EUICCDeviceProfileManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/disable')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -131,7 +132,7 @@ class EUICCDeviceProfileManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/delete')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

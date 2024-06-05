@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace VerizonLib\Models\Builders;
 
 use Core\Utils\CoreHelper;
-use VerizonLib\Models\Notification;
+use VerizonLib\Models\TriggerNotification;
 use VerizonLib\Models\TriggersListOptions;
 use VerizonLib\Models\UsageAnomalyAttributes;
 
@@ -115,7 +115,7 @@ class TriggersListOptionsBuilder
     /**
      * Sets notification field.
      */
-    public function notification(?Notification $value): self
+    public function notification(?TriggerNotification $value): self
     {
         $this->instance->setNotification($value);
         return $this;

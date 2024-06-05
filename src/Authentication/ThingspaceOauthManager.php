@@ -18,12 +18,11 @@ use Core\Utils\CoreHelper;
 use InvalidArgumentException;
 use VerizonLib\Models\OauthToken;
 use VerizonLib\Controllers\OauthAuthorizationController;
-use VerizonLib\ClientCredentialsAuth;
 
 /**
  * Utility class for OAuth 2 authorization and token management
  */
-class ClientCredentialsAuthManager extends CoreAuth implements ClientCredentialsAuth
+class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredentials
 {
     /**
      * Singleton instance of OAuth 2 API controller
@@ -95,7 +94,7 @@ class ClientCredentialsAuthManager extends CoreAuth implements ClientCredentials
     }
 
     /**
-     * OauthScopeEnum value for oauthScopes.
+     * OauthScopeThingspaceOauthEnum value for oauthScopes.
      */
     public function getOauthScopes(): ?array
     {
@@ -121,7 +120,7 @@ class ClientCredentialsAuthManager extends CoreAuth implements ClientCredentials
     public function fetchToken(?array $additionalParams = null): OauthToken
     {
         //send request for access token
-        $oAuthToken = $this->oAuthApi->requestToken(
+        $oAuthToken = $this->oAuthApi->requestTokenThingspaceOauth(
             $this->buildBasicHeader(),
             implode(' ', $this->oauthScopes ?? []),
             $additionalParams

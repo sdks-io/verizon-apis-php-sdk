@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -42,7 +43,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/configuration/actions/set')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(ChangeConfigurationResponse::class)->returnApiResponse();
@@ -61,7 +62,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/query')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(FindDeviceByPropertyResponseList::class)->returnApiResponse();
@@ -80,7 +81,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/search')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(SearchDeviceByPropertyResponseList::class)->returnApiResponse();
@@ -101,7 +102,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/fields/actions/history/search')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -125,7 +126,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/fields/{fieldname}/actions/history')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('fieldname', $fieldname),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -148,7 +149,7 @@ class CloudConnectorDevicesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/delete')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->returnApiResponse();

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -35,7 +36,7 @@ class HyperPreciseLocationCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(QueryParam::init('accountNumber', $accountNumber));
 
         $_resHandler = $this->responseHandler()
@@ -84,7 +85,7 @@ class HyperPreciseLocationCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 QueryParam::init('accountNumber', $accountNumber),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -134,7 +135,7 @@ class HyperPreciseLocationCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(QueryParam::init('accountNumber', $accountNumber), QueryParam::init('service', $service));
 
         $_resHandler = $this->responseHandler()

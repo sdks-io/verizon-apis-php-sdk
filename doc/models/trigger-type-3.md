@@ -16,7 +16,7 @@ Trigger details.
 | `triggerCategory` | `?string` | Optional | This is the value to use in the request body to detect anomalous behaivior. The values in this table will only be relevant when this parameter is set to this value. | getTriggerCategory(): ?string | setTriggerCategory(?string triggerCategory): void |
 | `accountName` | `?string` | Optional | Account name.<br>**Constraints**: *Minimum Length*: `3`, *Maximum Length*: `32` | getAccountName(): ?string | setAccountName(?string accountName): void |
 | `anomalyTriggerRequest` | [`?AnomalyTriggerRequest`](../../doc/models/anomaly-trigger-request.md) | Optional | The details of the UsageAnomaly trigger. | getAnomalyTriggerRequest(): ?AnomalyTriggerRequest | setAnomalyTriggerRequest(?AnomalyTriggerRequest anomalyTriggerRequest): void |
-| `notification` | [`?Notification`](../../doc/models/notification.md) | Optional | The notification details of the trigger. | getNotification(): ?Notification | setNotification(?Notification notification): void |
+| `notification` | [`?TriggerNotification`](../../doc/models/trigger-notification.md) | Optional | The notification details of the trigger. | getNotification(): ?TriggerNotification | setNotification(?TriggerNotification notification): void |
 
 ## Example (as JSON)
 

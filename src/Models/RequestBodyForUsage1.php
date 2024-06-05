@@ -13,13 +13,8 @@ namespace VerizonLib\Models;
 use stdClass;
 use VerizonLib\Utils\DateTimeHelper;
 
-class UsageRequestBody implements \JsonSerializable
+class RequestBodyForUsage1 implements \JsonSerializable
 {
-    /**
-     * @var string|null
-     */
-    private $accountId;
-
     /**
      * @var ReadySimDeviceId[]|null
      */
@@ -34,24 +29,6 @@ class UsageRequestBody implements \JsonSerializable
      * @var \DateTime|null
      */
     private $endTime;
-
-    /**
-     * Returns Account Id.
-     */
-    public function getAccountId(): ?string
-    {
-        return $this->accountId;
-    }
-
-    /**
-     * Sets Account Id.
-     *
-     * @maps accountId
-     */
-    public function setAccountId(?string $accountId): void
-    {
-        $this->accountId = $accountId;
-    }
 
     /**
      * Returns Device Id.
@@ -125,9 +102,6 @@ class UsageRequestBody implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->accountId)) {
-            $json['accountId'] = $this->accountId;
-        }
         if (isset($this->deviceId)) {
             $json['deviceId']  = $this->deviceId;
         }

@@ -12,9 +12,8 @@ namespace VerizonLib;
 
 use Core\Types\Sdk\CoreCallback;
 use Core\Utils\CoreHelper;
-use VerizonLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
-use VerizonLib\Models\OauthScopeEnum;
-use VerizonLib\Models\OauthToken;
+use VerizonLib\Authentication\ThingspaceOauthCredentialsBuilder;
+use VerizonLib\Authentication\VZM2MTokenCredentialsBuilder;
 
 class VerizonClientBuilder
 {
@@ -104,87 +103,21 @@ class VerizonClientBuilder
         return $this;
     }
 
-    public function vZM2mToken(string $vZM2mToken): self
-    {
-        $this->config['vZM2mToken'] = $vZM2mToken;
-        return $this;
-    }
-
     public function environment(string $environment): self
     {
         $this->config['environment'] = $environment;
         return $this;
     }
 
-    /**
-     * @see VerizonClientBuilder::clientCredentialsAuthCredentials
-     *
-     * @deprecated This builder setter is deprecated. Checkout the see also section for its
-     *             alternate.
-     *
-     * @param string $oauthClientId
-     *
-     * @return $this
-     */
-    public function oauthClientId(string $oauthClientId): self
+    public function thingspaceOauthCredentials(ThingspaceOauthCredentialsBuilder $thingspaceOauth): self
     {
-        $this->config['oauthClientId'] = $oauthClientId;
+        $this->config = array_merge($this->config, $thingspaceOauth->getConfiguration());
         return $this;
     }
 
-    /**
-     * @see VerizonClientBuilder::clientCredentialsAuthCredentials
-     *
-     * @deprecated This builder setter is deprecated. Checkout the see also section for its
-     *             alternate.
-     *
-     * @param string $oauthClientSecret
-     *
-     * @return $this
-     */
-    public function oauthClientSecret(string $oauthClientSecret): self
+    public function vZM2mTokenCredentials(VZM2MTokenCredentialsBuilder $vZM2mToken): self
     {
-        $this->config['oauthClientSecret'] = $oauthClientSecret;
-        return $this;
-    }
-
-    /**
-     * @see VerizonClientBuilder::clientCredentialsAuthCredentials
-     *
-     * @deprecated This builder setter is deprecated. Checkout the see also section for its
-     *             alternate.
-     *
-     * @param OauthToken|null $oauthToken
-     *
-     * @return $this
-     */
-    public function oauthToken(?OauthToken $oauthToken): self
-    {
-        $this->config['oauthToken'] = $oauthToken;
-        return $this;
-    }
-
-    /**
-     * @see VerizonClientBuilder::clientCredentialsAuthCredentials
-     *
-     * @deprecated This builder setter is deprecated. Checkout the see also section for its
-     *             alternate.
-     *
-     * @param string[]|null $oauthScopes
-     *
-     * @return $this
-     */
-    public function oauthScopes(?array $oauthScopes): self
-    {
-        OauthScopeEnum::checkValue($oauthScopes);
-        $this->config['oauthScopes'] = $oauthScopes;
-        return $this;
-    }
-
-    public function clientCredentialsAuthCredentials(
-        ClientCredentialsAuthCredentialsBuilder $clientCredentialsAuth
-    ): self {
-        $this->config = array_merge($this->config, $clientCredentialsAuth->getConfiguration());
+        $this->config = array_merge($this->config, $vZM2mToken->getConfiguration());
         return $this;
     }
 

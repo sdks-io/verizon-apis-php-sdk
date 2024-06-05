@@ -10,15 +10,16 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
-use Core\Request\Parameters\QueryParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
 use VerizonLib\Exceptions\RestErrorResponseException;
 use VerizonLib\Http\ApiResponse;
 use VerizonLib\Models\NotificationReportRequest;
 use VerizonLib\Models\RequestResponse;
+use VerizonLib\Models\StopMonitorRequest;
 use VerizonLib\Server;
 
 class DeviceMonitoringController extends BaseController
@@ -32,7 +33,7 @@ class DeviceMonitoringController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/diagnostics/basic/devicereachability')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -44,21 +45,16 @@ class DeviceMonitoringController extends BaseController
     }
 
     /**
-     * @param string $accountName The numeric name of the account.
-     * @param string[] $monitorIds The array contains the monitorIDs (UUID) for which the monitor is
-     *        to be deleted.
+     * @param StopMonitorRequest|null $body
      *
      * @return ApiResponse Response from the API call
      */
-    public function stopDeviceReachability(string $accountName, array $monitorIds): ApiResponse
+    public function stopDeviceReachability(?StopMonitorRequest $body = null): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/diagnostics/basic/devicereachability')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
-            ->parameters(
-                QueryParam::init('accountName', $accountName),
-                QueryParam::init('monitorIds', $monitorIds)
-            );
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error Response', RestErrorResponseException::class))

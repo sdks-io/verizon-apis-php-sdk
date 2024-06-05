@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Response\Types\ErrorType;
@@ -36,7 +37,7 @@ class WirelessNetworkPerformanceController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/intelligence/network-conditions')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -59,7 +60,7 @@ class WirelessNetworkPerformanceController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/intelligence/wireless-coverage')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -85,7 +86,7 @@ class WirelessNetworkPerformanceController extends BaseController
             '/m2m/v1/intelligence/site-proximity/action/list'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -110,7 +111,7 @@ class WirelessNetworkPerformanceController extends BaseController
             '/m2m/v1/intelligence/device-experience/history/30-days'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -135,7 +136,7 @@ class WirelessNetworkPerformanceController extends BaseController
             '/m2m/v1/intelligence/device-experience/bulk/latest'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

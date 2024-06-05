@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -38,7 +39,7 @@ class SMSController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/sms')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -62,7 +63,7 @@ class SMSController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/sms/{aname}/history')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
 
         $_resHandler = $this->responseHandler()
@@ -87,7 +88,7 @@ class SMSController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/sms/{aname}/startCallbacks')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()

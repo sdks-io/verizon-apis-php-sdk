@@ -32,7 +32,7 @@ class OauthAuthorizationController extends BaseController
      *
      * @return ApiResponse Response from the API call
      */
-    public function requestToken(
+    public function requestTokenThingspaceOauth(
         string $authorization,
         ?string $scope = null,
         array $fieldParameters = null

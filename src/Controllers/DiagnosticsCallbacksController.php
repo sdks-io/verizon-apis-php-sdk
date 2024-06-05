@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -35,7 +36,7 @@ class DiagnosticsCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(QueryParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
@@ -57,7 +58,7 @@ class DiagnosticsCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -80,7 +81,7 @@ class DiagnosticsCallbacksController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 QueryParam::init('accountName', $accountName),
                 QueryParam::init('serviceName', $serviceName)

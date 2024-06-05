@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -35,7 +36,7 @@ class CloudConnectorSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/subscriptions')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(Subscription::class)->returnApiResponse();
@@ -54,7 +55,7 @@ class CloudConnectorSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/subscriptions/actions/query')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(Subscription::class, 1)->returnApiResponse();
@@ -74,7 +75,7 @@ class CloudConnectorSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/subscriptions/actions/delete')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->returnApiResponse();

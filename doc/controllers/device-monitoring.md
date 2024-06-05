@@ -67,15 +67,14 @@ $apiResponse = $deviceMonitoringController->deviceReachability($body);
 # Stop Device Reachability
 
 ```php
-function stopDeviceReachability(string $accountName, array $monitorIds): ApiResponse
+function stopDeviceReachability(?StopMonitorRequest $body = null): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `accountName` | `string` | Query, Required | The numeric name of the account. |
-| `monitorIds` | `string[]` | Query, Required | The array contains the monitorIDs (UUID) for which the monitor is to be deleted. |
+| `body` | [`?StopMonitorRequest`](../../doc/models/stop-monitor-request.md) | Body, Optional | - |
 
 ## Response Type
 
@@ -84,17 +83,14 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$accountName = '0242123520-00001';
+$body = StopMonitorRequestBuilder::init(
+    '0242123520-00001',
+    [
+        '35596ca6-bab4-4333-a914-42b4fc2da54c'
+    ]
+)->build();
 
-$monitorIds = [
-    '35596ca6-bab4-4333-a914-42b4fc2da54c',
-    '35596ca6-bab4-4333-a914-42b4fc2da54b'
-];
-
-$apiResponse = $deviceMonitoringController->stopDeviceReachability(
-    $accountName,
-    $monitorIds
-);
+$apiResponse = $deviceMonitoringController->stopDeviceReachability($body);
 ```
 
 ## Errors

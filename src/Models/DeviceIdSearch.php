@@ -18,7 +18,7 @@ use stdClass;
 class DeviceIdSearch implements \JsonSerializable
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $contains;
 
@@ -38,10 +38,12 @@ class DeviceIdSearch implements \JsonSerializable
     private $kind;
 
     /**
+     * @param string $contains
      * @param string $kind
      */
-    public function __construct(string $kind)
+    public function __construct(string $contains, string $kind)
     {
+        $this->contains = $contains;
         $this->kind = $kind;
     }
 
@@ -49,7 +51,7 @@ class DeviceIdSearch implements \JsonSerializable
      * Returns Contains.
      * The string appears anywhere in the identifer.
      */
-    public function getContains(): ?string
+    public function getContains(): string
     {
         return $this->contains;
     }
@@ -58,9 +60,10 @@ class DeviceIdSearch implements \JsonSerializable
      * Sets Contains.
      * The string appears anywhere in the identifer.
      *
+     * @required
      * @maps contains
      */
-    public function setContains(?string $contains): void
+    public function setContains(string $contains): void
     {
         $this->contains = $contains;
     }
@@ -140,9 +143,7 @@ class DeviceIdSearch implements \JsonSerializable
     public function jsonSerialize(bool $asArrayWhenEmpty = false)
     {
         $json = [];
-        if (isset($this->contains)) {
-            $json['contains']   = $this->contains;
-        }
+        $json['contains']       = $this->contains;
         if (isset($this->startswith)) {
             $json['startswith'] = $this->startswith;
         }

@@ -11,7 +11,10 @@ declare(strict_types=1);
 namespace VerizonLib;
 
 use CoreInterfaces\Http\HttpConfigurations;
-use VerizonLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
+use VerizonLib\Authentication\ThingspaceOauthCredentials;
+use VerizonLib\Authentication\ThingspaceOauthCredentialsBuilder;
+use VerizonLib\Authentication\VZM2MTokenCredentials;
+use VerizonLib\Authentication\VZM2MTokenCredentialsBuilder;
 
 /**
  * An interface for all configuration parameters required by the SDK.
@@ -19,27 +22,29 @@ use VerizonLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
 interface ConfigurationInterface extends HttpConfigurations
 {
     /**
-     * Get m2M Session Token ([How to generate an M2M session token?](page:getting-started/5g-edge-
-     * developer-
-     *
-     * * creds-token#obtaining-a-vz-m2m-session-token-programmatically))
-     */
-    public function getVZM2mToken(): string;
-
-    /**
      * Get current API environment
      */
     public function getEnvironment(): string;
 
     /**
-     * Get the credentials to use with ClientCredentialsAuth
+     * Get the credentials to use with ThingspaceOauth
      */
-    public function getClientCredentialsAuth(): ClientCredentialsAuth;
+    public function getThingspaceOauthCredentials(): ThingspaceOauthCredentials;
 
     /**
-     * Get the credentials builder instance to update credentials for ClientCredentialsAuth
+     * Get the credentials builder instance to update credentials for ThingspaceOauth
      */
-    public function getClientCredentialsAuthCredentialsBuilder(): ?ClientCredentialsAuthCredentialsBuilder;
+    public function getThingspaceOauthCredentialsBuilder(): ?ThingspaceOauthCredentialsBuilder;
+
+    /**
+     * Get the credentials to use with VZM2MToken
+     */
+    public function getVZM2MTokenCredentials(): VZM2MTokenCredentials;
+
+    /**
+     * Get the credentials builder instance to update credentials for VZM2mToken
+     */
+    public function getVZM2MTokenCredentialsBuilder(): ?VZM2MTokenCredentialsBuilder;
 
     /**
      * Get the base uri for a given server in the current environment.

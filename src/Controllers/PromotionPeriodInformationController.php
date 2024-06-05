@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Response\Types\ErrorType;
@@ -17,8 +18,8 @@ use CoreInterfaces\Core\Request\RequestMethod;
 use VerizonLib\Exceptions\ReadySimRestErrorResponseException;
 use VerizonLib\Http\ApiResponse;
 use VerizonLib\Models\RequestBodyForUsage;
+use VerizonLib\Models\RequestBodyForUsage1;
 use VerizonLib\Models\ResponseToUsageQuery;
-use VerizonLib\Models\UsageRequestBody;
 use VerizonLib\Models\UsageRequestResponse;
 use VerizonLib\Server;
 
@@ -27,15 +28,15 @@ class PromotionPeriodInformationController extends BaseController
     /**
      * Retrieves the usage history of a device during the promotion period.
      *
-     * @param RequestBodyForUsage $body Retrieve Aggregate Usage
+     * @param RequestBodyForUsage1 $body Retrieve Aggregate Usage
      *
      * @return ApiResponse Response from the API call
      */
-    public function getPromoDeviceUsageHistory(RequestBodyForUsage $body): ApiResponse
+    public function getPromoDeviceUsageHistory(RequestBodyForUsage1 $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/usage/actions/promodeviceusage')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -56,18 +57,18 @@ class PromotionPeriodInformationController extends BaseController
      * Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a
      * callback.
      *
-     * @param UsageRequestBody $body Retrieve Aggregate Usage
+     * @param RequestBodyForUsage $body Retrieve Aggregate Usage
      *
      * @return ApiResponse Response from the API call
      */
-    public function getPromoDeviceAggregateUsageHistory(UsageRequestBody $body): ApiResponse
+    public function getPromoDeviceAggregateUsageHistory(RequestBodyForUsage $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(
             RequestMethod::POST,
             '/m2m/v1/devices/usage/actions/promoaggregateusage'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

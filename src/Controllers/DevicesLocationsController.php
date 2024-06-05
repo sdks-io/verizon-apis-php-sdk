@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -40,7 +41,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/locations')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -64,7 +65,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devicelocations')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -88,7 +89,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/devicelocations/{txid}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(QueryParam::init('accountName', $accountName), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()
@@ -110,7 +111,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/locationreports')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -137,7 +138,7 @@ class DevicesLocationsController extends BaseController
             '/locationreports/{account}/report/{txid}/index/{startindex}'
         )
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('txid', $txid),
@@ -164,7 +165,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/locationreports/{account}/report/{txid}/status')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()
@@ -187,7 +188,7 @@ class DevicesLocationsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/locationreports/{account}/report/{txid}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()

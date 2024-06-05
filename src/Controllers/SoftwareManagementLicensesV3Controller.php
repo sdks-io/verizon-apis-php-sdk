@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -37,7 +38,7 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('acc', $acc), QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId));
 
         $_resHandler = $this->responseHandler()
@@ -60,7 +61,7 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/assign')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -87,7 +88,7 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/remove')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),

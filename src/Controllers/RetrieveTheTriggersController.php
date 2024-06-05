@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -30,7 +31,7 @@ class RetrieveTheTriggersController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2');
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
@@ -51,7 +52,7 @@ class RetrieveTheTriggersController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers/accounts/{accountName}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
@@ -71,7 +72,7 @@ class RetrieveTheTriggersController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers/categories/PromoAlerts')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2');
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
@@ -92,7 +93,7 @@ class RetrieveTheTriggersController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers/{triggerId}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('triggerId', $triggerId));
 
         $_resHandler = $this->responseHandler()

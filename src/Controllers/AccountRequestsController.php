@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -35,7 +36,7 @@ class AccountRequestsController extends BaseController
             '/m2m/v1/accounts/{aname}/requests/{requestId}/status'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('requestId', $requestId));
 
         $_resHandler = $this->responseHandler()

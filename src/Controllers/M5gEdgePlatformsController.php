@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\QueryParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -46,7 +47,7 @@ class M5gEdgePlatformsController extends BaseController
         ?string $uEIdentity = null
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/mecplatforms')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 QueryParam::init('region', $region),
                 QueryParam::init('serviceProfileId', $serviceProfileId),
@@ -77,7 +78,8 @@ class M5gEdgePlatformsController extends BaseController
      */
     public function listRegions(): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/regions')->auth('oAuth2');
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/regions')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))

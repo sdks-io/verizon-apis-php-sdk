@@ -13,7 +13,7 @@ namespace VerizonLib\Models\Builders;
 use Core\Utils\CoreHelper;
 use VerizonLib\Models\AnomalyTriggerRequest;
 use VerizonLib\Models\CreateTriggerRequestOptions;
-use VerizonLib\Models\Notification;
+use VerizonLib\Models\TriggerNotification;
 
 /**
  * Builder for model CreateTriggerRequestOptions
@@ -79,7 +79,7 @@ class CreateTriggerRequestOptionsBuilder
     /**
      * Sets notification field.
      */
-    public function notification(?Notification $value): self
+    public function notification(?TriggerNotification $value): self
     {
         $this->instance->setNotification($value);
         return $this;

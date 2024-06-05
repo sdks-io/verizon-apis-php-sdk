@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -35,7 +36,7 @@ class DeviceServiceManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/services')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(QueryParam::init('imei', $imei), QueryParam::init('accountNumber', $accountNumber));
 
         $_resHandler = $this->responseHandler()
@@ -80,7 +81,7 @@ class DeviceServiceManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/devices/services')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

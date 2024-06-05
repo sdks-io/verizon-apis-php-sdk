@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\QueryParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -33,7 +34,7 @@ class DiagnosticsSettingsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/settings')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(QueryParam::init('accountName', $accountName), QueryParam::init('devices', $devices));
 
         $_resHandler = $this->responseHandler()

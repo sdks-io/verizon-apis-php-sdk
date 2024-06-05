@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -36,7 +37,7 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -59,7 +60,7 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -86,7 +87,7 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -112,7 +113,7 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()

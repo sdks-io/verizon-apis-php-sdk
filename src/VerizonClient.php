@@ -11,12 +11,15 @@ declare(strict_types=1);
 namespace VerizonLib;
 
 use Core\ClientBuilder;
-use Core\Request\Parameters\HeaderParam;
 use Core\Utils\CoreHelper;
 use Unirest\Configuration;
 use Unirest\HttpClient;
-use VerizonLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
-use VerizonLib\Authentication\ClientCredentialsAuthManager;
+use VerizonLib\Authentication\ThingspaceOauthCredentials;
+use VerizonLib\Authentication\ThingspaceOauthCredentialsBuilder;
+use VerizonLib\Authentication\ThingspaceOauthManager;
+use VerizonLib\Authentication\VZM2MTokenCredentials;
+use VerizonLib\Authentication\VZM2MTokenCredentialsBuilder;
+use VerizonLib\Authentication\VZM2mTokenManager;
 use VerizonLib\Controllers\AccountDevicesController;
 use VerizonLib\Controllers\AccountRequestsController;
 use VerizonLib\Controllers\AccountsController;
@@ -60,6 +63,7 @@ use VerizonLib\Controllers\HyperPreciseLocationCallbacksController;
 use VerizonLib\Controllers\M5gEdgePlatformsController;
 use VerizonLib\Controllers\ManagingESIMProfilesController;
 use VerizonLib\Controllers\MECController;
+use VerizonLib\Controllers\MV2TriggersController;
 use VerizonLib\Controllers\OauthAuthorizationController;
 use VerizonLib\Controllers\PerformanceMetricsController;
 use VerizonLib\Controllers\PromotionPeriodInformationController;
@@ -235,9 +239,13 @@ class VerizonClient implements ConfigurationInterface
 
     private $globalReporting;
 
+    private $mV2Triggers;
+
     private $oauthAuthorization;
 
-    private $clientCredentialsAuthManager;
+    private $thingspaceOauthManager;
+
+    private $vZM2mTokenManager;
 
     private $config;
 
@@ -252,11 +260,14 @@ class VerizonClient implements ConfigurationInterface
     public function __construct(array $config = [])
     {
         $this->config = array_merge(ConfigurationDefaults::_ALL, CoreHelper::clone($config));
-        $this->clientCredentialsAuthManager = new ClientCredentialsAuthManager(
+        $this->thingspaceOauthManager = new ThingspaceOauthManager(
             $this->config['oauthClientId'] ?? ConfigurationDefaults::O_AUTH_CLIENT_ID,
             $this->config['oauthClientSecret'] ?? ConfigurationDefaults::O_AUTH_CLIENT_SECRET,
             $this->config['oauthToken'],
             $this->config['oauthScopes']
+        );
+        $this->vZM2mTokenManager = new VZM2mTokenManager(
+            $this->config['vZM2mToken'] ?? ConfigurationDefaults::VZ_M2_M_TOKEN
         );
         $this->validateConfig();
         $this->client = ClientBuilder::init(new HttpClient(Configuration::init($this)))
@@ -264,11 +275,12 @@ class VerizonClient implements ConfigurationInterface
             ->jsonHelper(ApiHelper::getJsonHelper())
             ->apiCallback($this->config['httpCallback'] ?? null)
             ->userAgent('APIMATIC 3.0')
-            ->globalConfig($this->getGlobalConfiguration())
             ->serverUrls(self::ENVIRONMENT_MAP[$this->getEnvironment()], Server::EDGE_DISCOVERY)
-            ->authManagers(['oAuth2' => $this->clientCredentialsAuthManager])
+            ->authManagers(
+                ['thingspace_oauth' => $this->thingspaceOauthManager, 'VZ-M2M-Token' => $this->vZM2mTokenManager]
+            )
             ->build();
-        $this->clientCredentialsAuthManager->setClient($this->client);
+        $this->thingspaceOauthManager->setClient($this->client);
     }
 
     /**
@@ -288,13 +300,17 @@ class VerizonClient implements ConfigurationInterface
             ->retryOnTimeout($this->shouldRetryOnTimeout())
             ->httpStatusCodesToRetry($this->getHttpStatusCodesToRetry())
             ->httpMethodsToRetry($this->getHttpMethodsToRetry())
-            ->vZM2mToken($this->getVZM2mToken())
             ->environment($this->getEnvironment())
             ->httpCallback($this->config['httpCallback'] ?? null);
 
-        $clientCredentialsAuth = $this->getClientCredentialsAuthCredentialsBuilder();
-        if ($clientCredentialsAuth != null) {
-            $builder->clientCredentialsAuthCredentials($clientCredentialsAuth);
+        $thingspaceOauth = $this->getThingspaceOauthCredentialsBuilder();
+        if ($thingspaceOauth != null) {
+            $builder->thingspaceOauthCredentials($thingspaceOauth);
+        }
+
+        $vZM2mToken = $this->getVZM2MTokenCredentialsBuilder();
+        if ($vZM2mToken != null) {
+            $builder->vZM2mTokenCredentials($vZM2mToken);
         }
         return $builder;
     }
@@ -344,35 +360,43 @@ class VerizonClient implements ConfigurationInterface
         return $this->config['httpMethodsToRetry'] ?? ConfigurationDefaults::HTTP_METHODS_TO_RETRY;
     }
 
-    public function getVZM2mToken(): string
-    {
-        return $this->config['vZM2mToken'] ?? ConfigurationDefaults::VZ_M2_M_TOKEN;
-    }
-
     public function getEnvironment(): string
     {
         return $this->config['environment'] ?? ConfigurationDefaults::ENVIRONMENT;
     }
 
-    public function getClientCredentialsAuth(): ClientCredentialsAuth
+    public function getThingspaceOauthCredentials(): ThingspaceOauthCredentials
     {
-        return $this->clientCredentialsAuthManager;
+        return $this->thingspaceOauthManager;
     }
 
-    public function getClientCredentialsAuthCredentialsBuilder(): ?ClientCredentialsAuthCredentialsBuilder
+    public function getThingspaceOauthCredentialsBuilder(): ?ThingspaceOauthCredentialsBuilder
     {
         if (
-            empty($this->clientCredentialsAuthManager->getOauthClientId()) &&
-            empty($this->clientCredentialsAuthManager->getOauthClientSecret())
+            empty($this->thingspaceOauthManager->getOauthClientId()) &&
+            empty($this->thingspaceOauthManager->getOauthClientSecret())
         ) {
             return null;
         }
-        return ClientCredentialsAuthCredentialsBuilder::init(
-            $this->clientCredentialsAuthManager->getOauthClientId(),
-            $this->clientCredentialsAuthManager->getOauthClientSecret()
+        return ThingspaceOauthCredentialsBuilder::init(
+            $this->thingspaceOauthManager->getOauthClientId(),
+            $this->thingspaceOauthManager->getOauthClientSecret()
         )
-            ->oauthToken($this->clientCredentialsAuthManager->getOauthToken())
-            ->oauthScopes($this->clientCredentialsAuthManager->getOauthScopes());
+            ->oauthToken($this->thingspaceOauthManager->getOauthToken())
+            ->oauthScopes($this->thingspaceOauthManager->getOauthScopes());
+    }
+
+    public function getVZM2MTokenCredentials(): VZM2MTokenCredentials
+    {
+        return $this->vZM2mTokenManager;
+    }
+
+    public function getVZM2MTokenCredentialsBuilder(): ?VZM2MTokenCredentialsBuilder
+    {
+        if (empty($this->vZM2mTokenManager->getVZM2mToken())) {
+            return null;
+        }
+        return VZM2MTokenCredentialsBuilder::init($this->vZM2mTokenManager->getVZM2mToken());
     }
 
     /**
@@ -402,9 +426,9 @@ class VerizonClient implements ConfigurationInterface
     {
         $builder = VerizonClientBuilder::init();
 
-        $clientCredentialsAuth = $this->getClientCredentialsAuthCredentialsBuilder();
-        if ($clientCredentialsAuth != null) {
-            $builder->clientCredentialsAuthCredentials($clientCredentialsAuth);
+        $thingspaceOauth = $this->getThingspaceOauthCredentialsBuilder();
+        if ($thingspaceOauth != null) {
+            $builder->thingspaceOauthCredentials($thingspaceOauth);
         }
     }
 
@@ -1210,6 +1234,17 @@ class VerizonClient implements ConfigurationInterface
     }
 
     /**
+     * Returns V2 Triggers Controller
+     */
+    public function getMV2TriggersController(): MV2TriggersController
+    {
+        if ($this->mV2Triggers == null) {
+            $this->mV2Triggers = new MV2TriggersController($this->client);
+        }
+        return $this->mV2Triggers;
+    }
+
+    /**
      * Returns Oauth Authorization Controller
      */
     public function getOauthAuthorizationController(): OauthAuthorizationController
@@ -1218,14 +1253,6 @@ class VerizonClient implements ConfigurationInterface
             $this->oauthAuthorization = new OauthAuthorizationController($this->client);
         }
         return $this->oauthAuthorization;
-    }
-
-    /**
-     * Get the defined global configurations
-     */
-    private function getGlobalConfiguration(): array
-    {
-        return [HeaderParam::init('VZ-M2M-Token', $this->getVZM2mToken())];
     }
 
     /**
@@ -1250,6 +1277,23 @@ class VerizonClient implements ConfigurationInterface
             Server::HYPER_PRECISE_LOCATION => 'https://thingspace.verizon.com/api/hyper-precise/v1',
             Server::SERVICES => 'https://5gedge.verizon.com/api/mec/services',
             Server::QUALITY_OF_SERVICE => 'https://thingspace.verizon.com/api/m2m/v1/devices'
+        ],
+        Environment::MOCK_SERVER_FOR_LIMITED_AVAILABILITY_SEE_QUICK_START => [
+            Server::EDGE_DISCOVERY => 'https://mock.thingspace.verizon.com/api/mec/eds',
+            Server::THINGSPACE => 'https://mock.thingspace.verizon.com/api',
+            Server::OAUTH_SERVER => 'https://mock.thingspace.verizon.com/api/ts/v1',
+            Server::M2M => 'https://mock.thingspace.verizon.com/api/m2m',
+            Server::DEVICE_LOCATION => 'https://mock.thingspace.verizon.com/api/loc/v1',
+            Server::SUBSCRIPTION_SERVER => 'https://mock.thingspace.verizon.com/api/subsc/v1',
+            Server::SOFTWARE_MANAGEMENT_V1 => 'https://mock.thingspace.verizon.com/api/fota/v1',
+            Server::SOFTWARE_MANAGEMENT_V2 => 'https://mock.thingspace.verizon.com/api/fota/v2',
+            Server::SOFTWARE_MANAGEMENT_V3 => 'https://mock.thingspace.verizon.com/api/fota/v3',
+            Server::PERFORMANCE => 'https://mock.thingspace.verizon.com/api/mec',
+            Server::DEVICE_DIAGNOSTICS => 'https://mock.thingspace.verizon.com/api/diagnostics/v1',
+            Server::CLOUD_CONNECTOR => 'https://mock.thingspace.verizon.com/api/cc/v1',
+            Server::HYPER_PRECISE_LOCATION => 'https://mock.thingspace.verizon.com/api/hyper-precise/v1',
+            Server::SERVICES => 'https://mock.thingspace.verizon.com/api/mec/services',
+            Server::QUALITY_OF_SERVICE => 'https://mock.thingspace.verizon.com/api/m2m/v1/devices'
         ]
     ];
 }

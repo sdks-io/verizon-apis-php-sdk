@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Response\Types\ErrorType;
@@ -37,7 +38,7 @@ class DeviceReportsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/aggregate')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -83,7 +84,7 @@ class DeviceReportsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/async/aggregate')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -128,7 +129,7 @@ class DeviceReportsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/report/sessions')
             ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -31,7 +32,7 @@ class SoftwareManagementSubscriptionsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()

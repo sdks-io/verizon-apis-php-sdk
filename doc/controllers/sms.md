@@ -39,11 +39,17 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = SMSSendRequestBuilder::init(
-    'accountName0',
-    'The rain in Spain stays mainly in the plain.'
+    '0000123456-00001',
+    'Can you hear me now?'
 )
-    ->servicePlan('T Plan 2')
-    ->build();
+    ->deviceIds(
+        [
+            DeviceIdBuilder::init(
+                '89148000000800139708',
+                'iccid'
+            )->build()
+        ]
+    )->build();
 
 $apiResponse = $sMSController->sendSMSToDevice($body);
 ```

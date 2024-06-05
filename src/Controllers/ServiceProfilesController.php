@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -41,7 +42,7 @@ class ServiceProfilesController extends BaseController
     public function createServiceProfile(ResourcesServiceProfile $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceprofiles')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -64,7 +65,8 @@ class ServiceProfilesController extends BaseController
      */
     public function listServiceProfiles(): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles')->auth('oAuth2');
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
@@ -89,7 +91,7 @@ class ServiceProfilesController extends BaseController
     public function getServiceProfile(string $serviceProfileId): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceprofiles/{serviceProfileId}')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
 
         $_resHandler = $this->responseHandler()
@@ -120,7 +122,7 @@ class ServiceProfilesController extends BaseController
     public function updateServiceProfile(string $serviceProfileId, ResourcesServiceProfile $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/serviceprofiles/{serviceProfileId}')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('serviceProfileId', $serviceProfileId),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -150,7 +152,7 @@ class ServiceProfilesController extends BaseController
     public function deleteServiceProfile(string $serviceProfileId): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceprofiles/{serviceProfileId}')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
 
         $_resHandler = $this->responseHandler()

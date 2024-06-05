@@ -17,7 +17,7 @@
 | `createdAt` | `?string` | Optional | Timestamp for whe the trigger was created. | getCreatedAt(): ?string | setCreatedAt(?string createdAt): void |
 | `modifiedAt` | `?string` | Optional | Timestamp for the most recent time the trigger was modified. | getModifiedAt(): ?string | setModifiedAt(?string modifiedAt): void |
 | `anomalyattributes` | [`?UsageAnomalyAttributes`](../../doc/models/usage-anomaly-attributes.md) | Optional | The details of the UsageAnomaly trigger. | getAnomalyattributes(): ?UsageAnomalyAttributes | setAnomalyattributes(?UsageAnomalyAttributes anomalyattributes): void |
-| `notification` | [`?Notification`](../../doc/models/notification.md) | Optional | The notification details of the trigger. | getNotification(): ?Notification | setNotification(?Notification notification): void |
+| `notification` | [`?TriggerNotification`](../../doc/models/trigger-notification.md) | Optional | The notification details of the trigger. | getNotification(): ?TriggerNotification | setNotification(?TriggerNotification notification): void |
 
 ## Example (as JSON)
 

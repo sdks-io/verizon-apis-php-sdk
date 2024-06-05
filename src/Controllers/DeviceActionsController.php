@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -36,7 +37,7 @@ class DeviceActionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v2/devices/actions/list')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -58,7 +59,7 @@ class DeviceActionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v2/devices/history/actions/list')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -84,7 +85,7 @@ class DeviceActionsController extends BaseController
             '/m2m/v2/accounts/{accountName}/requests/{requestID}/status'
         )
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('accountName', $accountName),
                 TemplateParam::init('requestID', $requestID)

@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -35,7 +36,7 @@ class ThingSpaceQualityOfServiceAPIActionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/enhanceQoS')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -61,7 +62,7 @@ class ThingSpaceQualityOfServiceAPIActionsController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/devices/actions/enhanceQoS')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 QueryParam::init('accountName', $accountName),
                 QueryParam::init('qosSubscriptionId', $qosSubscriptionId)

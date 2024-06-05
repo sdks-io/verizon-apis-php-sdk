@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -38,7 +39,7 @@ class UsageTriggerManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -62,7 +63,7 @@ class UsageTriggerManagementController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers/{triggerId}')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('triggerId', $triggerId),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -92,7 +93,7 @@ class UsageTriggerManagementController extends BaseController
             '/usage/accounts/{accountName}/triggers/{triggerId}'
         )
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('accountName', $accountName),
                 TemplateParam::init('triggerId', $triggerId)

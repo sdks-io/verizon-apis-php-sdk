@@ -33,18 +33,9 @@ class DeviceIdSearchBuilder
     /**
      * Initializes a new device id search Builder object.
      */
-    public static function init(string $kind): self
+    public static function init(string $contains, string $kind): self
     {
-        return new self(new DeviceIdSearch($kind));
-    }
-
-    /**
-     * Sets contains field.
-     */
-    public function contains(?string $value): self
-    {
-        $this->instance->setContains($value);
-        return $this;
+        return new self(new DeviceIdSearch($contains, $kind));
     }
 
     /**

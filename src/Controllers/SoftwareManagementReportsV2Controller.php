@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\QueryParam;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
@@ -38,7 +39,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/software/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 QueryParam::init('distributionType', $distributionType)
@@ -69,7 +70,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 QueryParam::init('lastSeenDeviceId', $lastSeenDeviceId),
@@ -96,7 +97,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
@@ -123,7 +124,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/campaigns')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 QueryParam::init('campaignStatus', $campaignStatus),
@@ -157,7 +158,7 @@ class SoftwareManagementReportsV2Controller extends BaseController
             '/reports/{account}/campaigns/{campaignId}/devices'
         )
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('campaignId', $campaignId),

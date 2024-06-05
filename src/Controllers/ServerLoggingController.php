@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -36,7 +37,7 @@ class ServerLoggingController extends BaseController
             '/logging/{account}/devices/{deviceId}/checkInHistory'
         )
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()

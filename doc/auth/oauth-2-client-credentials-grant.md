@@ -3,7 +3,7 @@
 
 
 
-Documentation for accessing and setting credentials for oAuth2.
+Documentation for accessing and setting credentials for thingspace_oauth.
 
 ## Auth Credentials
 
@@ -16,7 +16,7 @@ Documentation for accessing and setting credentials for oAuth2.
 
 
 
-**Note:** Auth credentials can be set using `ClientCredentialsAuthCredentialsBuilder::init()` in `clientCredentialsAuthCredentials` method in the client builder and accessed through `getClientCredentialsAuth` method in the client instance.
+**Note:** Auth credentials can be set using `ThingspaceOauthCredentialsBuilder::init()` in `thingspaceOauthCredentials` method in the client builder and accessed through `getThingspaceOauthCredentials` method in the client instance.
 
 ## Usage Example
 
@@ -26,15 +26,15 @@ You must initialize the client with *OAuth 2.0 Client Credentials Grant* credent
 
 ```php
 $client = VerizonClientBuilder::init()
-    ->clientCredentialsAuthCredentials(
-        ClientCredentialsAuthCredentialsBuilder::init(
+    ->thingspaceOauthCredentials(
+        ThingspaceOauthCredentialsBuilder::init(
             'OAuthClientId',
             'OAuthClientSecret'
         )
             ->oauthScopes(
                 [
-                    OauthScopeEnum::DISCOVERYREAD,
-                    OauthScopeEnum::SERVICEPROFILEREAD
+                    OauthScopeThingspaceOauthEnum::DISCOVERYREAD,
+                    OauthScopeThingspaceOauthEnum::SERVICEPROFILEREAD
                 ]
             )
     )
@@ -51,13 +51,11 @@ You must have initialized the client with scopes for which you need permission t
 
 ```php
 try {
-    $token = $client->getClientCredentialsAuth()->fetchToken();
+    $token = $client->getThingspaceOauthCredentials()->fetchToken();
     // re-build the client with oauth token
     $client = $client
         ->toBuilder()
-        ->clientCredentialsAuthCredentials(
-            $client->getClientCredentialsAuthCredentialsBuilder()->oauthToken($token)
-        )
+        ->thingspaceOauthCredentials($client->getThingspaceOauthCredentialsBuilder()->oauthToken($token))
         ->build();
 } catch (VerizonLib\Exceptions\ApiException $e) {
     // handle exception
@@ -68,7 +66,7 @@ The client can now make authorized endpoint calls.
 
 ### Scopes
 
-Scopes enable your application to only request access to the resources it needs while enabling users to control the amount of access they grant to your application. Available scopes are defined in the [`OauthScopeEnum`](../../doc/models/oauth-scope-enum.md) enumeration.
+Scopes enable your application to only request access to the resources it needs while enabling users to control the amount of access they grant to your application. Available scopes are defined in the [`OauthScopeThingspaceOauthEnum`](../../doc/models/oauth-scope-thingspace-oauth-enum.md) enumeration.
 
 | Scope Name | Description |
 |  --- | --- |
@@ -80,6 +78,11 @@ Scopes enable your application to only request access to the resources it needs 
 | `TS_MEC_FULLACCESS` | Full access for /serviceprofiles and /serviceendpoints. |
 | `TS_MEC_LIMITACCESS` | Limited access. Will not allow use of /serviceprofiles and /serviceendpoints but will allow discovery. |
 | `TS_APPLICATION_RO` |  |
+| `EDGEDISCOVERYREAD` |  |
+| `EDGESERVICEPROFILEREAD` |  |
+| `EDGESERVICEPROFILEWRITE` |  |
+| `EDGESERVICEREGISTRYREAD` |  |
+| `EDGESERVICEREGISTRYWRITE` |  |
 | `READ` | read access |
 | `WRITE` | read/write access |
 
@@ -89,7 +92,7 @@ It is recommended that you store the access token for reuse.
 
 ```php
 // store token
-$_SESSION['access_token'] = $client->getClientCredentialsAuth()->getOauthToken();
+$_SESSION['access_token'] = $client->getThingspaceOauthCredentials()->getOauthToken();
 ```
 
 ### Creating a client from a stored token
@@ -103,7 +106,7 @@ $token = $_SESSION['access_token'];
 // re-build the client with oauth token
 $client = $client
     ->toBuilder()
-    ->clientCredentialsAuthCredentials($client->getClientCredentialsAuthCredentialsBuilder()->oauthToken($token))
+    ->thingspaceOauthCredentials($client->getThingspaceOauthCredentialsBuilder()->oauthToken($token))
     ->build();
 ```
 
@@ -119,15 +122,15 @@ session_start();
 
 // Client configuration
 $client = VerizonClientBuilder::init()
-    ->clientCredentialsAuthCredentials(
-        ClientCredentialsAuthCredentialsBuilder::init(
+    ->thingspaceOauthCredentials(
+        ThingspaceOauthCredentialsBuilder::init(
             'OAuthClientId',
             'OAuthClientSecret'
         )
             ->oauthScopes(
                 [
-                    OauthScopeEnum::DISCOVERYREAD,
-                    OauthScopeEnum::SERVICEPROFILEREAD
+                    OauthScopeThingspaceOauthEnum::DISCOVERYREAD,
+                    OauthScopeThingspaceOauthEnum::SERVICEPROFILEREAD
                 ]
             )
     )
@@ -142,20 +145,16 @@ if (isset($_SESSION['access_token'])) {
     // re-build the client with oauth token
     $client = $client
         ->toBuilder()
-        ->clientCredentialsAuthCredentials(
-            $client->getClientCredentialsAuthCredentialsBuilder()->oauthToken($token)
-        )
+        ->thingspaceOauthCredentials($client->getThingspaceOauthCredentialsBuilder()->oauthToken($token))
         ->build();
 } else {
     try {
         // fetch an oauth token to authorize the client
-        $token = $client->getClientCredentialsAuth()->fetchToken();
+        $token = $client->getThingspaceOauthCredentials()->fetchToken();
         // re-build the client with oauth token
         $client = $client
             ->toBuilder()
-            ->clientCredentialsAuthCredentials(
-                $client->getClientCredentialsAuthCredentialsBuilder()->oauthToken($token)
-            )
+            ->thingspaceOauthCredentials($client->getThingspaceOauthCredentialsBuilder()->oauthToken($token))
             ->build();
 
         // store token

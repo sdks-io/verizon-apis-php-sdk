@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -37,7 +38,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/devices/mec/kpi/list/{aname}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()->type(KPIInfoList::class)->returnApiResponse();
@@ -54,7 +55,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/devices/mec/profiles/list/{aname}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()->type(MECProfileList::class)->returnApiResponse();
@@ -71,7 +72,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/state/activate')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(ChangeMecDeviceStateResponse::class)->returnApiResponse();
@@ -88,7 +89,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/state/deactivate')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(ChangeMecDeviceStateResponse::class)->returnApiResponse();
@@ -105,7 +106,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/profile')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(ChangeMecDeviceProfileResponse::class)->returnApiResponse();
@@ -122,7 +123,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/mec/actions/ipaddress')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(ChangeMecDeviceIPAddressResponse::class)->returnApiResponse();
@@ -139,7 +140,7 @@ class MECController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/devices/mec/performance/consent/{aname}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()->type(GetMECPerformanceConsentResponse::class)->returnApiResponse();

@@ -12,9 +12,6 @@ namespace VerizonLib\Models;
 
 use stdClass;
 
-/**
- * The notification details of the trigger.
- */
 class Notification implements \JsonSerializable
 {
     /**
@@ -58,7 +55,7 @@ class Notification implements \JsonSerializable
     private $smsNotification;
 
     /**
-     * @var SMSNumber[]|null
+     * @var SmsNumbers[]|null
      */
     private $smsNumbers;
 
@@ -74,7 +71,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Notification Type.
-     * The type of notification, i.e. 'DailySummary'.
      */
     public function getNotificationType(): ?string
     {
@@ -83,7 +79,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Notification Type.
-     * The type of notification, i.e. 'DailySummary'.
      *
      * @maps notificationType
      */
@@ -94,7 +89,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Callback.
-     * Whether or not the notification should be sent via callback.<br />true<br />false.
      */
     public function getCallback(): ?bool
     {
@@ -103,7 +97,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Callback.
-     * Whether or not the notification should be sent via callback.<br />true<br />false.
      *
      * @maps callback
      */
@@ -114,7 +107,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Email Notification.
-     * Whether or not the notification should be sent via e-mail.<br />true<br />false.
      */
     public function getEmailNotification(): ?bool
     {
@@ -123,7 +115,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Email Notification.
-     * Whether or not the notification should be sent via e-mail.<br />true<br />false.
      *
      * @maps emailNotification
      */
@@ -134,7 +125,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Notification Group Name.
-     * Name for the notification group.
      */
     public function getNotificationGroupName(): ?string
     {
@@ -143,7 +133,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Notification Group Name.
-     * Name for the notification group.
      *
      * @maps notificationGroupName
      */
@@ -154,7 +143,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Notification Frequency Factor.
-     * Frequency factor for notification.
      */
     public function getNotificationFrequencyFactor(): ?int
     {
@@ -163,7 +151,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Notification Frequency Factor.
-     * Frequency factor for notification.
      *
      * @maps notificationFrequencyFactor
      */
@@ -174,7 +161,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Notification Frequency Interval.
-     * Frequency interval for notification.
      */
     public function getNotificationFrequencyInterval(): ?string
     {
@@ -183,7 +169,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Notification Frequency Interval.
-     * Frequency interval for notification.
      *
      * @maps notificationFrequencyInterval
      */
@@ -194,7 +179,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns External Email Recipients.
-     * E-mail address(es) where the notification should be delivered.
      */
     public function getExternalEmailRecipients(): ?string
     {
@@ -203,7 +187,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets External Email Recipients.
-     * E-mail address(es) where the notification should be delivered.
      *
      * @maps externalEmailRecipients
      */
@@ -214,7 +197,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Sms Notification.
-     * SMS notification.
      */
     public function getSmsNotification(): ?bool
     {
@@ -223,7 +205,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Sms Notification.
-     * SMS notification.
      *
      * @maps smsNotification
      */
@@ -234,9 +215,8 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Sms Numbers.
-     * List of SMS numbers.
      *
-     * @return SMSNumber[]|null
+     * @return SmsNumbers[]|null
      */
     public function getSmsNumbers(): ?array
     {
@@ -245,11 +225,10 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Sms Numbers.
-     * List of SMS numbers.
      *
      * @maps smsNumbers
      *
-     * @param SMSNumber[]|null $smsNumbers
+     * @param SmsNumbers[]|null $smsNumbers
      */
     public function setSmsNumbers(?array $smsNumbers): void
     {
@@ -276,8 +255,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Returns Severity.
-     * Severity level associated with the notification. Examples would be:<br />Major<br />Minor<br
-     * />Critical<br />NotApplicable.
      */
     public function getSeverity(): ?string
     {
@@ -286,8 +263,6 @@ class Notification implements \JsonSerializable
 
     /**
      * Sets Severity.
-     * Severity level associated with the notification. Examples would be:<br />Major<br />Minor<br
-     * />Critical<br />NotApplicable.
      *
      * @maps severity
      */

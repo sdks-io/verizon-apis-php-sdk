@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -54,7 +55,7 @@ class ServiceEndpointsController extends BaseController
         ?string $serviceEndpointsIds = null
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpoints')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 QueryParam::init('region', $region),
                 QueryParam::init('subscriberDensity', $subscriberDensity),
@@ -94,7 +95,7 @@ class ServiceEndpointsController extends BaseController
     public function registerServiceEndpoints(array $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceendpoints')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -117,7 +118,8 @@ class ServiceEndpointsController extends BaseController
      */
     public function listAllServiceEndpoints(): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpointsall')->auth('oAuth2');
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpointsall')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
@@ -143,7 +145,7 @@ class ServiceEndpointsController extends BaseController
     public function getServiceEndpoint(string $serviceEndpointsId): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
 
         $_resHandler = $this->responseHandler()
@@ -176,7 +178,7 @@ class ServiceEndpointsController extends BaseController
     public function updateServiceEndpoint(string $serviceEndpointsId, array $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('serviceEndpointsId', $serviceEndpointsId),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -207,7 +209,7 @@ class ServiceEndpointsController extends BaseController
     public function deregisterServiceEndpoint(string $serviceEndpointsId): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
 
         $_resHandler = $this->responseHandler()

@@ -66,6 +66,15 @@ class AggregateUsageItemBuilder
     }
 
     /**
+     * Sets example field.
+     */
+    public function example(?array $value): self
+    {
+        $this->instance->setExample($value);
+        return $this;
+    }
+
+    /**
      * Initializes a new aggregate usage item object.
      */
     public function build(): AggregateUsageItem

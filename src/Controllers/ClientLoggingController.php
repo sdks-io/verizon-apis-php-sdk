@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -36,7 +37,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -59,7 +60,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/logging/{account}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -86,7 +87,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/logging/{account}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), QueryParam::init('deviceIds', $deviceIds));
 
         $_resHandler = $this->responseHandler()
@@ -108,7 +109,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/logging/{account}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
@@ -131,7 +132,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/logging/{account}/devices/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()
@@ -153,7 +154,7 @@ class ClientLoggingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices/{deviceId}/logs')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()

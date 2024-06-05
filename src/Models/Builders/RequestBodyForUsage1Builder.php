@@ -11,40 +11,31 @@ declare(strict_types=1);
 namespace VerizonLib\Models\Builders;
 
 use Core\Utils\CoreHelper;
-use VerizonLib\Models\UsageRequestBody;
+use VerizonLib\Models\RequestBodyForUsage1;
 
 /**
- * Builder for model UsageRequestBody
+ * Builder for model RequestBodyForUsage1
  *
- * @see UsageRequestBody
+ * @see RequestBodyForUsage1
  */
-class UsageRequestBodyBuilder
+class RequestBodyForUsage1Builder
 {
     /**
-     * @var UsageRequestBody
+     * @var RequestBodyForUsage1
      */
     private $instance;
 
-    private function __construct(UsageRequestBody $instance)
+    private function __construct(RequestBodyForUsage1 $instance)
     {
         $this->instance = $instance;
     }
 
     /**
-     * Initializes a new usage request body Builder object.
+     * Initializes a new request body for usage 1 Builder object.
      */
     public static function init(): self
     {
-        return new self(new UsageRequestBody());
-    }
-
-    /**
-     * Sets account id field.
-     */
-    public function accountId(?string $value): self
-    {
-        $this->instance->setAccountId($value);
-        return $this;
+        return new self(new RequestBodyForUsage1());
     }
 
     /**
@@ -75,9 +66,9 @@ class UsageRequestBodyBuilder
     }
 
     /**
-     * Initializes a new usage request body object.
+     * Initializes a new request body for usage 1 object.
      */
-    public function build(): UsageRequestBody
+    public function build(): RequestBodyForUsage1
     {
         return CoreHelper::clone($this->instance);
     }

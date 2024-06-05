@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -36,7 +37,7 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('acc', $acc));
 
         $_resHandler = $this->responseHandler()
@@ -59,7 +60,7 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -86,7 +87,7 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -112,7 +113,7 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('acc', $acc));
 
         $_resHandler = $this->responseHandler()

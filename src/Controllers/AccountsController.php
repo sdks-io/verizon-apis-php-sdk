@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\QueryParam;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
@@ -34,7 +35,7 @@ class AccountsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/accounts/{aname}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()
@@ -56,7 +57,7 @@ class AccountsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/accounts/{aname}/statesandservices')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname));
 
         $_resHandler = $this->responseHandler()
@@ -80,7 +81,7 @@ class AccountsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/leads/{aname}')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
 
         $_resHandler = $this->responseHandler()

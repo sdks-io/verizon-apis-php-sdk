@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Response\Types\ErrorType;
@@ -34,7 +35,7 @@ class SIMSecureForIoTLicensesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/license/actions/assign')
             ->server(Server::M2M)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 HeaderParam::init('Content-Type', 'application/json'),
                 BodyParam::init($body),
@@ -69,7 +70,7 @@ class SIMSecureForIoTLicensesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/v1/devices/license/actions/assign')
             ->server(Server::M2M)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('X-Request-ID', $xRequestID));
 
         $_resHandler = $this->responseHandler()

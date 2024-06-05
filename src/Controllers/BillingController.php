@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -40,7 +41,7 @@ class BillingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/add')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -62,7 +63,7 @@ class BillingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/provision')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -85,7 +86,7 @@ class BillingController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/cancel')
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -111,7 +112,7 @@ class BillingController extends BaseController
             '/managedaccounts/{accountName}/service/{serviceName}'
         )
             ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('accountName', $accountName),
                 TemplateParam::init('serviceName', $serviceName)

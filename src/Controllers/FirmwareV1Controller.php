@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -39,7 +40,7 @@ class FirmwareV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -61,7 +62,7 @@ class FirmwareV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/upgrades')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -86,7 +87,7 @@ class FirmwareV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/upgrades/{account}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
 
         $_resHandler = $this->responseHandler()
@@ -114,7 +115,7 @@ class FirmwareV1Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/upgrades/{account}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('upgradeId', $upgradeId),
@@ -142,7 +143,7 @@ class FirmwareV1Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/upgrades/{account}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
 
         $_resHandler = $this->responseHandler()

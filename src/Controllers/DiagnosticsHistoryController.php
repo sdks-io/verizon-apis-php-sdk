@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Response\Types\ErrorType;
@@ -33,7 +34,7 @@ class DiagnosticsHistoryController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/history/actions/$search')
             ->server(Server::DEVICE_DIAGNOSTICS)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

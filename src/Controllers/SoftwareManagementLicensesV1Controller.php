@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -44,7 +45,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/assign')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -75,7 +76,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/remove')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -107,7 +108,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{account}/cancel')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -137,7 +138,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -168,7 +169,7 @@ class SoftwareManagementLicensesV1Controller extends BaseController
 
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}/cancel/index/{startIndex}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
 
         $_resHandler = $this->responseHandler()

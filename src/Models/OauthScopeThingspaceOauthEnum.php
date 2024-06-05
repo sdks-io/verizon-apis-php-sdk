@@ -17,7 +17,7 @@ use stdClass;
 /**
  * OAuth 2 scopes supported by the API
  */
-class OauthScopeEnum
+class OauthScopeThingspaceOauthEnum
 {
     /**
      * Grant read-only access to discovery data
@@ -57,6 +57,16 @@ class OauthScopeEnum
 
     public const TS_APPLICATION_RO = 'ts.application.ro';
 
+    public const EDGEDISCOVERYREAD = 'edge:discovery:read';
+
+    public const EDGESERVICEPROFILEREAD = 'edge:serviceprofile:read';
+
+    public const EDGESERVICEPROFILEWRITE = 'edge:serviceprofile:write';
+
+    public const EDGESERVICEREGISTRYREAD = 'edge:serviceregistry:read';
+
+    public const EDGESERVICEREGISTRYWRITE = 'edge:serviceregistry:write';
+
     /**
      * read access
      */
@@ -76,6 +86,11 @@ class OauthScopeEnum
         self::TS_MEC_FULLACCESS,
         self::TS_MEC_LIMITACCESS,
         self::TS_APPLICATION_RO,
+        self::EDGEDISCOVERYREAD,
+        self::EDGESERVICEPROFILEREAD,
+        self::EDGESERVICEPROFILEWRITE,
+        self::EDGESERVICEREGISTRYREAD,
+        self::EDGESERVICEREGISTRYWRITE,
         self::READ,
         self::WRITE
     ];
@@ -95,6 +110,6 @@ class OauthScopeEnum
         if (CoreHelper::checkValueOrValuesInList($value, self::_ALL_VALUES)) {
             return $value;
         }
-        throw new Exception("$value is invalid for OauthScopeEnum.");
+        throw new Exception("$value is invalid for OauthScopeThingspaceOauthEnum.");
     }
 }

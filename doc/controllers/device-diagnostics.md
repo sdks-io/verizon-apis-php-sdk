@@ -84,36 +84,18 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = RetrieveMonitorsRequestBuilder::init(
-    '0868924207-00001',
+    '0242123520-00001',
     [
         AccountDeviceListBuilder::init(
             [
                 DeviceIdBuilder::init(
-                    '990013907835573',
-                    'imei'
-                )->build(),
-                DeviceIdBuilder::init(
-                    '89141390780800784259',
-                    'iccid'
-                )->build()
-            ]
-        )->build(),
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '990013907884259',
-                    'imei'
-                )->build(),
-                DeviceIdBuilder::init(
-                    '89141390780800735573',
-                    'iccid'
+                    '12016560696',
+                    'msisdn'
                 )->build()
             ]
         )->build()
     ]
-)
-    ->monitorType('monitorType')
-    ->build();
+)->build();
 
 $apiResponse = $deviceDiagnosticsController->retrieveActiveMonitorsUsingPOST($body);
 ```

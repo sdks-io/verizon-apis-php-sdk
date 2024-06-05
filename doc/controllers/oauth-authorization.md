@@ -9,14 +9,18 @@ $oauthAuthorizationController = $client->getOauthAuthorizationController();
 `OauthAuthorizationController`
 
 
-# Request Token
+# Request Token Thingspace Oauth
 
 Create a new OAuth 2 token.
 
 :information_source: **Note** This endpoint does not require authentication.
 
 ```php
-function requestToken(string $authorization, ?string $scope = null, array $fieldParameters = null): ApiResponse
+function requestTokenThingspaceOauth(
+    string $authorization,
+    ?string $scope = null,
+    array $fieldParameters = null
+): ApiResponse
 ```
 
 ## Parameters
@@ -40,7 +44,7 @@ $additionalFieldParams = [
     'key0' => ApiHelper::deserialize('"additionalFieldParams9"')
 ];
 
-$apiResponse = $oauthAuthorizationController->requestToken(
+$apiResponse = $oauthAuthorizationController->requestTokenThingspaceOauth(
     $authorization,
     null,
     $additionalFieldParams

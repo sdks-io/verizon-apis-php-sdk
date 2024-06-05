@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -35,7 +36,7 @@ class AnomalySettingsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/intelligence/anomaly/settings')
             ->server(Server::THINGSPACE)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
@@ -58,7 +59,10 @@ class AnomalySettingsController extends BaseController
         $_reqBuilder = $this->requestBuilder(
             RequestMethod::GET,
             '/m2m/v1/intelligence/{accountName}/anomaly/settings'
-        )->server(Server::THINGSPACE)->auth('oAuth2')->parameters(TemplateParam::init('accountName', $accountName));
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('An error occurred.', IntelligenceResultException::class))
@@ -80,7 +84,10 @@ class AnomalySettingsController extends BaseController
         $_reqBuilder = $this->requestBuilder(
             RequestMethod::PUT,
             '/m2m/v1/intelligence/{accountName}/anomaly/settings/reset'
-        )->server(Server::THINGSPACE)->auth('oAuth2')->parameters(TemplateParam::init('accountName', $accountName));
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('An error occurred.', IntelligenceResultException::class))

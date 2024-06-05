@@ -16,4 +16,7 @@ namespace VerizonLib;
 class Environment
 {
     public const PRODUCTION = 'Production';
+
+    public const MOCK_SERVER_FOR_LIMITED_AVAILABILITY_SEE_QUICK_START =
+        'Mock server for limited availability, see quick start';
 }

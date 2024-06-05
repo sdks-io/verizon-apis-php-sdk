@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -42,7 +43,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/{account}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 HeaderParam::init('Content-Type', '*/*'),
@@ -69,7 +70,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/campaigns/{account}/{campaignId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('campaignId', $campaignId));
 
         $_resHandler = $this->responseHandler()
@@ -97,7 +98,7 @@ class CampaignsV2Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('campaignId', $campaignId),
@@ -126,7 +127,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/campaigns/{account}/{campaignId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account), TemplateParam::init('campaignId', $campaignId));
 
         $_resHandler = $this->responseHandler()
@@ -154,7 +155,7 @@ class CampaignsV2Controller extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}/dates')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
                 TemplateParam::init('campaignId', $campaignId),
@@ -182,7 +183,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/files/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -210,7 +211,7 @@ class CampaignsV2Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/software/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),

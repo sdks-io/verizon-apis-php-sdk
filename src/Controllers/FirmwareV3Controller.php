@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\QueryParam;
@@ -39,7 +40,7 @@ class FirmwareV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 QueryParam::init('protocol', $protocol)->serializeBy([FirmwareProtocolEnum::class, 'checkValue'])
@@ -65,7 +66,7 @@ class FirmwareV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/firmware/{acc}/devices')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 HeaderParam::init('Content-Type', 'application/json'),
@@ -92,7 +93,7 @@ class FirmwareV3Controller extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/firmware/{acc}/async/{deviceId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('deviceId', $deviceId));
 
         $_resHandler = $this->responseHandler()

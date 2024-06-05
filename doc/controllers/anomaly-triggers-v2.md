@@ -51,7 +51,7 @@ $body = [
                 ->build()
         )
         ->notification(
-            NotificationBuilder::init()
+            TriggerNotificationBuilder::init()
                 ->notificationType('DailySummary')
                 ->callback(true)
                 ->emailNotification(false)
@@ -130,7 +130,7 @@ $body = [
                 ->build()
         )
         ->notification(
-            NotificationBuilder::init()
+            TriggerNotificationBuilder::init()
                 ->notificationType('DailySummary')
                 ->callback(true)
                 ->emailNotification(false)

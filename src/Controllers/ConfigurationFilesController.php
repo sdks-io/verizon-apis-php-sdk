@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\FormParam;
 use Core\Request\Parameters\QueryParam;
 use Core\Request\Parameters\TemplateParam;
@@ -37,7 +38,7 @@ class ConfigurationFilesController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/files/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('acc', $acc), QueryParam::init('distributionType', $distributionType));
 
         $_resHandler = $this->responseHandler()
@@ -71,7 +72,7 @@ class ConfigurationFilesController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/files/{acc}')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('acc', $acc),
                 FormParam::init('fileupload', $fileupload),

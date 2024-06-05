@@ -75,7 +75,9 @@ $body = CarrierActivateRequestBuilder::init(
                     'iccid'
                 )->build()
             ]
-        )->build(),
+        )
+            ->ipAddress('1.2.3.456')
+            ->build(),
         AccountDeviceListBuilder::init(
             [
                 DeviceIdBuilder::init(
@@ -87,9 +89,11 @@ $body = CarrierActivateRequestBuilder::init(
                     'iccid'
                 )->build()
             ]
-        )->build()
+        )
+            ->ipAddress('1.2.3.456')
+            ->build()
     ],
-    'm2m_4G',
+    'the service plan name',
     '98801'
 )
     ->accountName('0868924207-00001')
@@ -404,19 +408,12 @@ $body = CarrierDeactivateRequestBuilder::init(
                     'iccid'
                 )->build()
             ]
-        )->build(),
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '20-digit ICCID',
-                    'iccid'
-                )->build()
-            ]
         )->build()
     ],
     'FF'
 )
     ->etfWaiver(true)
+    ->deleteAfterDeactivation(true)
     ->build();
 
 $apiResponse = $deviceManagementController->deactivateServiceForDevices($body);
@@ -857,7 +854,7 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = ServicePlanUpdateRequestBuilder::init(
-    'new_service_plan_code'
+    'Tablet5GB'
 )
     ->devices(
         [
@@ -870,7 +867,9 @@ $body = ServicePlanUpdateRequestBuilder::init(
                 ]
             )->build()
         ]
-    )->build();
+    )
+    ->carrierIpPoolName('IPPool')
+    ->build();
 
 $apiResponse = $deviceManagementController->changeDevicesServicePlan($body);
 ```
@@ -912,31 +911,18 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = CarrierActionsRequestBuilder::init()
-    ->accountName('0000123456-00001')
-    ->customFields(
-        [
-            CustomFieldsBuilder::init(
-                'customField1',
-                'key value'
-            )->build()
-        ]
-    )
     ->devices(
         [
             AccountDeviceListBuilder::init(
                 [
                     DeviceIdBuilder::init(
-                        '20-digit ICCID',
+                        '89148000000800139708',
                         'iccid'
                     )->build()
                 ]
             )->build()
         ]
-    )
-    ->withBilling(true)
-    ->groupName('name of the group')
-    ->servicePlan('service plan name')
-    ->build();
+    )->build();
 
 $apiResponse = $deviceManagementController->suspendServiceForDevices($body);
 ```
@@ -978,30 +964,18 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = CarrierActionsRequestBuilder::init()
-    ->accountName('0000123456-00001')
-    ->customFields(
-        [
-            CustomFieldsBuilder::init(
-                'customField1',
-                'key value'
-            )->build()
-        ]
-    )
     ->devices(
         [
             AccountDeviceListBuilder::init(
                 [
                     DeviceIdBuilder::init(
-                        '20-digit ICCID',
+                        '89148000000800139708',
                         'iccid'
                     )->build()
                 ]
             )->build()
         ]
-    )
-    ->groupName('name of the group')
-    ->servicePlan('service plan name')
-    ->build();
+    )->build();
 
 $apiResponse = $deviceManagementController->restoreServiceForSuspendedDevices($body);
 ```
@@ -1353,10 +1327,18 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = DevicePrlListRequestBuilder::init()
-    ->accountName('101234-0001')
-    ->groupName('West Region')
-    ->servicePlan('3G 2MB')
-    ->build();
+    ->deviceIds(
+        [
+            DeviceIdBuilder::init(
+                'A10085E5003861',
+                'meid'
+            )->build(),
+            DeviceIdBuilder::init(
+                'A10085E5003186',
+                'meid'
+            )->build()
+        ]
+    )->build();
 
 $apiResponse = $deviceManagementController->listCurrentDevicesPRLVersion($body);
 ```
@@ -1398,13 +1380,18 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 
 ```php
 $body = DeviceSuspensionStatusRequestBuilder::init()
-    ->filter(
-        DeviceFilterWithoutAccountBuilder::init()
-            ->groupName('suspended devices')
-            ->build()
-    )
-    ->accountName('1223334444-00001')
-    ->build();
+    ->deviceIds(
+        [
+            DeviceIdBuilder::init(
+                'A10085E5003861',
+                'meid'
+            )->build(),
+            DeviceIdBuilder::init(
+                'A10085E5003186',
+                'meid'
+            )->build()
+        ]
+    )->build();
 
 $apiResponse = $deviceManagementController->getDeviceServiceSuspensionStatus($body);
 ```
@@ -1448,7 +1435,13 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 $body = DeviceUsageListRequestBuilder::init(
     '2018-03-20T00:00:01Z',
     '2020-12-31T00:00:01Z'
-)->build();
+)
+    ->deviceId(
+        DeviceIdBuilder::init(
+            '50684915885088839315521399821675',
+            'eid'
+        )->build()
+    )->build();
 
 $apiResponse = $deviceManagementController->listDevicesUsageHistory($body);
 ```
@@ -1631,7 +1624,7 @@ $body = DeviceUploadRequestBuilder::init(
                 [
                     DeviceIdBuilder::init(
                         '15-digit IMEI',
-                        'imei'
+                        'IMEI'
                     )->build()
                 ]
             )->build(),
@@ -1640,7 +1633,16 @@ $body = DeviceUploadRequestBuilder::init(
                 [
                     DeviceIdBuilder::init(
                         '15-digit IMEI',
-                        'imei'
+                        'IMEI'
+                    )->build()
+                ]
+            )->build(),
+        DeviceListBuilder::init()
+            ->deviceIds(
+                [
+                    DeviceIdBuilder::init(
+                        '15-digit IMEI',
+                        'IMEI'
                     )->build()
                 ]
             )->build()

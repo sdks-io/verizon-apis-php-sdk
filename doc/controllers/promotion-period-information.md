@@ -19,14 +19,14 @@ $promotionPeriodInformationController = $client->getPromotionPeriodInformationCo
 Retrieves the usage history of a device during the promotion period.
 
 ```php
-function getPromoDeviceUsageHistory(RequestBodyForUsage $body): ApiResponse
+function getPromoDeviceUsageHistory(RequestBodyForUsage1 $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`RequestBodyForUsage`](../../doc/models/request-body-for-usage.md) | Body, Required | Retrieve Aggregate Usage |
+| `body` | [`RequestBodyForUsage1`](../../doc/models/request-body-for-usage-1.md) | Body, Required | Retrieve Aggregate Usage |
 
 ## Response Type
 
@@ -35,7 +35,7 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = RequestBodyForUsageBuilder::init()
+$body = RequestBodyForUsage1Builder::init()
     ->startTime(DateTimeHelper::fromRfc3339DateTime('08/15/2021 00:00:00'))
     ->endTime(DateTimeHelper::fromRfc3339DateTime('08/16/2021 00:00:00'))
     ->build();
@@ -78,14 +78,14 @@ $apiResponse = $promotionPeriodInformationController->getPromoDeviceUsageHistory
 Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a callback.
 
 ```php
-function getPromoDeviceAggregateUsageHistory(UsageRequestBody $body): ApiResponse
+function getPromoDeviceAggregateUsageHistory(RequestBodyForUsage $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`UsageRequestBody`](../../doc/models/usage-request-body.md) | Body, Required | Retrieve Aggregate Usage |
+| `body` | [`RequestBodyForUsage`](../../doc/models/request-body-for-usage.md) | Body, Required | Retrieve Aggregate Usage |
 
 ## Response Type
 
@@ -94,7 +94,7 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = UsageRequestBodyBuilder::init()
+$body = RequestBodyForUsageBuilder::init()
     ->accountId('0000123456-000001')
     ->startTime(DateTimeHelper::fromRfc3339DateTime('08/15/2021 00:00:00'))
     ->endTime(DateTimeHelper::fromRfc3339DateTime('08/16/2021 00:00:00'))

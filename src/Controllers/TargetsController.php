@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -37,7 +38,7 @@ class TargetsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/query')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(Target::class, 1)->returnApiResponse();
@@ -56,7 +57,7 @@ class TargetsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/delete')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->returnApiResponse();
@@ -77,7 +78,7 @@ class TargetsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(Target::class)->returnApiResponse();
@@ -120,7 +121,7 @@ class TargetsController extends BaseController
     ): ApiResponse {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/newaic')
             ->server(Server::CLOUD_CONNECTOR)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 HeaderParam::init('BillingaccountID', $billingaccountID),
                 HeaderParam::init('Content-Type', 'application/json'),

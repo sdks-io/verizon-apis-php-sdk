@@ -33,8 +33,6 @@ class ConfigurationDefaults
 
     public const HTTP_METHODS_TO_RETRY = ['GET', 'PUT'];
 
-    public const VZ_M2_M_TOKEN = 'TODO: Replace';
-
     public const ENVIRONMENT = Environment::PRODUCTION;
 
     public const O_AUTH_CLIENT_ID = '';
@@ -44,6 +42,8 @@ class ConfigurationDefaults
     public const O_AUTH_TOKEN = null;
 
     public const O_AUTH_SCOPES = null;
+
+    public const VZ_M2_M_TOKEN = '';
 
     /**
      * @var array Associative list of all default configurations
@@ -58,11 +58,11 @@ class ConfigurationDefaults
         'retryOnTimeout' => self::RETRY_ON_TIMEOUT,
         'httpStatusCodesToRetry' => self::HTTP_STATUS_CODES_TO_RETRY,
         'httpMethodsToRetry' => self::HTTP_METHODS_TO_RETRY,
-        'vZM2mToken' => self::VZ_M2_M_TOKEN,
         'environment' => self::ENVIRONMENT,
         'oauthClientId' => self::O_AUTH_CLIENT_ID,
         'oauthClientSecret' => self::O_AUTH_CLIENT_SECRET,
         'oauthToken' => self::O_AUTH_TOKEN,
-        'oauthScopes' => self::O_AUTH_SCOPES
+        'oauthScopes' => self::O_AUTH_SCOPES,
+        'vZM2mToken' => self::VZ_M2_M_TOKEN
     ];
 }

@@ -11,13 +11,13 @@ declare(strict_types=1);
 namespace VerizonLib\Authentication;
 
 use Core\Utils\CoreHelper;
-use VerizonLib\Models\OauthScopeEnum;
+use VerizonLib\Models\OauthScopeThingspaceOauthEnum;
 use VerizonLib\Models\OauthToken;
 
 /**
- * Utility class for initializing ClientCredentialsAuth security credentials.
+ * Utility class for initializing ThingspaceOauth security credentials.
  */
-class ClientCredentialsAuthCredentialsBuilder
+class ThingspaceOauthCredentialsBuilder
 {
     /**
      * @var array
@@ -30,7 +30,7 @@ class ClientCredentialsAuthCredentialsBuilder
     }
 
     /**
-     * Initializer for ClientCredentialsAuthCredentialsBuilder
+     * Initializer for ThingspaceOauthCredentialsBuilder
      *
      * @param string $oauthClientId
      * @param string $oauthClientSecret
@@ -88,7 +88,7 @@ class ClientCredentialsAuthCredentialsBuilder
      */
     public function oauthScopes(?array $oauthScopes): self
     {
-        OauthScopeEnum::checkValue($oauthScopes);
+        OauthScopeThingspaceOauthEnum::checkValue($oauthScopes);
         $this->config['oauthScopes'] = $oauthScopes;
         return $this;
     }

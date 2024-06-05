@@ -39,6 +39,15 @@ class RequestBodyForUsageBuilder
     }
 
     /**
+     * Sets account id field.
+     */
+    public function accountId(?string $value): self
+    {
+        $this->instance->setAccountId($value);
+        return $this;
+    }
+
+    /**
      * Sets device id field.
      */
     public function deviceId(?array $value): self

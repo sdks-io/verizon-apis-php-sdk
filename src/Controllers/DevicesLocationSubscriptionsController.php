@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace VerizonLib\Controllers;
 
+use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
 use Core\Request\Parameters\TemplateParam;
@@ -34,7 +35,7 @@ class DevicesLocationSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('account', $account));
 
         $_resHandler = $this->responseHandler()
@@ -56,7 +57,7 @@ class DevicesLocationSubscriptionsController extends BaseController
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage')
             ->server(Server::DEVICE_LOCATION)
-            ->auth('oAuth2')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', '*/*'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()

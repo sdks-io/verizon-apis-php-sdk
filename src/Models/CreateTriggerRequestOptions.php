@@ -35,7 +35,7 @@ class CreateTriggerRequestOptions implements \JsonSerializable
     private $anomalyTriggerRequest;
 
     /**
-     * @var Notification|null
+     * @var TriggerNotification|null
      */
     private $notification;
 
@@ -130,7 +130,7 @@ class CreateTriggerRequestOptions implements \JsonSerializable
      * Returns Notification.
      * The notification details of the trigger.
      */
-    public function getNotification(): ?Notification
+    public function getNotification(): ?TriggerNotification
     {
         return $this->notification;
     }
@@ -141,7 +141,7 @@ class CreateTriggerRequestOptions implements \JsonSerializable
      *
      * @maps notification
      */
-    public function setNotification(?Notification $notification): void
+    public function setNotification(?TriggerNotification $notification): void
     {
         $this->notification = $notification;
     }
