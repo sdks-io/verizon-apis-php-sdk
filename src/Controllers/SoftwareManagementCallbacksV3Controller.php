@@ -76,6 +76,28 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
     }
 
     /**
+     * This endpoint allows user to delete a previously registered callback URL.
+     *
+     * @param string $acc Account identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deregisterCallback(string $acc): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{acc}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('acc', $acc));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(FotaV3SuccessResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * This endpoint allows the user to create the HTTPS callback address.
      *
      * @param string $acc Account identifier.
@@ -97,28 +119,6 @@ class SoftwareManagementCallbacksV3Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(FotaV3CallbackRegistrationResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows user to delete a previously registered callback URL.
-     *
-     * @param string $acc Account identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deregisterCallback(string $acc): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{acc}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('acc', $acc));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(FotaV3SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

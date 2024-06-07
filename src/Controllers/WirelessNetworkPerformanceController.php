@@ -27,6 +27,31 @@ use VerizonLib\Server;
 class WirelessNetworkPerformanceController extends BaseController
 {
     /**
+     * A report of a specific device's service scores over a 30 day period.
+     *
+     * @param GetDeviceExperienceScoreHistoryRequest $body Request for a device's 30 day experience.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deviceExperience30daysHistory(GetDeviceExperienceScoreHistoryRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/intelligence/device-experience/history/30-days'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', WNPRestErrorResponseException::class))
+            ->type(WNPRequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * WNP Query for current network condition.
      *
      * @param GetNetworkConditionsRequest $body Request for current network health.
@@ -84,31 +109,6 @@ class WirelessNetworkPerformanceController extends BaseController
         $_reqBuilder = $this->requestBuilder(
             RequestMethod::POST,
             '/m2m/v1/intelligence/site-proximity/action/list'
-        )
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', WNPRestErrorResponseException::class))
-            ->type(WNPRequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * A report of a specific device's service scores over a 30 day period.
-     *
-     * @param GetDeviceExperienceScoreHistoryRequest $body Request for a device's 30 day experience.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deviceExperience30daysHistory(GetDeviceExperienceScoreHistoryRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/m2m/v1/intelligence/device-experience/history/30-days'
         )
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))

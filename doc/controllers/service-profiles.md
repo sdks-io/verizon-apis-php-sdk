@@ -10,11 +10,61 @@ $serviceProfilesController = $client->getServiceProfilesController();
 
 ## Methods
 
+* [Delete Service Profile](../../doc/controllers/service-profiles.md#delete-service-profile)
 * [Create Service Profile](../../doc/controllers/service-profiles.md#create-service-profile)
 * [List Service Profiles](../../doc/controllers/service-profiles.md#list-service-profiles)
 * [Get Service Profile](../../doc/controllers/service-profiles.md#get-service-profile)
 * [Update Service Profile](../../doc/controllers/service-profiles.md#update-service-profile)
-* [Delete Service Profile](../../doc/controllers/service-profiles.md#delete-service-profile)
+
+
+# Delete Service Profile
+
+Delete Service Profile based on unique service profile ID.
+
+```php
+function deleteServiceProfile(string $serviceProfileId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `serviceProfileId` | `string` | Template, Required | - |
+
+## Requires scope
+
+### thingspace_oauth
+
+`edge:discovery:read`, `edge:serviceprofile:read`, `edge:serviceprofile:write`, `edge:serviceregistry:read`, `edge:serviceregistry:write`, `ts.application.ro`, `ts.mec.fullaccess`, `ts.mec.limitaccess`
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeleteServiceProfileResult`](../../doc/models/delete-service-profile-result.md).
+
+## Example Usage
+
+```php
+$serviceProfileId = 'serviceProfileId2';
+
+$apiResponse = $serviceProfilesController->deleteServiceProfile($serviceProfileId);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "status": "Success",
+  "message": "Service Profile Deleted"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | HTTP 400 Bad Request. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+| 401 | HTTP 401 Unauthorized. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+| Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
 
 
 # Create Service Profile
@@ -273,56 +323,6 @@ $apiResponse = $serviceProfilesController->updateServiceProfile(
 {
   "status": "Success",
   "message": "Service Profile Updated"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | HTTP 400 Bad Request. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-| 401 | HTTP 401 Unauthorized. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-| Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-
-
-# Delete Service Profile
-
-Delete Service Profile based on unique service profile ID.
-
-```php
-function deleteServiceProfile(string $serviceProfileId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `serviceProfileId` | `string` | Template, Required | - |
-
-## Requires scope
-
-### thingspace_oauth
-
-`edge:discovery:read`, `edge:serviceprofile:read`, `edge:serviceprofile:write`, `edge:serviceregistry:read`, `edge:serviceregistry:write`, `ts.application.ro`, `ts.mec.fullaccess`, `ts.mec.limitaccess`
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeleteServiceProfileResult`](../../doc/models/delete-service-profile-result.md).
-
-## Example Usage
-
-```php
-$serviceProfileId = 'serviceProfileId2';
-
-$apiResponse = $serviceProfilesController->deleteServiceProfile($serviceProfileId);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "status": "Success",
-  "message": "Service Profile Deleted"
 }
 ```
 

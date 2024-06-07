@@ -26,6 +26,32 @@ use VerizonLib\Server;
 class PromotionPeriodInformationController extends BaseController
 {
     /**
+     * Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a
+     * callback.
+     *
+     * @param RequestBodyForUsage $body Retrieve Aggregate Usage
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getPromoDeviceAggregateUsageHistory(RequestBodyForUsage $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/usage/actions/promoaggregateusage'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
+            ->type(UsageRequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Retrieves the usage history of a device during the promotion period.
      *
      * @param RequestBodyForUsage1 $body Retrieve Aggregate Usage
@@ -48,32 +74,6 @@ class PromotionPeriodInformationController extends BaseController
                 )
             )
             ->type(ResponseToUsageQuery::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a
-     * callback.
-     *
-     * @param RequestBodyForUsage $body Retrieve Aggregate Usage
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getPromoDeviceAggregateUsageHistory(RequestBodyForUsage $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/m2m/v1/devices/usage/actions/promoaggregateusage'
-        )
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
-            ->type(UsageRequestResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

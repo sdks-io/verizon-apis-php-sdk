@@ -10,8 +10,53 @@ $promotionPeriodInformationController = $client->getPromotionPeriodInformationCo
 
 ## Methods
 
-* [Get Promo Device Usage History](../../doc/controllers/promotion-period-information.md#get-promo-device-usage-history)
 * [Get Promo Device Aggregate Usage History](../../doc/controllers/promotion-period-information.md#get-promo-device-aggregate-usage-history)
+* [Get Promo Device Usage History](../../doc/controllers/promotion-period-information.md#get-promo-device-usage-history)
+
+
+# Get Promo Device Aggregate Usage History
+
+Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a callback.
+
+```php
+function getPromoDeviceAggregateUsageHistory(RequestBodyForUsage $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`RequestBodyForUsage`](../../doc/models/request-body-for-usage.md) | Body, Required | Retrieve Aggregate Usage |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`UsageRequestResponse`](../../doc/models/usage-request-response.md).
+
+## Example Usage
+
+```php
+$body = RequestBodyForUsageBuilder::init()
+    ->accountId('0000123456-000001')
+    ->startTime(DateTimeHelper::fromRfc3339DateTime('08/15/2021 00:00:00'))
+    ->endTime(DateTimeHelper::fromRfc3339DateTime('08/16/2021 00:00:00'))
+    ->build();
+
+$apiResponse = $promotionPeriodInformationController->getPromoDeviceAggregateUsageHistory($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "be1b5958-3e11-41db-9abd-b1b7618c0035"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`ReadySimRestErrorResponseException`](../../doc/models/ready-sim-rest-error-response-exception.md) |
 
 
 # Get Promo Device Usage History
@@ -71,49 +116,4 @@ $apiResponse = $promotionPeriodInformationController->getPromoDeviceUsageHistory
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
 | Default | All error responses will be in this format | [`ReadySimRestErrorResponseException`](../../doc/models/ready-sim-rest-error-response-exception.md) |
-
-
-# Get Promo Device Aggregate Usage History
-
-Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a callback.
-
-```php
-function getPromoDeviceAggregateUsageHistory(RequestBodyForUsage $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`RequestBodyForUsage`](../../doc/models/request-body-for-usage.md) | Body, Required | Retrieve Aggregate Usage |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`UsageRequestResponse`](../../doc/models/usage-request-response.md).
-
-## Example Usage
-
-```php
-$body = RequestBodyForUsageBuilder::init()
-    ->accountId('0000123456-000001')
-    ->startTime(DateTimeHelper::fromRfc3339DateTime('08/15/2021 00:00:00'))
-    ->endTime(DateTimeHelper::fromRfc3339DateTime('08/16/2021 00:00:00'))
-    ->build();
-
-$apiResponse = $promotionPeriodInformationController->getPromoDeviceAggregateUsageHistory($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "be1b5958-3e11-41db-9abd-b1b7618c0035"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| Default | Error response | [`ReadySimRestErrorResponseException`](../../doc/models/ready-sim-rest-error-response-exception.md) |
 

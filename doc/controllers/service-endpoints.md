@@ -11,11 +11,11 @@ $serviceEndpointsController = $client->getServiceEndpointsController();
 ## Methods
 
 * [List Optimal Service Endpoints](../../doc/controllers/service-endpoints.md#list-optimal-service-endpoints)
-* [Register Service Endpoints](../../doc/controllers/service-endpoints.md#register-service-endpoints)
 * [List All Service Endpoints](../../doc/controllers/service-endpoints.md#list-all-service-endpoints)
 * [Get Service Endpoint](../../doc/controllers/service-endpoints.md#get-service-endpoint)
-* [Update Service Endpoint](../../doc/controllers/service-endpoints.md#update-service-endpoint)
 * [Deregister Service Endpoint](../../doc/controllers/service-endpoints.md#deregister-service-endpoint)
+* [Register Service Endpoints](../../doc/controllers/service-endpoints.md#register-service-endpoints)
+* [Update Service Endpoint](../../doc/controllers/service-endpoints.md#update-service-endpoint)
 
 
 # List Optimal Service Endpoints
@@ -92,64 +92,6 @@ $apiResponse = $serviceEndpointsController->listOptimalServiceEndpoints(
     }
   ]
 }
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | HTTP 400 Bad Request. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-| 401 | HTTP 401 Unauthorized. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-| Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-
-
-# Register Service Endpoints
-
-Register Service Endpoints of a deployed application to specified MEC Platforms.
-
-```php
-function registerServiceEndpoints(array $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`ResourcesEdgeHostedServiceWithProfileId[]`](../../doc/models/resources-edge-hosted-service-with-profile-id.md) | Body, Required | An array of Service Endpoint data for a deployed application. The request body passes all of the needed parameters to create a service endpoint. Parameters will be edited here rather than the **Parameters** section above. The `ern`,`applicationServerProviderId`, `applicationId` and `serviceProfileID` parameters are required. **Note:** Currently, the only valid value for `applicationServerProviderId`is **AWS**. Also, if you do not know one of the optional values (i.e. URI), you can erase the line from the query by back-spacing over it. |
-
-## Requires scope
-
-### thingspace_oauth
-
-`edge:discovery:read`, `edge:serviceprofile:read`, `edge:serviceprofile:write`, `edge:serviceregistry:read`, `edge:serviceregistry:write`, `ts.application.ro`, `ts.mec.fullaccess`, `ts.mec.limitaccess`
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RegisterServiceEndpointResult`](../../doc/models/register-service-endpoint-result.md).
-
-## Example Usage
-
-```php
-$body = [
-    ResourcesEdgeHostedServiceWithProfileIdBuilder::init()
-        ->ern('us-east-1-wl1-atl-wlz-1')
-        ->serviceEndpoint(
-            ResourcesServiceEndpointBuilder::init()
-                ->uRI('http://base_path/some_segment/id')
-                ->fQDN('thingtest.verizon.com')
-                ->iPv4Address('192.168.11.10')
-                ->iPv6Address('2001:0db8:85a3:0000:0000:8a2e:0370:1234')
-                ->port(1234)
-                ->build()
-        )
-        ->applicationServerProviderId('AWS')
-        ->applicationId('IogspaceJan15')
-        ->serviceDescription('ThieIt')
-        ->serviceProfileID('4054ea9a-593e-4776-b488-697b1bfa4f3b')
-        ->build()
-];
-
-$apiResponse = $serviceEndpointsController->registerServiceEndpoints($body);
 ```
 
 ## Errors
@@ -267,6 +209,114 @@ $apiResponse = $serviceEndpointsController->getServiceEndpoint($serviceEndpoints
 | Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
 
 
+# Deregister Service Endpoint
+
+Deregister an application's Service Endpoint from the MEC Platform(s).
+
+```php
+function deregisterServiceEndpoint(string $serviceEndpointsId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `serviceEndpointsId` | `string` | Template, Required | A system-defined string identifier representing one or more registered Service Endpoints. |
+
+## Requires scope
+
+### thingspace_oauth
+
+`edge:discovery:read`, `edge:serviceprofile:read`, `edge:serviceprofile:write`, `edge:serviceregistry:read`, `edge:serviceregistry:write`, `ts.application.ro`, `ts.mec.fullaccess`, `ts.mec.limitaccess`
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeregisterServiceEndpointResult`](../../doc/models/deregister-service-endpoint-result.md).
+
+## Example Usage
+
+```php
+$serviceEndpointsId = '43f3f7bb-d6c5-4bad-b081-9a3a0df2db98';
+
+$apiResponse = $serviceEndpointsController->deregisterServiceEndpoint($serviceEndpointsId);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "status": "Success",
+  "message": "EdgeAppServicesID Deleted"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | HTTP 400 Bad Request. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+| 401 | HTTP 401 Unauthorized. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+| Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+
+
+# Register Service Endpoints
+
+Register Service Endpoints of a deployed application to specified MEC Platforms.
+
+```php
+function registerServiceEndpoints(array $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`ResourcesEdgeHostedServiceWithProfileId[]`](../../doc/models/resources-edge-hosted-service-with-profile-id.md) | Body, Required | An array of Service Endpoint data for a deployed application. The request body passes all of the needed parameters to create a service endpoint. Parameters will be edited here rather than the **Parameters** section above. The `ern`,`applicationServerProviderId`, `applicationId` and `serviceProfileID` parameters are required. **Note:** Currently, the only valid value for `applicationServerProviderId`is **AWS**. Also, if you do not know one of the optional values (i.e. URI), you can erase the line from the query by back-spacing over it. |
+
+## Requires scope
+
+### thingspace_oauth
+
+`edge:discovery:read`, `edge:serviceprofile:read`, `edge:serviceprofile:write`, `edge:serviceregistry:read`, `edge:serviceregistry:write`, `ts.application.ro`, `ts.mec.fullaccess`, `ts.mec.limitaccess`
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RegisterServiceEndpointResult`](../../doc/models/register-service-endpoint-result.md).
+
+## Example Usage
+
+```php
+$body = [
+    ResourcesEdgeHostedServiceWithProfileIdBuilder::init()
+        ->ern('us-east-1-wl1-atl-wlz-1')
+        ->serviceEndpoint(
+            ResourcesServiceEndpointBuilder::init()
+                ->uRI('http://base_path/some_segment/id')
+                ->fQDN('thingtest.verizon.com')
+                ->iPv4Address('192.168.11.10')
+                ->iPv6Address('2001:0db8:85a3:0000:0000:8a2e:0370:1234')
+                ->port(1234)
+                ->build()
+        )
+        ->applicationServerProviderId('AWS')
+        ->applicationId('IogspaceJan15')
+        ->serviceDescription('ThieIt')
+        ->serviceProfileID('4054ea9a-593e-4776-b488-697b1bfa4f3b')
+        ->build()
+];
+
+$apiResponse = $serviceEndpointsController->registerServiceEndpoints($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | HTTP 400 Bad Request. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+| 401 | HTTP 401 Unauthorized. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+| Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
+
+
 # Update Service Endpoint
 
 Update registered Service Endpoint information.
@@ -328,56 +378,6 @@ $apiResponse = $serviceEndpointsController->updateServiceEndpoint(
 {
   "status": "Success",
   "message": "EdgeAppServices are updated"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | HTTP 400 Bad Request. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-| 401 | HTTP 401 Unauthorized. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-| Default | HTTP 500 Internal Server Error. | [`EdgeDiscoveryResultException`](../../doc/models/edge-discovery-result-exception.md) |
-
-
-# Deregister Service Endpoint
-
-Deregister an application's Service Endpoint from the MEC Platform(s).
-
-```php
-function deregisterServiceEndpoint(string $serviceEndpointsId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `serviceEndpointsId` | `string` | Template, Required | A system-defined string identifier representing one or more registered Service Endpoints. |
-
-## Requires scope
-
-### thingspace_oauth
-
-`edge:discovery:read`, `edge:serviceprofile:read`, `edge:serviceprofile:write`, `edge:serviceregistry:read`, `edge:serviceregistry:write`, `ts.application.ro`, `ts.mec.fullaccess`, `ts.mec.limitaccess`
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeregisterServiceEndpointResult`](../../doc/models/deregister-service-endpoint-result.md).
-
-## Example Usage
-
-```php
-$serviceEndpointsId = '43f3f7bb-d6c5-4bad-b081-9a3a0df2db98';
-
-$apiResponse = $serviceEndpointsController->deregisterServiceEndpoint($serviceEndpointsId);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "status": "Success",
-  "message": "EdgeAppServicesID Deleted"
 }
 ```
 

@@ -53,6 +53,37 @@ class DevicesLocationsController extends BaseController
     }
 
     /**
+     * Download a completed asynchronous device location report.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param string $txid Transaction ID from POST /locationreports response.
+     * @param int $startindex Zero-based number of the first record to return.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function retrieveLocationReport(string $account, string $txid, int $startindex): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::GET,
+            '/locationreports/{account}/report/{txid}/index/{startindex}'
+        )
+            ->server(Server::DEVICE_LOCATION)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(
+                TemplateParam::init('account', $account),
+                TemplateParam::init('txid', $txid),
+                TemplateParam::init('startindex', $startindex)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
+            ->type(LocationReport::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Requests the current or cached location of up to 10,000 IoT or consumer devices (phones, tablets.
      * etc.). This request returns a synchronous transaction ID, and the location information for each
      * device is returned asynchronously as a DeviceLocation callback message.
@@ -117,37 +148,6 @@ class DevicesLocationsController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
             ->type(AsynchronousLocationRequestResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Download a completed asynchronous device location report.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param string $txid Transaction ID from POST /locationreports response.
-     * @param int $startindex Zero-based number of the first record to return.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function retrieveLocationReport(string $account, string $txid, int $startindex): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::GET,
-            '/locationreports/{account}/report/{txid}/index/{startindex}'
-        )
-            ->server(Server::DEVICE_LOCATION)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(
-                TemplateParam::init('account', $account),
-                TemplateParam::init('txid', $txid),
-                TemplateParam::init('startindex', $startindex)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
-            ->type(LocationReport::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

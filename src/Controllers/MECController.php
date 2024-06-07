@@ -30,6 +30,57 @@ use VerizonLib\Server;
 class MECController extends BaseController
 {
     /**
+     * @param ChangePmecDeviceStateActivateRequest $body
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function changePmecDeviceStateActivate(ChangePmecDeviceStateActivateRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/state/activate')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(ChangeMecDeviceStateResponse::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * @param string $aname Account name.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getMECPerformanceConsent(string $aname): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/devices/mec/performance/consent/{aname}')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('aname', $aname));
+
+        $_resHandler = $this->responseHandler()->type(GetMECPerformanceConsentResponse::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * @param ChangePmecDeviceStateBulkDeactivateRequest $body
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function changePmecDeviceStateBulkDeactivate(ChangePmecDeviceStateBulkDeactivateRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/state/deactivate')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(ChangeMecDeviceStateResponse::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * @param string $aname Account name.
      *
      * @return ApiResponse Response from the API call
@@ -64,40 +115,6 @@ class MECController extends BaseController
     }
 
     /**
-     * @param ChangePmecDeviceStateActivateRequest $body
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function changePmecDeviceStateActivate(ChangePmecDeviceStateActivateRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/state/activate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(ChangeMecDeviceStateResponse::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * @param ChangePmecDeviceStateBulkDeactivateRequest $body
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function changePmecDeviceStateBulkDeactivate(ChangePmecDeviceStateBulkDeactivateRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/mec/actions/state/deactivate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(ChangeMecDeviceStateResponse::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * @param ChangePmecDeviceProfileRequest $body
      *
      * @return ApiResponse Response from the API call
@@ -127,23 +144,6 @@ class MECController extends BaseController
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(ChangeMecDeviceIPAddressResponse::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * @param string $aname Account name.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getMECPerformanceConsent(string $aname): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/devices/mec/performance/consent/{aname}')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('aname', $aname));
-
-        $_resHandler = $this->responseHandler()->type(GetMECPerformanceConsentResponse::class)->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }

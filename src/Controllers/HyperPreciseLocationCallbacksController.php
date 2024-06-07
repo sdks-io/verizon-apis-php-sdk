@@ -26,51 +26,6 @@ use VerizonLib\Server;
 class HyperPreciseLocationCallbacksController extends BaseController
 {
     /**
-     * Find registered callback listener for account by account number.
-     *
-     * @param string $accountNumber A unique identifier for an account.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listRegisteredCallbacks(string $accountNumber): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks')
-            ->server(Server::HYPER_PRECISE_LOCATION)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(QueryParam::init('accountNumber', $accountNumber));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Bad request.', HyperPreciseLocationResultException::class))
-            ->throwErrorOn(
-                '401',
-                ErrorType::init(
-                    'Unauthorized request. Access token is missing or invalid.',
-                    HyperPreciseLocationResultException::class
-                )
-            )
-            ->throwErrorOn(
-                '403',
-                ErrorType::init('Forbidden request.', HyperPreciseLocationResultException::class)
-            )
-            ->throwErrorOn(
-                '404',
-                ErrorType::init('Bad request. Not found.', HyperPreciseLocationResultException::class)
-            )
-            ->throwErrorOn(
-                '409',
-                ErrorType::init('Bad request. Conflict state.', HyperPreciseLocationResultException::class)
-            )
-            ->throwErrorOn(
-                '500',
-                ErrorType::init('Internal Server Error.', HyperPreciseLocationResultException::class)
-            )
-            ->type(CallbackCreated::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Registers a URL at which an account receives asynchronous responses and other messages from a
      * ThingSpace Platform callback service. The messages are REST messages. You are responsible for
      * creating and running a listening process on your server at that URL to receive and parse the
@@ -118,6 +73,51 @@ class HyperPreciseLocationCallbacksController extends BaseController
                 ErrorType::init('Internal Server Error.', HyperPreciseLocationResultException::class)
             )
             ->type(CallbackRegistered::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Find registered callback listener for account by account number.
+     *
+     * @param string $accountNumber A unique identifier for an account.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listRegisteredCallbacks(string $accountNumber): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks')
+            ->server(Server::HYPER_PRECISE_LOCATION)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(QueryParam::init('accountNumber', $accountNumber));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Bad request.', HyperPreciseLocationResultException::class))
+            ->throwErrorOn(
+                '401',
+                ErrorType::init(
+                    'Unauthorized request. Access token is missing or invalid.',
+                    HyperPreciseLocationResultException::class
+                )
+            )
+            ->throwErrorOn(
+                '403',
+                ErrorType::init('Forbidden request.', HyperPreciseLocationResultException::class)
+            )
+            ->throwErrorOn(
+                '404',
+                ErrorType::init('Bad request. Not found.', HyperPreciseLocationResultException::class)
+            )
+            ->throwErrorOn(
+                '409',
+                ErrorType::init('Bad request. Conflict state.', HyperPreciseLocationResultException::class)
+            )
+            ->throwErrorOn(
+                '500',
+                ErrorType::init('Internal Server Error.', HyperPreciseLocationResultException::class)
+            )
+            ->type(CallbackCreated::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

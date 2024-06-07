@@ -11,9 +11,9 @@ $targetsController = $client->getTargetsController();
 ## Methods
 
 * [Query Target](../../doc/controllers/targets.md#query-target)
-* [Delete Target](../../doc/controllers/targets.md#delete-target)
 * [Create Target](../../doc/controllers/targets.md#create-target)
 * [Generate Target External ID](../../doc/controllers/targets.md#generate-target-external-id)
+* [Delete Target](../../doc/controllers/targets.md#delete-target)
 * [Create Azure Central Io T Application](../../doc/controllers/targets.md#create-azure-central-io-t-application)
 
 
@@ -83,44 +83,6 @@ $apiResponse = $targetsController->queryTarget($body);
     "versionid": "caf85ff7-200e-11e9-a85b-02420a621e0a"
   }
 ]
-```
-
-
-# Delete Target
-
-Remove a target from a ThingSpace account.
-
-```php
-function deleteTarget(DeleteTargetRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeleteTargetRequest`](../../doc/models/delete-target-request.md) | Body, Required | The request body identifies the target to delete. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance.
-
-## Example Usage
-
-```php
-$body = DeleteTargetRequestBuilder::init()
-    ->accountidentifier(
-        AccountIdentifierBuilder::init()
-            ->billingaccountid('0000000000-00001')
-            ->build()
-    )
-    ->resourceidentifier(
-        ResourceIdentifierBuilder::init()
-            ->id('2e61a17d-8fd1-6816-e995-e4c2528bf535')
-            ->build()
-    )
-    ->build();
-
-$apiResponse = $targetsController->deleteTarget($body);
 ```
 
 
@@ -237,6 +199,44 @@ $apiResponse = $targetsController->generateTargetExternalID($body);
 {
   "externalid": "ZlJnih8BfqsosZrEEkfPuR3aGOk2i-HIr6tXN275ioJF6bezIrQB9EbzpTRep8J7RmV7QH=="
 }
+```
+
+
+# Delete Target
+
+Remove a target from a ThingSpace account.
+
+```php
+function deleteTarget(DeleteTargetRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeleteTargetRequest`](../../doc/models/delete-target-request.md) | Body, Required | The request body identifies the target to delete. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance.
+
+## Example Usage
+
+```php
+$body = DeleteTargetRequestBuilder::init()
+    ->accountidentifier(
+        AccountIdentifierBuilder::init()
+            ->billingaccountid('0000000000-00001')
+            ->build()
+    )
+    ->resourceidentifier(
+        ResourceIdentifierBuilder::init()
+            ->id('2e61a17d-8fd1-6816-e995-e4c2528bf535')
+            ->build()
+    )
+    ->build();
+
+$apiResponse = $targetsController->deleteTarget($body);
 ```
 
 

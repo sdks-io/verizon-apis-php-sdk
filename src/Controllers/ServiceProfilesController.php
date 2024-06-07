@@ -28,6 +28,32 @@ use VerizonLib\Models\UpdateServiceProfileResult;
 class ServiceProfilesController extends BaseController
 {
     /**
+     * Delete Service Profile based on unique service profile ID.
+     *
+     * @param string $serviceProfileId
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteServiceProfile(string $serviceProfileId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceprofiles/{serviceProfileId}')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(DeleteServiceProfileResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Creates a service profile that describes the resource requirements of a service.
      *
      * @param ResourcesServiceProfile $body The request body passes all of the needed parameters to
@@ -137,32 +163,6 @@ class ServiceProfilesController extends BaseController
                 ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
             )
             ->type(UpdateServiceProfileResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Delete Service Profile based on unique service profile ID.
-     *
-     * @param string $serviceProfileId
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteServiceProfile(string $serviceProfileId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceprofiles/{serviceProfileId}')
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('serviceProfileId', $serviceProfileId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(DeleteServiceProfileResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

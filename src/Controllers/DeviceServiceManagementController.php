@@ -25,19 +25,18 @@ use VerizonLib\Server;
 class DeviceServiceManagementController extends BaseController
 {
     /**
-     * Gets the list of a status for hyper-precise location devices.
+     * Enable/disable hyper-precise service for a device.
      *
-     * @param string $imei A unique identifier for a device.
-     * @param string $accountNumber A unique identifier for an account.
+     * @param BullseyeServiceRequest $body List of devices and hyper-precise required statuses.
      *
      * @return ApiResponse Response from the API call
      */
-    public function getDeviceHyperPreciseStatus(string $imei, string $accountNumber): ApiResponse
+    public function updateDeviceHyperPreciseStatus(BullseyeServiceRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/services')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/devices/services')
             ->server(Server::HYPER_PRECISE_LOCATION)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(QueryParam::init('imei', $imei), QueryParam::init('accountNumber', $accountNumber));
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Bad request.', HyperPreciseLocationResultException::class))
@@ -71,18 +70,19 @@ class DeviceServiceManagementController extends BaseController
     }
 
     /**
-     * Enable/disable hyper-precise service for a device.
+     * Gets the list of a status for hyper-precise location devices.
      *
-     * @param BullseyeServiceRequest $body List of devices and hyper-precise required statuses.
+     * @param string $imei A unique identifier for a device.
+     * @param string $accountNumber A unique identifier for an account.
      *
      * @return ApiResponse Response from the API call
      */
-    public function updateDeviceHyperPreciseStatus(BullseyeServiceRequest $body): ApiResponse
+    public function getDeviceHyperPreciseStatus(string $imei, string $accountNumber): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/devices/services')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devices/services')
             ->server(Server::HYPER_PRECISE_LOCATION)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+            ->parameters(QueryParam::init('imei', $imei), QueryParam::init('accountNumber', $accountNumber));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Bad request.', HyperPreciseLocationResultException::class))

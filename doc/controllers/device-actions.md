@@ -10,47 +10,9 @@ $deviceActionsController = $client->getDeviceActionsController();
 
 ## Methods
 
-* [Retrieve the Global Device List](../../doc/controllers/device-actions.md#retrieve-the-global-device-list)
 * [Retrieve Device Provisioning History](../../doc/controllers/device-actions.md#retrieve-device-provisioning-history)
 * [Get Asynchronous Request Status](../../doc/controllers/device-actions.md#get-asynchronous-request-status)
-
-
-# Retrieve the Global Device List
-
-Allows the profile to fetch the complete device list. This works with Verizon US and Global profiles.
-
-```php
-function retrieveTheGlobalDeviceList(GetDeviceListWithProfilesRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`GetDeviceListWithProfilesRequest`](../../doc/models/get-device-list-with-profiles-request.md) | Body, Required | Device Profile Query |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GIORequestResponse`](../../doc/models/gio-request-response.md).
-
-## Example Usage
-
-```php
-$body = GetDeviceListWithProfilesRequestBuilder::init(
-    '0000123456-00001'
-)
-    ->provisioningStatusFilter('ACTIVE')
-    ->profileStatusFilter('UNKNOWN')
-    ->build();
-
-$apiResponse = $deviceActionsController->retrieveTheGlobalDeviceList($body);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+* [Retrieve the Global Device List](../../doc/controllers/device-actions.md#retrieve-the-global-device-list)
 
 
 # Retrieve Device Provisioning History
@@ -120,6 +82,44 @@ $apiResponse = $deviceActionsController->getAsynchronousRequestStatus(
     $accountName,
     $requestID
 );
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+
+
+# Retrieve the Global Device List
+
+Allows the profile to fetch the complete device list. This works with Verizon US and Global profiles.
+
+```php
+function retrieveTheGlobalDeviceList(GetDeviceListWithProfilesRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`GetDeviceListWithProfilesRequest`](../../doc/models/get-device-list-with-profiles-request.md) | Body, Required | Device Profile Query |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GIORequestResponse`](../../doc/models/gio-request-response.md).
+
+## Example Usage
+
+```php
+$body = GetDeviceListWithProfilesRequestBuilder::init(
+    '0000123456-00001'
+)
+    ->provisioningStatusFilter('ACTIVE')
+    ->profileStatusFilter('UNKNOWN')
+    ->build();
+
+$apiResponse = $deviceActionsController->retrieveTheGlobalDeviceList($body);
 ```
 
 ## Errors

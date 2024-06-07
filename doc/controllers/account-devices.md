@@ -10,55 +10,8 @@ $accountDevicesController = $client->getAccountDevicesController();
 
 ## Methods
 
-* [Get Account Device Information](../../doc/controllers/account-devices.md#get-account-device-information)
 * [List Account Devices Information](../../doc/controllers/account-devices.md#list-account-devices-information)
-
-
-# Get Account Device Information
-
-Retrieve account device information such as reported firmware on the devices.
-
-```php
-function getAccountDeviceInformation(
-    string $acc,
-    ?string $lastSeenDeviceId = null,
-    ?string $protocol = DevicesProtocolEnum::LW_M2M
-): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `lastSeenDeviceId` | `?string` | Query, Optional | Last seen device identifier. |
-| `protocol` | [`?string(DevicesProtocolEnum)`](../../doc/models/devices-protocol-enum.md) | Query, Optional | Filter to retrieve a specific protocol type used. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V3AccountDeviceList`](../../doc/models/v3-account-device-list.md).
-
-## Example Usage
-
-```php
-$acc = '0000123456-00001';
-
-$lastSeenDeviceId = '0';
-
-$protocol = DevicesProtocolEnum::LW_M2M;
-
-$apiResponse = $accountDevicesController->getAccountDeviceInformation(
-    $acc,
-    $lastSeenDeviceId,
-    $protocol
-);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
+* [Get Account Device Information](../../doc/controllers/account-devices.md#get-account-device-information)
 
 
 # List Account Devices Information
@@ -121,6 +74,53 @@ $apiResponse = $accountDevicesController->listAccountDevicesInformation(
     }
   ]
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
+
+
+# Get Account Device Information
+
+Retrieve account device information such as reported firmware on the devices.
+
+```php
+function getAccountDeviceInformation(
+    string $acc,
+    ?string $lastSeenDeviceId = null,
+    ?string $protocol = DevicesProtocolEnum::LW_M2M
+): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `acc` | `string` | Template, Required | Account identifier. |
+| `lastSeenDeviceId` | `?string` | Query, Optional | Last seen device identifier. |
+| `protocol` | [`?string(DevicesProtocolEnum)`](../../doc/models/devices-protocol-enum.md) | Query, Optional | Filter to retrieve a specific protocol type used. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V3AccountDeviceList`](../../doc/models/v3-account-device-list.md).
+
+## Example Usage
+
+```php
+$acc = '0000123456-00001';
+
+$lastSeenDeviceId = '0';
+
+$protocol = DevicesProtocolEnum::LW_M2M;
+
+$apiResponse = $accountDevicesController->getAccountDeviceInformation(
+    $acc,
+    $lastSeenDeviceId,
+    $protocol
+);
 ```
 
 ## Errors

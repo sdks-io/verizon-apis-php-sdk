@@ -50,16 +50,16 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     }
 
     /**
-     * This endpoint allows user to assign licenses to a list of devices.
+     * This endpoint allows user to remove licenses from a list of devices.
      *
      * @param string $acc Account identifier.
-     * @param V3LicenseIMEI $body License assignment.
+     * @param V3LicenseIMEI $body License removal.
      *
      * @return ApiResponse Response from the API call
      */
-    public function assignLicensesToDevices(string $acc, V3LicenseIMEI $body): ApiResponse
+    public function removeLicensesFromDevices(string $acc, V3LicenseIMEI $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/assign')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/remove')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
@@ -77,16 +77,16 @@ class SoftwareManagementLicensesV3Controller extends BaseController
     }
 
     /**
-     * This endpoint allows user to remove licenses from a list of devices.
+     * This endpoint allows user to assign licenses to a list of devices.
      *
      * @param string $acc Account identifier.
-     * @param V3LicenseIMEI $body License removal.
+     * @param V3LicenseIMEI $body License assignment.
      *
      * @return ApiResponse Response from the API call
      */
-    public function removeLicensesFromDevices(string $acc, V3LicenseIMEI $body): ApiResponse
+    public function assignLicensesToDevices(string $acc, V3LicenseIMEI $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/remove')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/licenses/{acc}/assign')
             ->server(Server::SOFTWARE_MANAGEMENT_V3)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(

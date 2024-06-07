@@ -26,37 +26,18 @@ use VerizonLib\Server;
 class ManagingESIMProfilesController extends BaseController
 {
     /**
-     * Activate a device with either a lead or local profile.
-     *
-     * @param GIOProfileRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function activateADeviceProfile(GIOProfileRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/activate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
-            ->type(GIORequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Enable a device lead or local profile.
+     * Enable the Global IoT Orchestration device profile for download.
      *
      * @param DeviceProfileRequest $body Device Profile Query
      *
      * @return ApiResponse Response from the API call
      */
-    public function enableADeviceProfile(DeviceProfileRequest $body): ApiResponse
+    public function enableADeviceProfileForDownload(DeviceProfileRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/enable')
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/profile/actions/download_enable'
+        )
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
@@ -80,31 +61,6 @@ class ManagingESIMProfilesController extends BaseController
     public function deactivateADeviceProfile(GIODeactivateDeviceProfileRequest $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/deactivate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
-            ->type(GIORequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Enable the Global IoT Orchestration device profile for download.
-     *
-     * @param DeviceProfileRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function enableADeviceProfileForDownload(DeviceProfileRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/m2m/v1/devices/profile/actions/download_enable'
-        )
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
@@ -150,6 +106,50 @@ class ManagingESIMProfilesController extends BaseController
     public function deleteADeviceProfile(DeviceProfileRequest $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/delete')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(GIORequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Activate a device with either a lead or local profile.
+     *
+     * @param GIOProfileRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function activateADeviceProfile(GIOProfileRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/activate')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(GIORequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Enable a device lead or local profile.
+     *
+     * @param DeviceProfileRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function enableADeviceProfile(DeviceProfileRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/enable')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));

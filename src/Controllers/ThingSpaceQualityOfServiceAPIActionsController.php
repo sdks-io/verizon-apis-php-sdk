@@ -25,29 +25,6 @@ use VerizonLib\Server;
 class ThingSpaceQualityOfServiceAPIActionsController extends BaseController
 {
     /**
-     * Creates a QoS elevation subscription ID and activates the subscription.
-     *
-     * @param SubscribeRequest $body The request details to create a ThingSpace Quality of Service
-     *        API subscription.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function createAThingSpaceQualityOfServiceAPISubscription(SubscribeRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/enhanceQoS')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error Response', DefaultResponseException::class))
-            ->type(M201success::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Stops an active ThingSpace Quality of Service API subscription using the account name and the
      * subscription ID.
      *
@@ -67,6 +44,29 @@ class ThingSpaceQualityOfServiceAPIActionsController extends BaseController
                 QueryParam::init('accountName', $accountName),
                 QueryParam::init('qosSubscriptionId', $qosSubscriptionId)
             );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error Response', DefaultResponseException::class))
+            ->type(M201success::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Creates a QoS elevation subscription ID and activates the subscription.
+     *
+     * @param SubscribeRequest $body The request details to create a ThingSpace Quality of Service
+     *        API subscription.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function createAThingSpaceQualityOfServiceAPISubscription(SubscribeRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/enhanceQoS')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error Response', DefaultResponseException::class))

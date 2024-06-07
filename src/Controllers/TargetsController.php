@@ -47,25 +47,6 @@ class TargetsController extends BaseController
     }
 
     /**
-     * Remove a target from a ThingSpace account.
-     *
-     * @param DeleteTargetRequest $body The request body identifies the target to delete.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteTarget(DeleteTargetRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/delete')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Define a target to receive data streams, alerts, or callbacks. After creating the target resource,
      * use its ID in a subscription to set up a data stream.
      *
@@ -101,6 +82,25 @@ class TargetsController extends BaseController
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->type(GenerateExternalIDResult::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Remove a target from a ThingSpace account.
+     *
+     * @param DeleteTargetRequest $body The request body identifies the target to delete.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteTarget(DeleteTargetRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/targets/actions/delete')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }

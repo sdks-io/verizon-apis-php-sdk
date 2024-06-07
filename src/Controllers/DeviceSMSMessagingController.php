@@ -52,29 +52,6 @@ class DeviceSMSMessagingController extends BaseController
     }
 
     /**
-     * Retrieves queued SMS messages sent by all M2M MC devices associated with an account.
-     *
-     * @param string $accountName Numeric account name
-     * @param string|null $next Continue the previous query from the pageUrl in Location Header
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getSmsMessages(string $accountName, ?string $next = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/sms/{accountName}/history')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('accountName', $accountName), QueryParam::init('next', $next));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
-            ->type(SmsMessagesResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Starts delivery of SMS messages for the specified account.
      *
      * @param string $accountName Numeric account name
@@ -113,6 +90,29 @@ class DeviceSMSMessagingController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
             ->type(GIORequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Retrieves queued SMS messages sent by all M2M MC devices associated with an account.
+     *
+     * @param string $accountName Numeric account name
+     * @param string|null $next Continue the previous query from the pageUrl in Location Header
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getSmsMessages(string $accountName, ?string $next = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/sms/{accountName}/history')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('accountName', $accountName), QueryParam::init('next', $next));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(SmsMessagesResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

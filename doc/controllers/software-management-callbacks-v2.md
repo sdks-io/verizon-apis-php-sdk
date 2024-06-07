@@ -10,51 +10,10 @@ $softwareManagementCallbacksV2Controller = $client->getSoftwareManagementCallbac
 
 ## Methods
 
-* [List Registered Callbacks](../../doc/controllers/software-management-callbacks-v2.md#list-registered-callbacks)
 * [Update Callback](../../doc/controllers/software-management-callbacks-v2.md#update-callback)
 * [Register Callback](../../doc/controllers/software-management-callbacks-v2.md#register-callback)
 * [Deregister Callback](../../doc/controllers/software-management-callbacks-v2.md#deregister-callback)
-
-
-# List Registered Callbacks
-
-This endpoint allows user to get the registered callback information.
-
-```php
-function listRegisteredCallbacks(string $account): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CallbackSummary`](../../doc/models/callback-summary.md).
-
-## Example Usage
-
-```php
-$account = '0000123456-00001';
-
-$apiResponse = $softwareManagementCallbacksV2Controller->listRegisteredCallbacks($account);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "url": "http://10.120.102.183:50559/CallbackListener/FirmwareServiceMessages.asmx"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+* [List Registered Callbacks](../../doc/controllers/software-management-callbacks-v2.md#list-registered-callbacks)
 
 
 # Update Callback
@@ -186,6 +145,47 @@ $apiResponse = $softwareManagementCallbacksV2Controller->deregisterCallback($acc
 ```json
 {
   "success": true
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
+# List Registered Callbacks
+
+This endpoint allows user to get the registered callback information.
+
+```php
+function listRegisteredCallbacks(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CallbackSummary`](../../doc/models/callback-summary.md).
+
+## Example Usage
+
+```php
+$account = '0000123456-00001';
+
+$apiResponse = $softwareManagementCallbacksV2Controller->listRegisteredCallbacks($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "url": "http://10.120.102.183:50559/CallbackListener/FirmwareServiceMessages.asmx"
 }
 ```
 

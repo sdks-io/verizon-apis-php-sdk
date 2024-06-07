@@ -23,29 +23,6 @@ use VerizonLib\Server;
 class SoftwareManagementSubscriptionsV1Controller extends BaseController
 {
     /**
-     * This subscriptions endpoint retrieves an account's current Software Management Service subscription
-     * status.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getAccountSubscriptionStatus(string $account): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(V1AccountSubscription::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns information about an account's Software Management Services licenses and a list of licensed
      * devices.
      *
@@ -67,6 +44,29 @@ class SoftwareManagementSubscriptionsV1Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(AccountLicenseInfo::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This subscriptions endpoint retrieves an account's current Software Management Service subscription
+     * status.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getAccountSubscriptionStatus(string $account): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(V1AccountSubscription::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

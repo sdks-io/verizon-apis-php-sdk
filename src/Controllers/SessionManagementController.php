@@ -27,29 +27,6 @@ use VerizonLib\Server;
 class SessionManagementController extends BaseController
 {
     /**
-     * Initiates a Connectivity Management session and returns a VZ-M2M session token that is required in
-     * subsequent API requests.
-     *
-     * @param LogInRequest|null $body Request to initiate a session.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function startConnectivityManagementSession(?LogInRequest $body = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/session/login')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(LogInResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Ends a Connectivity Management session.
      *
      * @return ApiResponse Response from the API call
@@ -87,6 +64,29 @@ class SessionManagementController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(SessionResetPasswordResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Initiates a Connectivity Management session and returns a VZ-M2M session token that is required in
+     * subsequent API requests.
+     *
+     * @param LogInRequest|null $body Request to initiate a session.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function startConnectivityManagementSession(?LogInRequest $body = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/session/login')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(LogInResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

@@ -10,11 +10,60 @@ $wirelessNetworkPerformanceController = $client->getWirelessNetworkPerformanceCo
 
 ## Methods
 
+* [Device Experience 30 Days History](../../doc/controllers/wireless-network-performance.md#device-experience-30-days-history)
 * [Near Real Time Network Conditions](../../doc/controllers/wireless-network-performance.md#near-real-time-network-conditions)
 * [Domestic 4 G and 5G Nationwide Network Coverage](../../doc/controllers/wireless-network-performance.md#domestic-4-g-and-5g-nationwide-network-coverage)
 * [Site Proximity](../../doc/controllers/wireless-network-performance.md#site-proximity)
-* [Device Experience 30 Days History](../../doc/controllers/wireless-network-performance.md#device-experience-30-days-history)
 * [Device Experience Bulk Latest](../../doc/controllers/wireless-network-performance.md#device-experience-bulk-latest)
+
+
+# Device Experience 30 Days History
+
+A report of a specific device's service scores over a 30 day period.
+
+```php
+function deviceExperience30daysHistory(GetDeviceExperienceScoreHistoryRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`GetDeviceExperienceScoreHistoryRequest`](../../doc/models/get-device-experience-score-history-request.md) | Body, Required | Request for a device's 30 day experience. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`WNPRequestResponse`](../../doc/models/wnp-request-response.md).
+
+## Example Usage
+
+```php
+$body = GetDeviceExperienceScoreHistoryRequestBuilder::init(
+    '0000123456-00001',
+    DeviceIdentifierBuilder::init(
+        'iccid',
+        '01234567899876543210'
+    )
+        ->mdn('0123456789')
+        ->build()
+)->build();
+
+$apiResponse = $wirelessNetworkPerformanceController->deviceExperience30daysHistory($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "d1f08526-5443-4054-9a29-4456490ea9f8"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`WNPRestErrorResponseException`](../../doc/models/wnp-rest-error-response-exception.md) |
 
 
 # Near Real Time Network Conditions
@@ -154,55 +203,6 @@ $body = GetNetworkConditionsRequestBuilder::init(
 )->build();
 
 $apiResponse = $wirelessNetworkPerformanceController->siteProximity($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "d1f08526-5443-4054-9a29-4456490ea9f8"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| Default | Error response | [`WNPRestErrorResponseException`](../../doc/models/wnp-rest-error-response-exception.md) |
-
-
-# Device Experience 30 Days History
-
-A report of a specific device's service scores over a 30 day period.
-
-```php
-function deviceExperience30daysHistory(GetDeviceExperienceScoreHistoryRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`GetDeviceExperienceScoreHistoryRequest`](../../doc/models/get-device-experience-score-history-request.md) | Body, Required | Request for a device's 30 day experience. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`WNPRequestResponse`](../../doc/models/wnp-request-response.md).
-
-## Example Usage
-
-```php
-$body = GetDeviceExperienceScoreHistoryRequestBuilder::init(
-    '0000123456-00001',
-    DeviceIdentifierBuilder::init(
-        'iccid',
-        '01234567899876543210'
-    )
-        ->mdn('0123456789')
-        ->build()
-)->build();
-
-$apiResponse = $wirelessNetworkPerformanceController->deviceExperience30daysHistory($body);
 ```
 
 ## Example Response *(as JSON)*

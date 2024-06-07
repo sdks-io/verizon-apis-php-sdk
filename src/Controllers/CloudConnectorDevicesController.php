@@ -31,65 +31,6 @@ use VerizonLib\Server;
 class CloudConnectorDevicesController extends BaseController
 {
     /**
-     * Change configuration values on a device, such as setting how often a device records and reports
-     * sensor readings.
-     *
-     * @param ChangeConfigurationRequest $body The request body changes configuration values on a
-     *        device.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateDevicesConfigurationValue(ChangeConfigurationRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/configuration/actions/set')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(ChangeConfigurationResponse::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Find devices by property values. Returns an array of all matching device resources.
-     *
-     * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function findDeviceByPropertyValues(QuerySubscriptionRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/query')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(FindDeviceByPropertyResponseList::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Search for devices by property values. Returns an array of all matching device resources.
-     *
-     * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function searchDevicesResourcesByPropertyValues(QuerySubscriptionRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/search')
-            ->server(Server::CLOUD_CONNECTOR)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()->type(SearchDeviceByPropertyResponseList::class)->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Search device event history to find events that match criteria.Sensor readings, configuration
      * changes, and other device data are all stored as events.
      *
@@ -108,6 +49,27 @@ class CloudConnectorDevicesController extends BaseController
         $_resHandler = $this->responseHandler()
             ->type(SearchDeviceEventHistoryResponseList::class)
             ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Change configuration values on a device, such as setting how often a device records and reports
+     * sensor readings.
+     *
+     * @param ChangeConfigurationRequest $body The request body changes configuration values on a
+     *        device.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateDevicesConfigurationValue(ChangeConfigurationRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/configuration/actions/set')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(ChangeConfigurationResponse::class)->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }
@@ -153,6 +115,44 @@ class CloudConnectorDevicesController extends BaseController
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
 
         $_resHandler = $this->responseHandler()->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Find devices by property values. Returns an array of all matching device resources.
+     *
+     * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function findDeviceByPropertyValues(QuerySubscriptionRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/query')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(FindDeviceByPropertyResponseList::class)->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Search for devices by property values. Returns an array of all matching device resources.
+     *
+     * @param QuerySubscriptionRequest $body The request body specifies fields and values to match.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function searchDevicesResourcesByPropertyValues(QuerySubscriptionRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devices/actions/search')
+            ->server(Server::CLOUD_CONNECTOR)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()->type(SearchDeviceByPropertyResponseList::class)->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
     }

@@ -13,8 +13,8 @@ $sMSController = $client->getSMSController();
 ## Methods
 
 * [Send SMS to Device](../../doc/controllers/sms.md#send-sms-to-device)
-* [List Devices SMS Messages](../../doc/controllers/sms.md#list-devices-sms-messages)
 * [Start Queued SMS Delivery](../../doc/controllers/sms.md#start-queued-sms-delivery)
+* [List Devices SMS Messages](../../doc/controllers/sms.md#list-devices-sms-messages)
 
 
 # Send SMS to Device
@@ -59,6 +59,47 @@ $apiResponse = $sMSController->sendSMSToDevice($body);
 ```json
 {
   "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Start Queued SMS Delivery
+
+Tells the ThingSpace Platform to start sending mobile-originated SMS messages through the EnhancedConnectivityService callback service. SMS messages from devices are queued until they are retrieved by your application, either by callback or synchronously with GET /sms/{accountName}/history.
+
+```php
+function startQueuedSMSDelivery(string $aname): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `aname` | `string` | Template, Required | Account name. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ConnectivityManagementSuccessResult`](../../doc/models/connectivity-management-success-result.md).
+
+## Example Usage
+
+```php
+$aname = '0252012345-00001';
+
+$apiResponse = $sMSController->startQueuedSMSDelivery($aname);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
 }
 ```
 
@@ -123,47 +164,6 @@ $apiResponse = $sMSController->listDevicesSMSMessages($aname);
     }
   ],
   "hasMoreData": false
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Start Queued SMS Delivery
-
-Tells the ThingSpace Platform to start sending mobile-originated SMS messages through the EnhancedConnectivityService callback service. SMS messages from devices are queued until they are retrieved by your application, either by callback or synchronously with GET /sms/{accountName}/history.
-
-```php
-function startQueuedSMSDelivery(string $aname): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `aname` | `string` | Template, Required | Account name. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ConnectivityManagementSuccessResult`](../../doc/models/connectivity-management-success-result.md).
-
-## Example Usage
-
-```php
-$aname = '0252012345-00001';
-
-$apiResponse = $sMSController->startQueuedSMSDelivery($aname);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "success": true
 }
 ```
 

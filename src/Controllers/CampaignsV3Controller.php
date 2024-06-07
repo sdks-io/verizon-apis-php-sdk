@@ -30,33 +30,6 @@ use VerizonLib\Server;
 class CampaignsV3Controller extends BaseController
 {
     /**
-     * This endpoint allows a user to schedule a firmware upgrade for a list of devices.
-     *
-     * @param string $acc Account identifier.
-     * @param CampaignFirmwareUpgrade $body Firmware upgrade information.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function scheduleCampaignFirmwareUpgrade(string $acc, CampaignFirmwareUpgrade $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/firmware/{acc}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(
-                TemplateParam::init('acc', $acc),
-                HeaderParam::init('Content-Type', 'application/json'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(FirmwareCampaign::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * This endpoint allows user to Add or Remove devices to an existing campaign.
      *
      * @param string $acc Account identifier.
@@ -83,6 +56,56 @@ class CampaignsV3Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(V3AddOrRemoveDeviceResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows the user to retrieve campaign level information for a specified campaign.
+     *
+     * @param string $acc Account identifier.
+     * @param string $campaignId Firmware upgrade identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getCampaignInformation(string $acc, string $campaignId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/campaigns/{acc}/{campaignId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('campaignId', $campaignId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(Campaign::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This endpoint allows a user to schedule a firmware upgrade for a list of devices.
+     *
+     * @param string $acc Account identifier.
+     * @param CampaignFirmwareUpgrade $body Firmware upgrade information.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function scheduleCampaignFirmwareUpgrade(string $acc, CampaignFirmwareUpgrade $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/firmware/{acc}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V3)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(
+                TemplateParam::init('acc', $acc),
+                HeaderParam::init('Content-Type', 'application/json'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
+            ->type(FirmwareCampaign::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -116,29 +139,6 @@ class CampaignsV3Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
             ->type(FirmwareCampaign::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows the user to retrieve campaign level information for a specified campaign.
-     *
-     * @param string $acc Account identifier.
-     * @param string $campaignId Firmware upgrade identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getCampaignInformation(string $acc, string $campaignId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/campaigns/{acc}/{campaignId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V3)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('acc', $acc), TemplateParam::init('campaignId', $campaignId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV3ResultException::class))
-            ->type(Campaign::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

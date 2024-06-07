@@ -29,29 +29,6 @@ use VerizonLib\Server;
 class FirmwareV1Controller extends BaseController
 {
     /**
-     * Lists all device firmware images available for an account, based on the devices registered to that
-     * account.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAvailableFirmware(string $account): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(Firmware::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Schedules a firmware upgrade for devices.
      *
      * @param FirmwareUpgradeRequest $body Details of the firmware upgrade request.
@@ -93,6 +70,29 @@ class FirmwareV1Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(FirmwareUpgrade::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Lists all device firmware images available for an account, based on the devices registered to that
+     * account.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAvailableFirmware(string $account): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(Firmware::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

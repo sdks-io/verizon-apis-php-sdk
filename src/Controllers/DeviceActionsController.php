@@ -27,28 +27,6 @@ use VerizonLib\Server;
 class DeviceActionsController extends BaseController
 {
     /**
-     * Allows the profile to fetch the complete device list. This works with Verizon US and Global profiles.
-     *
-     * @param GetDeviceListWithProfilesRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function retrieveTheGlobalDeviceList(GetDeviceListWithProfilesRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v2/devices/actions/list')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
-            ->type(GIORequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Retreive the provisioning history of a specific device or devices.
      *
      * @param ProvhistoryRequest $body Device Provisioning History
@@ -94,6 +72,28 @@ class DeviceActionsController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
             ->type(StatusResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Allows the profile to fetch the complete device list. This works with Verizon US and Global profiles.
+     *
+     * @param GetDeviceListWithProfilesRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function retrieveTheGlobalDeviceList(GetDeviceListWithProfilesRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v2/devices/actions/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(GIORequestResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

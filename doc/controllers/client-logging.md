@@ -10,72 +10,12 @@ $clientLoggingController = $client->getClientLoggingController();
 
 ## Methods
 
-* [List Devices With Logging Enabled](../../doc/controllers/client-logging.md#list-devices-with-logging-enabled)
 * [Enable Logging for Devices](../../doc/controllers/client-logging.md#enable-logging-for-devices)
 * [Disable Logging for Devices](../../doc/controllers/client-logging.md#disable-logging-for-devices)
 * [Enable Device Logging](../../doc/controllers/client-logging.md#enable-device-logging)
+* [List Devices With Logging Enabled](../../doc/controllers/client-logging.md#list-devices-with-logging-enabled)
 * [Disable Device Logging](../../doc/controllers/client-logging.md#disable-device-logging)
 * [List Device Logs](../../doc/controllers/client-logging.md#list-device-logs)
-
-
-# List Devices With Logging Enabled
-
-Returns an array of all devices in the specified account for which logging is enabled.
-
-```php
-function listDevicesWithLoggingEnabled(string $account): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceLoggingStatus[]`](../../doc/models/device-logging-status.md).
-
-## Example Usage
-
-```php
-$account = '0000123456-00001';
-
-$apiResponse = $clientLoggingController->listDevicesWithLoggingEnabled($account);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "deviceId": "990013907835573",
-    "expiryDate": "2020-10-19"
-  },
-  {
-    "deviceId": "991124018926684",
-    "expiryDate": "2020-10-19"
-  },
-  {
-    "deviceId": "992234129057795",
-    "expiryDate": "2020-10-23"
-  },
-  {
-    "deviceId": "998891785613351",
-    "expiryDate": "2020-10-23"
-  },
-  {
-    "deviceId": "990013907835573",
-    "expiryDate": "2020-10-23"
-  }
-]
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
 
 
 # Enable Logging for Devices
@@ -230,6 +170,66 @@ $apiResponse = $clientLoggingController->enableDeviceLogging(
   "deviceId": "990013907835573",
   "expiryDate": "2020-10-19"
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
+# List Devices With Logging Enabled
+
+Returns an array of all devices in the specified account for which logging is enabled.
+
+```php
+function listDevicesWithLoggingEnabled(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceLoggingStatus[]`](../../doc/models/device-logging-status.md).
+
+## Example Usage
+
+```php
+$account = '0000123456-00001';
+
+$apiResponse = $clientLoggingController->listDevicesWithLoggingEnabled($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "deviceId": "990013907835573",
+    "expiryDate": "2020-10-19"
+  },
+  {
+    "deviceId": "991124018926684",
+    "expiryDate": "2020-10-19"
+  },
+  {
+    "deviceId": "992234129057795",
+    "expiryDate": "2020-10-23"
+  },
+  {
+    "deviceId": "998891785613351",
+    "expiryDate": "2020-10-23"
+  },
+  {
+    "deviceId": "990013907835573",
+    "expiryDate": "2020-10-23"
+  }
+]
 ```
 
 ## Errors

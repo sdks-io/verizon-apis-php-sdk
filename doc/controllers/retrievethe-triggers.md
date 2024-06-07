@@ -10,28 +10,36 @@ $retrievetheTriggersController = $client->getRetrievetheTriggersController();
 
 ## Methods
 
-* [Get All Available Triggers](../../doc/controllers/retrievethe-triggers.md#get-all-available-triggers)
+* [Get Triggers by Id](../../doc/controllers/retrievethe-triggers.md#get-triggers-by-id)
 * [Get All Triggers by Account Name](../../doc/controllers/retrievethe-triggers.md#get-all-triggers-by-account-name)
 * [Get All Triggers by Trigger Category](../../doc/controllers/retrievethe-triggers.md#get-all-triggers-by-trigger-category)
-* [Get Triggers by Id](../../doc/controllers/retrievethe-triggers.md#get-triggers-by-id)
+* [Get All Available Triggers](../../doc/controllers/retrievethe-triggers.md#get-all-available-triggers)
 
 
-# Get All Available Triggers
+# Get Triggers by Id
 
-Retrieves all of the available triggers for pseudo-MDN.
+Retrives a specific trigger by its ID.
 
 ```php
-function getAllAvailableTriggers(): ApiResponse
+function getTriggersById(string $triggerId): ApiResponse
 ```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `triggerId` | `string` | Template, Required | The ID of a specific trigger |
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`TriggerValueResponse`](../../doc/models/trigger-value-response.md).
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`TriggerValueResponse2`](../../doc/models/trigger-value-response-2.md).
 
 ## Example Usage
 
 ```php
-$apiResponse = $retrieveTheTriggersController->getAllAvailableTriggers();
+$triggerId = '2874DEC7-26CF-4797-9C6A-B5A2AC72D526';
+
+$apiResponse = $retrieveTheTriggersController->getTriggersById($triggerId);
 ```
 
 ## Errors
@@ -99,30 +107,22 @@ $apiResponse = $retrieveTheTriggersController->getAllTriggersByTriggerCategory()
 | Default | Error response | [`ReadySimRestErrorResponseException`](../../doc/models/ready-sim-rest-error-response-exception.md) |
 
 
-# Get Triggers by Id
+# Get All Available Triggers
 
-Retrives a specific trigger by its ID.
+Retrieves all of the available triggers for pseudo-MDN.
 
 ```php
-function getTriggersById(string $triggerId): ApiResponse
+function getAllAvailableTriggers(): ApiResponse
 ```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `triggerId` | `string` | Template, Required | The ID of a specific trigger |
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`TriggerValueResponse2`](../../doc/models/trigger-value-response-2.md).
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`TriggerValueResponse`](../../doc/models/trigger-value-response.md).
 
 ## Example Usage
 
 ```php
-$triggerId = '2874DEC7-26CF-4797-9C6A-B5A2AC72D526';
-
-$apiResponse = $retrieveTheTriggersController->getTriggersById($triggerId);
+$apiResponse = $retrieveTheTriggersController->getAllAvailableTriggers();
 ```
 
 ## Errors

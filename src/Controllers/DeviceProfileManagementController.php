@@ -27,53 +27,6 @@ use VerizonLib\Server;
 class DeviceProfileManagementController extends BaseController
 {
     /**
-     * Uses the profile to bring the device under management.
-     *
-     * @param ActivateDeviceProfileRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function activateDeviceThroughProfile(ActivateDeviceProfileRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/m2m/v1/devices/profile/actions/activate_enable'
-        )
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Bad request', RestErrorResponseException::class))
-            ->type(RequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Uses the profile to activate the device.
-     *
-     * @param ProfileRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function profileToActivateDevice(ProfileRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/activate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Bad request', RestErrorResponseException::class))
-            ->type(RequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Uses the profile to deactivate the device.
      *
      * @param DeactivateDeviceProfileRequest $body Device Profile Query
@@ -108,6 +61,53 @@ class DeviceProfileManagementController extends BaseController
             RequestMethod::POST,
             '/m2m/v1/devices/profile/actions/setfallbackattribute'
         )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Bad request', RestErrorResponseException::class))
+            ->type(RequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Uses the profile to bring the device under management.
+     *
+     * @param ActivateDeviceProfileRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function activateDeviceThroughProfile(ActivateDeviceProfileRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/profile/actions/activate_enable'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Bad request', RestErrorResponseException::class))
+            ->type(RequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Uses the profile to activate the device.
+     *
+     * @param ProfileRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function profileToActivateDevice(ProfileRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/profile/actions/activate')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));

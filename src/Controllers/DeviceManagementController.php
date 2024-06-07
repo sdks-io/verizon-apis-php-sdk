@@ -63,6 +63,83 @@ use VerizonLib\Server;
 class DeviceManagementController extends BaseController
 {
     /**
+     * Returns information about a single device or information about all devices that match the given
+     * parameters. Returned information includes device provisioning state, service plan, MDN, MIN, and IP
+     * address.
+     *
+     * @param AccountDeviceListRequest $body Device information query.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listDevicesInformation(AccountDeviceListRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(AccountDeviceListResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Each response includes a maximum of 500 records. To obtain more records, you can call the API
+     * multiple times, adjusting the earliest value each time to start where the previous request finished.
+     *
+     * @param DeviceConnectionListRequest $body Query to retrieve device connection history.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function retrieveDeviceConnectionHistory(DeviceConnectionListRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/connections/actions/listHistory'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(ConnectionHistoryResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Returns extended diagnostic information about a specified device, including connectivity,
+     * provisioning, billing and location status.
+     *
+     * @param DeviceExtendedDiagnosticsRequest $body Request to query extended diagnostics
+     *        information for a device.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getDeviceExtendedDiagnosticInformation(DeviceExtendedDiagnosticsRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::POST,
+            '/m2m/v1/devices/extendeddiagnostics/actions/list'
+        )
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceExtendedDiagnosticsResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * If the devices do not already exist in the account, this API resource adds them before activation.
      *
      * @param CarrierActivateRequest $body Request for activating a service on devices.
@@ -72,75 +149,6 @@ class DeviceManagementController extends BaseController
     public function activateServiceForDevices(CarrierActivateRequest $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/activate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceManagementResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Use this API if you want to manage some device settings before you are ready to activate service for
-     * the devices.
-     *
-     * @param AddDevicesRequest $body Devices to add.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function addDevices(AddDevicesRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/add')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(AddDevicesResult::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Sends a CarrierService callback message for each device in the request when the contact information
-     * has been changed, or if there was a problem and the change could not be completed.
-     *
-     * @param ContactInfoUpdateRequest $body Request to update contact information for devices.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateDevicesContactInformation(ContactInfoUpdateRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/contactinfo')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceManagementResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Sends a CarrierService callback message for each device in the request when the custom fields have
-     * been changed, or if there was a problem and the change could not be completed.
-     *
-     * @param CustomFieldsUpdateRequest $body Request to update custom field of devices.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateDevicesCustomFields(CustomFieldsUpdateRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/customFields')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
@@ -178,98 +186,6 @@ class DeviceManagementController extends BaseController
     }
 
     /**
-     * Use this API to remove unneeded devices from an account.
-     *
-     * @param DeleteDevicesRequest $body Devices to delete.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteDeactivatedDevices(DeleteDevicesRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/delete')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeleteDevicesResult::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns information about a single device or information about all devices that match the given
-     * parameters. Returned information includes device provisioning state, service plan, MDN, MIN, and IP
-     * address.
-     *
-     * @param AccountDeviceListRequest $body Device information query.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listDevicesInformation(AccountDeviceListRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/list')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(AccountDeviceListResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns a list of all 4G devices with an ICCID (SIM) that was not activated with the expected IMEI
-     * (hardware) during a specified time frame.
-     *
-     * @param DeviceMismatchListRequest $body Request to list devices with mismatched IMEIs and
-     *        ICCIDs.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listDevicesWithImeiIccidMismatch(DeviceMismatchListRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/list/imeiiccidmismatch')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceMismatchListResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Move active devices from one billing account to another within a customer profile.
-     *
-     * @param MoveDeviceRequest $body Request to move devices between accounts.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function moveDevicesWithinAccountsOfProfile(MoveDeviceRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/move')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceManagementResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Changes the provisioning state of one or more devices to a specified customer-defined service and
      * state.
      *
@@ -280,28 +196,6 @@ class DeviceManagementController extends BaseController
     public function updateDevicesState(GoToStateRequest $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/gotostate')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceManagementResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Changes the service plan for one or more devices.
-     *
-     * @param ServicePlanUpdateRequest $body Request to change device service plan.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function changeDevicesServicePlan(ServicePlanUpdateRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/plan')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
@@ -360,55 +254,6 @@ class DeviceManagementController extends BaseController
     }
 
     /**
-     * Checks whether specified devices are registered by the manufacturer with the Verizon network and are
-     * available to be activated.
-     *
-     * @param DeviceActivationRequest $body Request to check if devices can be activated or not.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function checkDevicesAvailabilityForActivation(DeviceActivationRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/availability/actions/list')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceManagementResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Each response includes a maximum of 500 records. To obtain more records, you can call the API
-     * multiple times, adjusting the earliest value each time to start where the previous request finished.
-     *
-     * @param DeviceConnectionListRequest $body Query to retrieve device connection history.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function retrieveDeviceConnectionHistory(DeviceConnectionListRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/m2m/v1/devices/connections/actions/listHistory'
-        )
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(ConnectionHistoryResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Changes or removes the CostCenterCode value or customer name and address (Primary Place of Use) for
      * one or more devices.
      *
@@ -427,56 +272,6 @@ class DeviceManagementController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(DeviceManagementResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns extended diagnostic information about a specified device, including connectivity,
-     * provisioning, billing and location status.
-     *
-     * @param DeviceExtendedDiagnosticsRequest $body Request to query extended diagnostics
-     *        information for a device.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getDeviceExtendedDiagnosticInformation(DeviceExtendedDiagnosticsRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::POST,
-            '/m2m/v1/devices/extendeddiagnostics/actions/list'
-        )
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceExtendedDiagnosticsResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns the provisioning history of a specified device during a specified time period.
-     *
-     * @param DeviceProvisioningHistoryListRequest $body Query to obtain device provisioning
-     *        history.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listDevicesProvisioningHistory(DeviceProvisioningHistoryListRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/history/actions/list')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(DeviceProvisioningHistoryListResult::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -523,6 +318,119 @@ class DeviceManagementController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * This corresponds to the M2M-MC SOAP interface, ```DeviceUploadService```.
+     *
+     * @param DeviceUploadRequest $body Device Upload Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deviceUpload(DeviceUploadRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/upload')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error Response', RestErrorResponseException::class))
+            ->type(RequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Use this API if you want to manage some device settings before you are ready to activate service for
+     * the devices.
+     *
+     * @param AddDevicesRequest $body Devices to add.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function addDevices(AddDevicesRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/add')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(AddDevicesResult::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Move active devices from one billing account to another within a customer profile.
+     *
+     * @param MoveDeviceRequest $body Request to move devices between accounts.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function moveDevicesWithinAccountsOfProfile(MoveDeviceRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/move')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Checks whether specified devices are registered by the manufacturer with the Verizon network and are
+     * available to be activated.
+     *
+     * @param DeviceActivationRequest $body Request to check if devices can be activated or not.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function checkDevicesAvailabilityForActivation(DeviceActivationRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/availability/actions/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Returns the provisioning history of a specified device during a specified time period.
+     *
+     * @param DeviceProvisioningHistoryListRequest $body Query to obtain device provisioning
+     *        history.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listDevicesProvisioningHistory(DeviceProvisioningHistoryListRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/history/actions/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceProvisioningHistoryListResult::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -603,28 +511,6 @@ class DeviceManagementController extends BaseController
     }
 
     /**
-     * This corresponds to the M2M-MC SOAP interface, ```DeviceUploadService```.
-     *
-     * @param DeviceUploadRequest $body Device Upload Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deviceUpload(DeviceUploadRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/upload')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error Response', RestErrorResponseException::class))
-            ->type(RequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Gets billed usage for for either multiple devices or an entire billing account.
      *
      * @param BilledusageListRequest $body Request to list devices with mismatched IMEIs and ICCIDs.
@@ -634,6 +520,120 @@ class DeviceManagementController extends BaseController
     public function billedUsageInfo(BilledusageListRequest $body): ApiResponse
     {
         $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/usage/actions/billedusage/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Sends a CarrierService callback message for each device in the request when the contact information
+     * has been changed, or if there was a problem and the change could not be completed.
+     *
+     * @param ContactInfoUpdateRequest $body Request to update contact information for devices.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateDevicesContactInformation(ContactInfoUpdateRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/contactinfo')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Sends a CarrierService callback message for each device in the request when the custom fields have
+     * been changed, or if there was a problem and the change could not be completed.
+     *
+     * @param CustomFieldsUpdateRequest $body Request to update custom field of devices.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function updateDevicesCustomFields(CustomFieldsUpdateRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/customFields')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceManagementResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Use this API to remove unneeded devices from an account.
+     *
+     * @param DeleteDevicesRequest $body Devices to delete.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteDeactivatedDevices(DeleteDevicesRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/delete')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeleteDevicesResult::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Returns a list of all 4G devices with an ICCID (SIM) that was not activated with the expected IMEI
+     * (hardware) during a specified time frame.
+     *
+     * @param DeviceMismatchListRequest $body Request to list devices with mismatched IMEIs and
+     *        ICCIDs.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listDevicesWithImeiIccidMismatch(DeviceMismatchListRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/actions/list/imeiiccidmismatch')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(DeviceMismatchListResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Changes the service plan for one or more devices.
+     *
+     * @param ServicePlanUpdateRequest $body Request to change device service plan.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function changeDevicesServicePlan(ServicePlanUpdateRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/m2m/v1/devices/actions/plan')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));

@@ -10,115 +10,13 @@ $campaignsV2Controller = $client->getCampaignsV2Controller();
 
 ## Methods
 
-* [Schedule Campaign Firmware Upgrade](../../doc/controllers/campaigns-v2.md#schedule-campaign-firmware-upgrade)
 * [Get Campaign Information](../../doc/controllers/campaigns-v2.md#get-campaign-information)
 * [Update Campaign Firmware Devices](../../doc/controllers/campaigns-v2.md#update-campaign-firmware-devices)
 * [Cancel Campaign](../../doc/controllers/campaigns-v2.md#cancel-campaign)
-* [Update Campaign Dates](../../doc/controllers/campaigns-v2.md#update-campaign-dates)
+* [Schedule Campaign Firmware Upgrade](../../doc/controllers/campaigns-v2.md#schedule-campaign-firmware-upgrade)
 * [Schedule File Upgrade](../../doc/controllers/campaigns-v2.md#schedule-file-upgrade)
+* [Update Campaign Dates](../../doc/controllers/campaigns-v2.md#update-campaign-dates)
 * [Schedule SW Upgrade Http Devices](../../doc/controllers/campaigns-v2.md#schedule-sw-upgrade-http-devices)
-
-
-# Schedule Campaign Firmware Upgrade
-
-This endpoint allows user to schedule a software upgrade.
-
-```php
-function scheduleCampaignFirmwareUpgrade(string $account, CampaignSoftwareUpgrade $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier. |
-| `body` | [`CampaignSoftwareUpgrade`](../../doc/models/campaign-software-upgrade.md) | Body, Required | Software upgrade information. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CampaignSoftware`](../../doc/models/campaign-software.md).
-
-## Example Usage
-
-```php
-$account = '0000123456-00001';
-
-$body = CampaignSoftwareUpgradeBuilder::init(
-    'FOTA_Verizon_Model-A_02To03_HF',
-    'FOTA_Verizon_Model-A_00To01_HF',
-    'FOTA_Verizon_Model-A_02To03_HF',
-    'HTTP',
-    DateTimeHelper::fromSimpleDateRequired('2020-08-21'),
-    DateTimeHelper::fromSimpleDateRequired('2020-08-22'),
-    [
-        '990013907835573',
-        '990013907884259'
-    ]
-)
-    ->campaignName('FOTA_Verizon_Upgrade')
-    ->downloadAfterDate(DateTimeHelper::fromSimpleDate('2020-08-21'))
-    ->downloadTimeWindowList(
-        [
-            V2TimeWindowBuilder::init(
-                20,
-                21
-            )->build()
-        ]
-    )
-    ->installAfterDate(DateTimeHelper::fromSimpleDate('2020-08-21'))
-    ->installTimeWindowList(
-        [
-            V2TimeWindowBuilder::init(
-                22,
-                23
-            )->build()
-        ]
-    )->build();
-
-$apiResponse = $campaignsV2Controller->scheduleCampaignFirmwareUpgrade(
-    $account,
-    $body
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "id": "60b5d639-ccdc-4db8-8824-069bd94c95bf",
-  "accountName": "0402196254-00001",
-  "campaignName": "FOTA_Verizon_Upgrade",
-  "softwareName": "FOTA_Verizon_Model-A_02To03_HF",
-  "distributionType": "HTTP",
-  "make": "Verizon",
-  "model": "Model-A",
-  "softwareFrom": "FOTA_Verizon_Model-A_00To01_HF",
-  "softwareTo": "FOTA_Verizon_Model-A_02To03_HF",
-  "startDate": "2020-08-21",
-  "endDate": "2020-08-22",
-  "downloadAfterDate": "2020-08-21",
-  "downloadTimeWindowList": [
-    {
-      "startTime": 20,
-      "endTime": 21
-    }
-  ],
-  "installAfterDate": "2020-08-21",
-  "installTimeWindowList": [
-    {
-      "startTime": 22,
-      "endTime": 23
-    }
-  ],
-  "status": "CampaignRequestPending"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
 
 
 # Get Campaign Information
@@ -294,6 +192,155 @@ $apiResponse = $campaignsV2Controller->cancelCampaign(
 | 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
 
 
+# Schedule Campaign Firmware Upgrade
+
+This endpoint allows user to schedule a software upgrade.
+
+```php
+function scheduleCampaignFirmwareUpgrade(string $account, CampaignSoftwareUpgrade $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier. |
+| `body` | [`CampaignSoftwareUpgrade`](../../doc/models/campaign-software-upgrade.md) | Body, Required | Software upgrade information. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CampaignSoftware`](../../doc/models/campaign-software.md).
+
+## Example Usage
+
+```php
+$account = '0000123456-00001';
+
+$body = CampaignSoftwareUpgradeBuilder::init(
+    'FOTA_Verizon_Model-A_02To03_HF',
+    'FOTA_Verizon_Model-A_00To01_HF',
+    'FOTA_Verizon_Model-A_02To03_HF',
+    'HTTP',
+    DateTimeHelper::fromSimpleDateRequired('2020-08-21'),
+    DateTimeHelper::fromSimpleDateRequired('2020-08-22'),
+    [
+        '990013907835573',
+        '990013907884259'
+    ]
+)
+    ->campaignName('FOTA_Verizon_Upgrade')
+    ->downloadAfterDate(DateTimeHelper::fromSimpleDate('2020-08-21'))
+    ->downloadTimeWindowList(
+        [
+            V2TimeWindowBuilder::init(
+                20,
+                21
+            )->build()
+        ]
+    )
+    ->installAfterDate(DateTimeHelper::fromSimpleDate('2020-08-21'))
+    ->installTimeWindowList(
+        [
+            V2TimeWindowBuilder::init(
+                22,
+                23
+            )->build()
+        ]
+    )->build();
+
+$apiResponse = $campaignsV2Controller->scheduleCampaignFirmwareUpgrade(
+    $account,
+    $body
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "id": "60b5d639-ccdc-4db8-8824-069bd94c95bf",
+  "accountName": "0402196254-00001",
+  "campaignName": "FOTA_Verizon_Upgrade",
+  "softwareName": "FOTA_Verizon_Model-A_02To03_HF",
+  "distributionType": "HTTP",
+  "make": "Verizon",
+  "model": "Model-A",
+  "softwareFrom": "FOTA_Verizon_Model-A_00To01_HF",
+  "softwareTo": "FOTA_Verizon_Model-A_02To03_HF",
+  "startDate": "2020-08-21",
+  "endDate": "2020-08-22",
+  "downloadAfterDate": "2020-08-21",
+  "downloadTimeWindowList": [
+    {
+      "startTime": 20,
+      "endTime": 21
+    }
+  ],
+  "installAfterDate": "2020-08-21",
+  "installTimeWindowList": [
+    {
+      "startTime": 22,
+      "endTime": 23
+    }
+  ],
+  "status": "CampaignRequestPending"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
+# Schedule File Upgrade
+
+You can upload configuration files and schedule them in a campaign to devices.
+
+```php
+function scheduleFileUpgrade(string $acc, UploadAndScheduleFileRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `acc` | `string` | Template, Required | Account identifier. |
+| `body` | [`UploadAndScheduleFileRequest`](../../doc/models/upload-and-schedule-file-request.md) | Body, Required | Device logging information. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`UploadAndScheduleFileResponse`](../../doc/models/upload-and-schedule-file-response.md).
+
+## Example Usage
+
+```php
+$acc = '0402196254-00001';
+
+$body = UploadAndScheduleFileRequestBuilder::init()
+    ->campaignName('FOTA_Verizon_Upgrade')
+    ->fileName('configfile-Verizon_VZW1_hello-world.txt')
+    ->fileVersion('1.0')
+    ->distributionType('HTTP')
+    ->startDate('2021-02-08')
+    ->endDate('2021-02-08')
+    ->downloadAfterDate('2021-02-08')
+    ->build();
+
+$apiResponse = $campaignsV2Controller->scheduleFileUpgrade(
+    $acc,
+    $body
+);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
+
+
 # Update Campaign Dates
 
 This endpoint allows user to change campaign dates and time windows. Fields which need to remain unchanged should be also provided.
@@ -394,53 +441,6 @@ $apiResponse = $campaignsV2Controller->updateCampaignDates(
   ],
   "status": "RequestPending"
 }
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV2ResultException`](../../doc/models/fota-v2-result-exception.md) |
-
-
-# Schedule File Upgrade
-
-You can upload configuration files and schedule them in a campaign to devices.
-
-```php
-function scheduleFileUpgrade(string $acc, UploadAndScheduleFileRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `body` | [`UploadAndScheduleFileRequest`](../../doc/models/upload-and-schedule-file-request.md) | Body, Required | Device logging information. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`UploadAndScheduleFileResponse`](../../doc/models/upload-and-schedule-file-response.md).
-
-## Example Usage
-
-```php
-$acc = '0402196254-00001';
-
-$body = UploadAndScheduleFileRequestBuilder::init()
-    ->campaignName('FOTA_Verizon_Upgrade')
-    ->fileName('configfile-Verizon_VZW1_hello-world.txt')
-    ->fileVersion('1.0')
-    ->distributionType('HTTP')
-    ->startDate('2021-02-08')
-    ->endDate('2021-02-08')
-    ->downloadAfterDate('2021-02-08')
-    ->build();
-
-$apiResponse = $campaignsV2Controller->scheduleFileUpgrade(
-    $acc,
-    $body
-);
 ```
 
 ## Errors

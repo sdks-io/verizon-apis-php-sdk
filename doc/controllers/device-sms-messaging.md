@@ -11,9 +11,9 @@ $deviceSMSMessagingController = $client->getDeviceSMSMessagingController();
 ## Methods
 
 * [Send an Sms Message](../../doc/controllers/device-sms-messaging.md#send-an-sms-message)
-* [Get Sms Messages](../../doc/controllers/device-sms-messaging.md#get-sms-messages)
 * [Start Sms Message Delivery](../../doc/controllers/device-sms-messaging.md#start-sms-message-delivery)
 * [List Sms Message History](../../doc/controllers/device-sms-messaging.md#list-sms-message-history)
+* [Get Sms Messages](../../doc/controllers/device-sms-messaging.md#get-sms-messages)
 
 
 # Send an Sms Message
@@ -48,45 +48,6 @@ $body = GIOSMSSendRequestBuilder::init(
 )->build();
 
 $apiResponse = $deviceSMSMessagingController->sendAnSmsMessage($body);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
-
-
-# Get Sms Messages
-
-Retrieves queued SMS messages sent by all M2M MC devices associated with an account.
-
-```php
-function getSmsMessages(string $accountName, ?string $next = null): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `accountName` | `string` | Template, Required | Numeric account name |
-| `next` | `?string` | Query, Optional | Continue the previous query from the pageUrl in Location Header |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`SmsMessagesResponse`](../../doc/models/sms-messages-response.md).
-
-## Example Usage
-
-```php
-$accountName = '0000123456-00001';
-
-$next = 'TheURLForTheNextQuery';
-
-$apiResponse = $deviceSMSMessagingController->getSmsMessages(
-    $accountName,
-    $next
-);
 ```
 
 ## Errors
@@ -158,6 +119,45 @@ $body = SMSEventHistoryRequestBuilder::init(
 )->build();
 
 $apiResponse = $deviceSMSMessagingController->listSmsMessageHistory($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+
+
+# Get Sms Messages
+
+Retrieves queued SMS messages sent by all M2M MC devices associated with an account.
+
+```php
+function getSmsMessages(string $accountName, ?string $next = null): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountName` | `string` | Template, Required | Numeric account name |
+| `next` | `?string` | Query, Optional | Continue the previous query from the pageUrl in Location Header |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`SmsMessagesResponse`](../../doc/models/sms-messages-response.md).
+
+## Example Usage
+
+```php
+$accountName = '0000123456-00001';
+
+$next = 'TheURLForTheNextQuery';
+
+$apiResponse = $deviceSMSMessagingController->getSmsMessages(
+    $accountName,
+    $next
+);
 ```
 
 ## Errors

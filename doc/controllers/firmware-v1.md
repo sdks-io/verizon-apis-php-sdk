@@ -10,61 +10,11 @@ $firmwareV1Controller = $client->getFirmwareV1Controller();
 
 ## Methods
 
-* [List Available Firmware](../../doc/controllers/firmware-v1.md#list-available-firmware)
 * [Schedule Firmware Upgrade](../../doc/controllers/firmware-v1.md#schedule-firmware-upgrade)
 * [List Firmware Upgrade Details](../../doc/controllers/firmware-v1.md#list-firmware-upgrade-details)
+* [List Available Firmware](../../doc/controllers/firmware-v1.md#list-available-firmware)
 * [Update Firmware Upgrade Devices](../../doc/controllers/firmware-v1.md#update-firmware-upgrade-devices)
 * [Cancel Scheduled Firmware Upgrade](../../doc/controllers/firmware-v1.md#cancel-scheduled-firmware-upgrade)
-
-
-# List Available Firmware
-
-Lists all device firmware images available for an account, based on the devices registered to that account.
-
-```php
-function listAvailableFirmware(string $account): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`Firmware[]`](../../doc/models/firmware.md).
-
-## Example Usage
-
-```php
-$account = '0242078689-00001';
-
-$apiResponse = $firmwareV1Controller->listAvailableFirmware($account);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "firmwareName": "FOTA_Verizon_Model-A_01To02_HF",
-    "participantName": "0402196254-00001",
-    "launchDate": "2018-04-01T16:03:00.000Z",
-    "releaseNote": "",
-    "model": "Model-A",
-    "make": "Verizon",
-    "fromVersion": "VerizonFirmwareVersion-01",
-    "toVersion": "VerizonFirmwareVersion-02"
-  }
-]
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
 
 
 # Schedule Firmware Upgrade
@@ -187,6 +137,56 @@ $apiResponse = $firmwareV1Controller->listFirmwareUpgradeDetails(
     }
   ]
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+
+
+# List Available Firmware
+
+Lists all device firmware images available for an account, based on the devices registered to that account.
+
+```php
+function listAvailableFirmware(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`Firmware[]`](../../doc/models/firmware.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$apiResponse = $firmwareV1Controller->listAvailableFirmware($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "firmwareName": "FOTA_Verizon_Model-A_01To02_HF",
+    "participantName": "0402196254-00001",
+    "launchDate": "2018-04-01T16:03:00.000Z",
+    "releaseNote": "",
+    "model": "Model-A",
+    "make": "Verizon",
+    "fromVersion": "VerizonFirmwareVersion-01",
+    "toVersion": "VerizonFirmwareVersion-02"
+  }
+]
 ```
 
 ## Errors

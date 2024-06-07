@@ -51,30 +51,6 @@ class SMSController extends BaseController
     }
 
     /**
-     * When HTTP status is 202, a URL will be returned in the Location header of the form
-     * /sms/{aname}/history?next={token}. This URL can be used to request the next set of messages.
-     *
-     * @param string $aname Account name.
-     * @param int|null $next Continue the previous query from the URL in Location Header.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listDevicesSMSMessages(string $aname, ?int $next = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/sms/{aname}/history')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(SMSMessagesQueryResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Tells the ThingSpace Platform to start sending mobile-originated SMS messages through the
      * EnhancedConnectivityService callback service. SMS messages from devices are queued until they are
      * retrieved by your application, either by callback or synchronously with GET
@@ -94,6 +70,30 @@ class SMSController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(ConnectivityManagementSuccessResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * When HTTP status is 202, a URL will be returned in the Location header of the form
+     * /sms/{aname}/history?next={token}. This URL can be used to request the next set of messages.
+     *
+     * @param string $aname Account name.
+     * @param int|null $next Continue the previous query from the URL in Location Header.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listDevicesSMSMessages(string $aname, ?int $next = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/sms/{aname}/history')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('aname', $aname), QueryParam::init('next', $next));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(SMSMessagesQueryResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
