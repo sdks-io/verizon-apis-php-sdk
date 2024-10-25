@@ -57,14 +57,29 @@ class OauthScopeThingspaceOauthEnum
 
     public const TS_APPLICATION_RO = 'ts.application.ro';
 
+    /**
+     * Read access to the discovery service
+     */
     public const EDGEDISCOVERYREAD = 'edge:discovery:read';
 
+    /**
+     * Read access to the service profile service
+     */
     public const EDGESERVICEPROFILEREAD = 'edge:serviceprofile:read';
 
+    /**
+     * Write access to the service profile service
+     */
     public const EDGESERVICEPROFILEWRITE = 'edge:serviceprofile:write';
 
+    /**
+     * Read access to the service registry service
+     */
     public const EDGESERVICEREGISTRYREAD = 'edge:serviceregistry:read';
 
+    /**
+     * Write access to the service registry service
+     */
     public const EDGESERVICEREGISTRYWRITE = 'edge:serviceregistry:write';
 
     /**

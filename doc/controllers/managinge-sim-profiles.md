@@ -10,27 +10,31 @@ $managingeSIMProfilesController = $client->getManagingeSIMProfilesController();
 
 ## Methods
 
-* [Enable a Device Profile for Download](../../doc/controllers/managinge-sim-profiles.md#enable-a-device-profile-for-download)
-* [Deactivate a Device Profile](../../doc/controllers/managinge-sim-profiles.md#deactivate-a-device-profile)
-* [Download a Device Profile](../../doc/controllers/managinge-sim-profiles.md#download-a-device-profile)
-* [Delete a Device Profile](../../doc/controllers/managinge-sim-profiles.md#delete-a-device-profile)
+* [Resume Profile](../../doc/controllers/managinge-sim-profiles.md#resume-profile)
+* [Profile Suspend](../../doc/controllers/managinge-sim-profiles.md#profile-suspend)
+* [Device Suspend](../../doc/controllers/managinge-sim-profiles.md#device-suspend)
+* [Set Fallback](../../doc/controllers/managinge-sim-profiles.md#set-fallback)
 * [Activate a Device Profile](../../doc/controllers/managinge-sim-profiles.md#activate-a-device-profile)
 * [Enable a Device Profile](../../doc/controllers/managinge-sim-profiles.md#enable-a-device-profile)
+* [Deactivate a Device Profile](../../doc/controllers/managinge-sim-profiles.md#deactivate-a-device-profile)
+* [Enable a Device Profile for Download](../../doc/controllers/managinge-sim-profiles.md#enable-a-device-profile-for-download)
+* [Download a Device Profile](../../doc/controllers/managinge-sim-profiles.md#download-a-device-profile)
+* [Delete a Device Profile](../../doc/controllers/managinge-sim-profiles.md#delete-a-device-profile)
 
 
-# Enable a Device Profile for Download
+# Resume Profile
 
-Enable the Global IoT Orchestration device profile for download.
+Resume service to a device with either a lead or local profile.
 
 ```php
-function enableADeviceProfileForDownload(DeviceProfileRequest $body): ApiResponse
+function resumeProfile(GIOProfileRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`DeviceProfileRequest`](../../doc/models/device-profile-request.md) | Body, Required | Device Profile Query |
+| `body` | [`GIOProfileRequest`](../../doc/models/gio-profile-request.md) | Body, Required | Device Profile Query |
 
 ## Response Type
 
@@ -39,12 +43,17 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = DeviceProfileRequestBuilder::init()
-    ->accountName('0000123456-00001')
+$body = GIOProfileRequestBuilder::init(
+    [
+        GIODeviceListBuilder::init()->build()
+    ],
+    '0000123456-00001'
+)
+    ->mdnZipCode('12345')
     ->servicePlan('service plan name')
     ->build();
 
-$apiResponse = $managingESIMProfilesController->enableADeviceProfileForDownload($body);
+$apiResponse = $managingESIMProfilesController->resumeProfile($body);
 ```
 
 ## Errors
@@ -54,19 +63,19 @@ $apiResponse = $managingESIMProfilesController->enableADeviceProfileForDownload(
 | Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
 
 
-# Deactivate a Device Profile
+# Profile Suspend
 
-Deactivate the lead or local profile. **Note:** to reactivate the profile, use the **Activate** endpoint above.
+Suspend a device's Global profile.
 
 ```php
-function deactivateADeviceProfile(GIODeactivateDeviceProfileRequest $body): ApiResponse
+function profileSuspend(GIOProfileRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`GIODeactivateDeviceProfileRequest`](../../doc/models/gio-deactivate-device-profile-request.md) | Body, Required | Device Profile Query |
+| `body` | [`GIOProfileRequest`](../../doc/models/gio-profile-request.md) | Body, Required | Device Profile Query |
 
 ## Response Type
 
@@ -75,14 +84,17 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = GIODeactivateDeviceProfileRequestBuilder::init()
-    ->accountName('0000123456-00001')
+$body = GIOProfileRequestBuilder::init(
+    [
+        GIODeviceListBuilder::init()->build()
+    ],
+    '0000123456-00001'
+)
+    ->mdnZipCode('12345')
     ->servicePlan('service plan name')
-    ->etfWaiver(false)
-    ->reasonCode('FF')
     ->build();
 
-$apiResponse = $managingESIMProfilesController->deactivateADeviceProfile($body);
+$apiResponse = $managingESIMProfilesController->profileSuspend($body);
 ```
 
 ## Errors
@@ -92,19 +104,19 @@ $apiResponse = $managingESIMProfilesController->deactivateADeviceProfile($body);
 | Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
 
 
-# Download a Device Profile
+# Device Suspend
 
-Download a Global IoT Orchestration device profile.
+Suspend all service to an eUICC device, including the lead and local profile.
 
 ```php
-function downloadADeviceProfile(DeviceProfileRequest $body): ApiResponse
+function deviceSuspend(GIOProfileRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`DeviceProfileRequest`](../../doc/models/device-profile-request.md) | Body, Required | Device Profile Query |
+| `body` | [`GIOProfileRequest`](../../doc/models/gio-profile-request.md) | Body, Required | Device Profile Query |
 
 ## Response Type
 
@@ -113,12 +125,17 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = DeviceProfileRequestBuilder::init()
-    ->accountName('0000123456-00001')
+$body = GIOProfileRequestBuilder::init(
+    [
+        GIODeviceListBuilder::init()->build()
+    ],
+    '0000123456-00001'
+)
+    ->mdnZipCode('12345')
     ->servicePlan('service plan name')
     ->build();
 
-$apiResponse = $managingESIMProfilesController->downloadADeviceProfile($body);
+$apiResponse = $managingESIMProfilesController->deviceSuspend($body);
 ```
 
 ## Errors
@@ -128,19 +145,19 @@ $apiResponse = $managingESIMProfilesController->downloadADeviceProfile($body);
 | Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
 
 
-# Delete a Device Profile
+# Set Fallback
 
-Delete a device profile for Global IoT Orchestration. **Note:** the profile must be deactivated first!
+Enable a fallback profile to be set.
 
 ```php
-function deleteADeviceProfile(DeviceProfileRequest $body): ApiResponse
+function setFallback(FallBack $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`DeviceProfileRequest`](../../doc/models/device-profile-request.md) | Body, Required | Device Profile Query |
+| `body` | [`FallBack`](../../doc/models/fall-back.md) | Body, Required | Set the fallback attributes to allow a fallback profile to be activated. |
 
 ## Response Type
 
@@ -149,12 +166,9 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = DeviceProfileRequestBuilder::init()
-    ->accountName('0000123456-00001')
-    ->servicePlan('service plan name')
-    ->build();
+$body = FallBackBuilder::init()->build();
 
-$apiResponse = $managingESIMProfilesController->deleteADeviceProfile($body);
+$apiResponse = $managingESIMProfilesController->setFallback($body);
 ```
 
 ## Errors
@@ -232,6 +246,152 @@ $body = DeviceProfileRequestBuilder::init()
     ->build();
 
 $apiResponse = $managingESIMProfilesController->enableADeviceProfile($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+
+
+# Deactivate a Device Profile
+
+Deactivate the lead or local profile. **Note:** to reactivate the profile, use the **Activate** endpoint above.
+
+```php
+function deactivateADeviceProfile(GIODeactivateDeviceProfileRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`GIODeactivateDeviceProfileRequest`](../../doc/models/gio-deactivate-device-profile-request.md) | Body, Required | Device Profile Query |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GIORequestResponse`](../../doc/models/gio-request-response.md).
+
+## Example Usage
+
+```php
+$body = GIODeactivateDeviceProfileRequestBuilder::init()
+    ->accountName('0000123456-00001')
+    ->servicePlan('service plan name')
+    ->etfWaiver(false)
+    ->reasonCode('FF')
+    ->build();
+
+$apiResponse = $managingESIMProfilesController->deactivateADeviceProfile($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+
+
+# Enable a Device Profile for Download
+
+Enable the Global IoT Orchestration device profile for download.
+
+```php
+function enableADeviceProfileForDownload(DeviceProfileRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceProfileRequest`](../../doc/models/device-profile-request.md) | Body, Required | Device Profile Query |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GIORequestResponse`](../../doc/models/gio-request-response.md).
+
+## Example Usage
+
+```php
+$body = DeviceProfileRequestBuilder::init()
+    ->accountName('0000123456-00001')
+    ->servicePlan('service plan name')
+    ->build();
+
+$apiResponse = $managingESIMProfilesController->enableADeviceProfileForDownload($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+
+
+# Download a Device Profile
+
+Download a Global IoT Orchestration device profile.
+
+```php
+function downloadADeviceProfile(DeviceProfileRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceProfileRequest`](../../doc/models/device-profile-request.md) | Body, Required | Device Profile Query |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GIORequestResponse`](../../doc/models/gio-request-response.md).
+
+## Example Usage
+
+```php
+$body = DeviceProfileRequestBuilder::init()
+    ->accountName('0000123456-00001')
+    ->servicePlan('service plan name')
+    ->build();
+
+$apiResponse = $managingESIMProfilesController->downloadADeviceProfile($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Error response | [`GIORestErrorResponseException`](../../doc/models/gio-rest-error-response-exception.md) |
+
+
+# Delete a Device Profile
+
+Delete a device profile for Global IoT Orchestration. **Note:** the profile must be deactivated first!
+
+```php
+function deleteADeviceProfile(DeviceProfileRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceProfileRequest`](../../doc/models/device-profile-request.md) | Body, Required | Device Profile Query |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GIORequestResponse`](../../doc/models/gio-request-response.md).
+
+## Example Usage
+
+```php
+$body = DeviceProfileRequestBuilder::init()
+    ->accountName('0000123456-00001')
+    ->servicePlan('service plan name')
+    ->build();
+
+$apiResponse = $managingESIMProfilesController->deleteADeviceProfile($body);
 ```
 
 ## Errors

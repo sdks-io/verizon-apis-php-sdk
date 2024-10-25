@@ -10,113 +10,11 @@ $softwareManagementLicensesV1Controller = $client->getSoftwareManagementLicenses
 
 ## Methods
 
-* [Delete List of Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#delete-list-of-licenses-to-remove)
-* [List Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#list-licenses-to-remove)
 * [Assign Licenses to Devices](../../doc/controllers/software-management-licenses-v1.md#assign-licenses-to-devices)
 * [Remove Licenses From Devices](../../doc/controllers/software-management-licenses-v1.md#remove-licenses-from-devices)
 * [Create List of Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#create-list-of-licenses-to-remove)
-
-
-# Delete List of Licenses to Remove
-
-**This endpoint is deprecated.**
-
-Deletes the entire list of cancellation candidate devices.
-
-```php
-function deleteListOfLicensesToRemove(string $account): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV1SuccessResult`](../../doc/models/fota-v1-success-result.md).
-
-## Example Usage
-
-```php
-$account = '0242078689-00001';
-
-$apiResponse = $softwareManagementLicensesV1Controller->deleteListOfLicensesToRemove($account);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "success": true
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
-
-
-# List Licenses to Remove
-
-**This endpoint is deprecated.**
-
-Returns a list of devices from which licenses will be removed if the number of MRC licenses becomes less than the number of assigned licenses.
-
-```php
-function listLicensesToRemove(string $account, string $startIndex): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-| `startIndex` | `string` | Template, Required | The zero-based number of the first record to return. Set startIndex=0 for the first request. If there are more than 1,000 devices in the response, set startIndex=1000 for the second request, 2000 for the third request, etc. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V1ListOfLicensesToRemove`](../../doc/models/v1-list-of-licenses-to-remove.md).
-
-## Example Usage
-
-```php
-$account = '0242078689-00001';
-
-$startIndex = 'startIndex4';
-
-$apiResponse = $softwareManagementLicensesV1Controller->listLicensesToRemove(
-    $account,
-    $startIndex
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "count": 6,
-  "hasMoreData": false,
-  "updateTime": "2018-03-22T12:06:06.000Z",
-  "deviceList": [
-    "990003425730535",
-    "990000473475989",
-    "990005733420535",
-    "990000347475989",
-    "990007303425535",
-    "990007590473489"
-  ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+* [Delete List of Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#delete-list-of-licenses-to-remove)
+* [List Licenses to Remove](../../doc/controllers/software-management-licenses-v1.md#list-licenses-to-remove)
 
 
 # Assign Licenses to Devices
@@ -310,6 +208,108 @@ $apiResponse = $softwareManagementLicensesV1Controller->createListOfLicensesToRe
   "deviceList": [
     "900000000000001",
     "900000000000999"
+  ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+
+
+# Delete List of Licenses to Remove
+
+**This endpoint is deprecated.**
+
+Deletes the entire list of cancellation candidate devices.
+
+```php
+function deleteListOfLicensesToRemove(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV1SuccessResult`](../../doc/models/fota-v1-success-result.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$apiResponse = $softwareManagementLicensesV1Controller->deleteListOfLicensesToRemove($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+
+
+# List Licenses to Remove
+
+**This endpoint is deprecated.**
+
+Returns a list of devices from which licenses will be removed if the number of MRC licenses becomes less than the number of assigned licenses.
+
+```php
+function listLicensesToRemove(string $account, string $startIndex): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+| `startIndex` | `string` | Template, Required | The zero-based number of the first record to return. Set startIndex=0 for the first request. If there are more than 1,000 devices in the response, set startIndex=1000 for the second request, 2000 for the third request, etc. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V1ListOfLicensesToRemove`](../../doc/models/v1-list-of-licenses-to-remove.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$startIndex = 'startIndex4';
+
+$apiResponse = $softwareManagementLicensesV1Controller->listLicensesToRemove(
+    $account,
+    $startIndex
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "count": 6,
+  "hasMoreData": false,
+  "updateTime": "2018-03-22T12:06:06.000Z",
+  "deviceList": [
+    "990003425730535",
+    "990000473475989",
+    "990005733420535",
+    "990000347475989",
+    "990007303425535",
+    "990007590473489"
   ]
 }
 ```

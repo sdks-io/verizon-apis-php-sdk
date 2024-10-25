@@ -84,6 +84,16 @@ class Campaign implements \JsonSerializable
     private $status;
 
     /**
+     * @var bool
+     */
+    private $autoAssignLicenseFlag;
+
+    /**
+     * @var bool
+     */
+    private $autoAddDevicesFlag;
+
+    /**
      * @param string $id
      * @param string $accountName
      * @param string $protocol
@@ -92,6 +102,8 @@ class Campaign implements \JsonSerializable
      * @param \DateTime $startDate
      * @param \DateTime $endDate
      * @param string $status
+     * @param bool $autoAssignLicenseFlag
+     * @param bool $autoAddDevicesFlag
      */
     public function __construct(
         string $id,
@@ -101,7 +113,9 @@ class Campaign implements \JsonSerializable
         string $model,
         \DateTime $startDate,
         \DateTime $endDate,
-        string $status
+        string $status,
+        bool $autoAssignLicenseFlag,
+        bool $autoAddDevicesFlag
     ) {
         $this->id = $id;
         $this->accountName = $accountName;
@@ -111,6 +125,8 @@ class Campaign implements \JsonSerializable
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->status = $status;
+        $this->autoAssignLicenseFlag = $autoAssignLicenseFlag;
+        $this->autoAddDevicesFlag = $autoAddDevicesFlag;
     }
 
     /**
@@ -388,6 +404,54 @@ class Campaign implements \JsonSerializable
     }
 
     /**
+     * Returns Auto Assign License Flag.
+     * Any device included in the device list which does not have a license will automatically be assigned
+     * a FOTA license, assuming there are enough FOTA licenses available, when set to true.
+     */
+    public function getAutoAssignLicenseFlag(): bool
+    {
+        return $this->autoAssignLicenseFlag;
+    }
+
+    /**
+     * Sets Auto Assign License Flag.
+     * Any device included in the device list which does not have a license will automatically be assigned
+     * a FOTA license, assuming there are enough FOTA licenses available, when set to true.
+     *
+     * @required
+     * @maps autoAssignLicenseFlag
+     */
+    public function setAutoAssignLicenseFlag(bool $autoAssignLicenseFlag): void
+    {
+        $this->autoAssignLicenseFlag = $autoAssignLicenseFlag;
+    }
+
+    /**
+     * Returns Auto Add Devices Flag.
+     * Beyond the devices included on the device list, any other device(s) which matches the eligibility
+     * criteria (same make, model, current firmware, protocol, billing account) will automatically be added
+     * to the campaign list during the life of the campaign when set to true.
+     */
+    public function getAutoAddDevicesFlag(): bool
+    {
+        return $this->autoAddDevicesFlag;
+    }
+
+    /**
+     * Sets Auto Add Devices Flag.
+     * Beyond the devices included on the device list, any other device(s) which matches the eligibility
+     * criteria (same make, model, current firmware, protocol, billing account) will automatically be added
+     * to the campaign list during the life of the campaign when set to true.
+     *
+     * @required
+     * @maps autoAddDevicesFlag
+     */
+    public function setAutoAddDevicesFlag(bool $autoAddDevicesFlag): void
+    {
+        $this->autoAddDevicesFlag = $autoAddDevicesFlag;
+    }
+
+    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -422,6 +486,8 @@ class Campaign implements \JsonSerializable
             $json['campaignTimeWindowList'] = $this->campaignTimeWindowList;
         }
         $json['status']                     = $this->status;
+        $json['autoAssignLicenseFlag']      = $this->autoAssignLicenseFlag;
+        $json['autoAddDevicesFlag']         = $this->autoAddDevicesFlag;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

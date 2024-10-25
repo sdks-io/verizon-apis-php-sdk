@@ -3,34 +3,28 @@
     "description": "Use the Verizon API for connectivity management, device diagnostics, device location, edge discovery service, edge performance, software management and much more.",
     "type": "library",
     "keywords": [
-        "Verizon",
-        "SDK",
         "API",
+        "SDK",
+        "Verizon",
         "Thingspace"
     ],
-    "homepage": "https://www.verizon.com/business/5g-edge-portal/api-documentation.html",
+    "homepage": "https://www.verizon.com/business/5g-edge-portal",
     "license": [
         "MIT"
     ],
     "authors": [
         {
             "name": "developer-sdksio",
-            "email": "developer+sdksio@apimatic.io",
-            "homepage": "https://app.apimatic.io/",
-            "role": "developer"
+            "email": "developer+sdksio@apimatic.io"
         }
     ],
-    "support": {
-        "email": "developer+sdksio@apimatic.io",
-        "issues": "https://github.com/sdks-io/verizon-apis-php-sdk/issues",
-        "source": "https://github.com/sdks-io/verizon-apis-php-sdk"
-    },
+    "support": {},
     "require": {
         "php": "^7.2 || ^8.0",
         "ext-json": "*",
         "apimatic/unirest-php": "^4.0.0",
         "apimatic/core-interfaces": "~0.1.5",
-        "apimatic/core": "~0.3.9"
+        "apimatic/core": "~0.3.11"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5",
@@ -49,7 +43,7 @@
     "scripts": {
         "lint-src": "phpcs --standard=phpcs-ruleset.xml src/",
         "lint-src-fix": "phpcbf --standard=phpcs-ruleset.xml src/",
-        "analyze": "phan --allow-polyfill-parser",
+        "analyze": "phan --allow-polyfill-parser -p",
         "lint": [
             "@lint-src"
         ]

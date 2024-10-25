@@ -18,6 +18,10 @@ use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
 use VerizonLib\Exceptions\GIORestErrorResponseException;
 use VerizonLib\Http\ApiResponse;
+use VerizonLib\Models\AccountDetails;
+use VerizonLib\Models\AggregateUsage;
+use VerizonLib\Models\DailyUsage;
+use VerizonLib\Models\DailyUsageResponse;
 use VerizonLib\Models\GetDeviceListWithProfilesRequest;
 use VerizonLib\Models\GIORequestResponse;
 use VerizonLib\Models\ProvhistoryRequest;
@@ -27,7 +31,117 @@ use VerizonLib\Server;
 class DeviceActionsController extends BaseController
 {
     /**
-     * Retreive the provisioning history of a specific device or devices.
+     * Retrieve the aggregate usage for a device or a number of devices.
+     *
+     * @param AggregateUsage $body
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function aggregateUsage(AggregateUsage $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/usage/actions/list/aggregate')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(GIORequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Retrieve the daily usage for a device, for a specified period of time, segmented by day
+     *
+     * @param DailyUsage $body
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function dailyUsage(DailyUsage $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/v1/devices/usage/actions/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(DailyUsageResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Retrieve all of the service plans, features and carriers associated with the account specified.
+     *
+     * @param string $accountName
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function servicePlanList(string $accountName): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/plans/{accountName}')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('accountName', $accountName));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(AccountDetails::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Retrieve all of the service plans, features and carriers associated with the account specified.
+     *
+     * @param string $accountName
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function accountInformation(string $accountName): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/v1/accounts/{accountName}')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('accountName', $accountName));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(AccountDetails::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Allows the profile to fetch the complete device list. This works with Verizon US and Global profiles.
+     *
+     * @param GetDeviceListWithProfilesRequest $body Device Profile Query
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function retrieveTheGlobalDeviceList(GetDeviceListWithProfilesRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v2/devices/actions/list')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
+            ->type(GIORequestResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Retrieve the provisioning history of a specific device or devices.
      *
      * @param ProvhistoryRequest $body Device Provisioning History
      *
@@ -72,28 +186,6 @@ class DeviceActionsController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
             ->type(StatusResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Allows the profile to fetch the complete device list. This works with Verizon US and Global profiles.
-     *
-     * @param GetDeviceListWithProfilesRequest $body Device Profile Query
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function retrieveTheGlobalDeviceList(GetDeviceListWithProfilesRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v2/devices/actions/list')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Error response', GIORestErrorResponseException::class))
-            ->type(GIORequestResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

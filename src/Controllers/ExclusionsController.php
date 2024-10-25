@@ -19,13 +19,84 @@ use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
 use VerizonLib\Exceptions\DeviceLocationResultException;
 use VerizonLib\Http\ApiResponse;
+use VerizonLib\Models\AccountConsentCreate;
+use VerizonLib\Models\AccountConsentUpdate;
 use VerizonLib\Models\ConsentRequest;
+use VerizonLib\Models\ConsentTransactionID;
 use VerizonLib\Models\DeviceLocationSuccessResult;
 use VerizonLib\Models\DevicesConsentResult;
+use VerizonLib\Models\GetAccountDeviceConsent;
 use VerizonLib\Server;
 
 class ExclusionsController extends BaseController
 {
+    /**
+     * Get the consent settings for the entire account or device list in an account.
+     *
+     * @param string $accountName The numeric name of the account.
+     * @param string|null $deviceId The IMEI of the device being queried
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function devicesLocationGetConsentAsync(string $accountName, ?string $deviceId = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/devicelocations/action/consents')
+            ->server(Server::DEVICE_LOCATION)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(QueryParam::init('accountName', $accountName), QueryParam::init('deviceId', $deviceId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
+            ->type(GetAccountDeviceConsent::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Create a consent record to use location services as an asynchronous request.
+     *
+     * @param AccountConsentCreate|null $body Account details to create a consent record.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function devicesLocationGiveConsentAsync(?AccountConsentCreate $body = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/devicelocations/action/consents')
+            ->server(Server::DEVICE_LOCATION)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
+            ->type(ConsentTransactionID::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Update the location services consent record for an entire account.
+     *
+     * @param AccountConsentUpdate|null $body Account details to update a consent record.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function devicesLocationUpdateConsent(?AccountConsentUpdate $body = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/devicelocations/action/consents')
+            ->server(Server::DEVICE_LOCATION)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
+            ->type(ConsentTransactionID::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
     /**
      * This consents endpoint sets a new exclusion list.
      *
@@ -78,17 +149,20 @@ class ExclusionsController extends BaseController
     /**
      * This consents endpoint retrieves a list of excluded devices in an account.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      * @param string $startIndex Zero-based number of the first record to return.
      *
      * @return ApiResponse Response from the API call
      */
-    public function listExcludedDevices(string $account, string $startIndex): ApiResponse
+    public function listExcludedDevices(string $accountName, string $startIndex): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/consents/{account}/index/{startIndex}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/consents/{accountName}/index/{startIndex}')
             ->server(Server::DEVICE_LOCATION)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
+            ->parameters(
+                TemplateParam::init('accountName', $accountName),
+                TemplateParam::init('startIndex', $startIndex)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))

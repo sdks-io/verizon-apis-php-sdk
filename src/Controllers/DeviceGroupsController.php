@@ -29,6 +29,29 @@ use VerizonLib\Server;
 class DeviceGroupsController extends BaseController
 {
     /**
+     * Create a new device group and optionally add devices to the group. Device groups can make it easier
+     * to manage similar devices and to get reports on their usage.
+     *
+     * @param CreateDeviceGroupRequest $body A request to create a new device group.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function createDeviceGroup(CreateDeviceGroupRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/groups')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(ConnectivityManagementSuccessResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Returns a list of all device groups in a specified account.
      *
      * @param string $aname Account name.
@@ -45,30 +68,6 @@ class DeviceGroupsController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(DeviceGroup::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Deletes a device group from the account. Devices in the group are moved to the default device group
-     * and are not deleted from the account.
-     *
-     * @param string $aname Account name.
-     * @param string $gname Group name.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteDeviceGroup(string $aname, string $gname): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/groups/{aname}/name/{gname}')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('gname', $gname));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(ConnectivityManagementSuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -134,19 +133,20 @@ class DeviceGroupsController extends BaseController
     }
 
     /**
-     * Create a new device group and optionally add devices to the group. Device groups can make it easier
-     * to manage similar devices and to get reports on their usage.
+     * Deletes a device group from the account. Devices in the group are moved to the default device group
+     * and are not deleted from the account.
      *
-     * @param CreateDeviceGroupRequest $body A request to create a new device group.
+     * @param string $aname Account name.
+     * @param string $gname Group name.
      *
      * @return ApiResponse Response from the API call
      */
-    public function createDeviceGroup(CreateDeviceGroupRequest $body): ApiResponse
+    public function deleteDeviceGroup(string $aname, string $gname): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/groups')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/groups/{aname}/name/{gname}')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+            ->parameters(TemplateParam::init('aname', $aname), TemplateParam::init('gname', $gname));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))

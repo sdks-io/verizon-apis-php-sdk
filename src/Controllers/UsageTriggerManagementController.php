@@ -27,6 +27,30 @@ use VerizonLib\Server;
 class UsageTriggerManagementController extends BaseController
 {
     /**
+     * Create a new usage trigger, which will send an alert when the number of device location service
+     * transactions reaches a specified percentage of the monthly subscription amount.
+     *
+     *
+     * @param UsageTriggerAddRequest|null $body License assignment.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function createNewTrigger(?UsageTriggerAddRequest $body = null): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers')
+            ->server(Server::SUBSCRIPTION_SERVER)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
+            ->type(UsageTriggerResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Update an existing usage trigger
      *
      *
@@ -78,30 +102,6 @@ class UsageTriggerManagementController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
             ->type(DeviceLocationSuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Create a new usage trigger, which will send an alert when the number of device location service
-     * transactions reaches a specified percentage of the monthly subscription amount.
-     *
-     *
-     * @param UsageTriggerAddRequest|null $body License assignment.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function createNewTrigger(?UsageTriggerAddRequest $body = null): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/usage/triggers')
-            ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
-            ->type(UsageTriggerResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

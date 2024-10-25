@@ -30,28 +30,6 @@ use VerizonLib\Server;
 class BillingController extends BaseController
 {
     /**
-     * Activates a managed billing service relationship between a managed account and the primary account.
-     *
-     * @param ManagedAccountsProvisionRequest $body Service name and list of accounts to add
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function managedAccountAction(ManagedAccountsProvisionRequest $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/provision')
-            ->server(Server::SUBSCRIPTION_SERVER)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
-            ->type(ManagedAccountsProvisionResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * This endpoint allows user to add managed accounts to a primary account.
      *
      *
@@ -69,6 +47,28 @@ class BillingController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
             ->type(ManagedAccountsAddResponse::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Activates a managed billing service relationship between a managed account and the primary account.
+     *
+     * @param ManagedAccountsProvisionRequest $body Service name and list of accounts to add
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function managedAccountAction(ManagedAccountsProvisionRequest $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/managedaccounts/actions/provision')
+            ->server(Server::SUBSCRIPTION_SERVER)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error', DeviceLocationResultException::class))
+            ->type(ManagedAccountsProvisionResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

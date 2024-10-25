@@ -93,6 +93,48 @@ class ThingspaceOauthCredentialsBuilder
         return $this;
     }
 
+    /**
+     * Setter for clock skew time in seconds applied while checking the OAuth Token expiry.
+     *
+     * @param int $oauthClockSkew
+     *
+     * @return $this
+     */
+    public function oauthClockSkew(int $oauthClockSkew): self
+    {
+        $this->config['thingspace_oauth-ClockSkew'] = $oauthClockSkew;
+        return $this;
+    }
+
+    /**
+     * Setter for the OAuthTokenProvider callable with 2 arguments. Arg1 will be the last OAuthToken
+     * instance, while Arg2 will be an instance of ThingspaceOauthManager. The return type of callable
+     * should be an instance of OAuthToken model.
+     *
+     * @param callable(OAuthToken, ThingspaceOauthManager): OAuthToken $oauthTokenProvider
+     *
+     * @return $this
+     */
+    public function oauthTokenProvider(callable $oauthTokenProvider): self
+    {
+        $this->config['thingspace_oauth-TokenProvider'] = $oauthTokenProvider;
+        return $this;
+    }
+
+    /**
+     * Setter for the OAuthOnTokenUpdate callable with the updated OAuthToken instance as the only argument.
+     * Here the return type of callable should be void
+     *
+     * @param callable(OAuthToken): void $oauthOnTokenUpdate
+     *
+     * @return $this
+     */
+    public function oauthOnTokenUpdate(callable $oauthOnTokenUpdate): self
+    {
+        $this->config['thingspace_oauth-OnTokenUpdate'] = $oauthOnTokenUpdate;
+        return $this;
+    }
+
     public function getConfiguration(): array
     {
         return CoreHelper::clone($this->config);

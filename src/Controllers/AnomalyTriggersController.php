@@ -27,6 +27,37 @@ use VerizonLib\Server;
 class AnomalyTriggersController extends BaseController
 {
     /**
+     * This corresponds to the M2M-MC SOAP interface, ```GetTriggers```.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAnomalyDetectionTriggers(): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/triggers')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Bad request', IntelligenceResultException::class))
+            ->throwErrorOn('401', ErrorType::init('Unauthorized', IntelligenceResultException::class))
+            ->throwErrorOn('403', ErrorType::init('Forbidden', IntelligenceResultException::class))
+            ->throwErrorOn(
+                '404',
+                ErrorType::init('Not Found / Does not exist', IntelligenceResultException::class)
+            )
+            ->throwErrorOn(
+                '406',
+                ErrorType::init('Format / Request Unacceptable', IntelligenceResultException::class)
+            )
+            ->throwErrorOn('429', ErrorType::init('Too many requests', IntelligenceResultException::class))
+            ->throwErrorOn('0', ErrorType::init('Error response', IntelligenceResultException::class))
+            ->type(GetTriggerResponseList::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * This corresponds to the M2M-MC SOAP interface, ```UpdateTriggerRequest```.
      *
      * @param UpdateTriggerRequest $body Update Trigger Request
@@ -107,37 +138,6 @@ class AnomalyTriggersController extends BaseController
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(TemplateParam::init('triggerId', $triggerId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Bad request', IntelligenceResultException::class))
-            ->throwErrorOn('401', ErrorType::init('Unauthorized', IntelligenceResultException::class))
-            ->throwErrorOn('403', ErrorType::init('Forbidden', IntelligenceResultException::class))
-            ->throwErrorOn(
-                '404',
-                ErrorType::init('Not Found / Does not exist', IntelligenceResultException::class)
-            )
-            ->throwErrorOn(
-                '406',
-                ErrorType::init('Format / Request Unacceptable', IntelligenceResultException::class)
-            )
-            ->throwErrorOn('429', ErrorType::init('Too many requests', IntelligenceResultException::class))
-            ->throwErrorOn('0', ErrorType::init('Error response', IntelligenceResultException::class))
-            ->type(GetTriggerResponseList::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This corresponds to the M2M-MC SOAP interface, ```GetTriggers```.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAnomalyDetectionTriggers(): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/triggers')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Bad request', IntelligenceResultException::class))

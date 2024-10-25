@@ -10,44 +10,8 @@ $deviceMonitoringController = $client->getDeviceMonitoringController();
 
 ## Methods
 
-* [Stop Device Reachability](../../doc/controllers/device-monitoring.md#stop-device-reachability)
 * [Device Reachability](../../doc/controllers/device-monitoring.md#device-reachability)
-
-
-# Stop Device Reachability
-
-```php
-function stopDeviceReachability(?StopMonitorRequest $body = null): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`?StopMonitorRequest`](../../doc/models/stop-monitor-request.md) | Body, Optional | - |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RequestResponse`](../../doc/models/request-response.md).
-
-## Example Usage
-
-```php
-$body = StopMonitorRequestBuilder::init(
-    '0242123520-00001',
-    [
-        '35596ca6-bab4-4333-a914-42b4fc2da54c'
-    ]
-)->build();
-
-$apiResponse = $deviceMonitoringController->stopDeviceReachability($body);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error Response | [`RestErrorResponseException`](../../doc/models/rest-error-response-exception.md) |
+* [Stop Device Reachability](../../doc/controllers/device-monitoring.md#stop-device-reachability)
 
 
 # Device Reachability
@@ -91,6 +55,42 @@ $body = NotificationReportRequestBuilder::init(
 )->build();
 
 $apiResponse = $deviceMonitoringController->deviceReachability($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error Response | [`RestErrorResponseException`](../../doc/models/rest-error-response-exception.md) |
+
+
+# Stop Device Reachability
+
+```php
+function stopDeviceReachability(?StopMonitorRequest $body = null): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`?StopMonitorRequest`](../../doc/models/stop-monitor-request.md) | Body, Optional | - |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RequestResponse`](../../doc/models/request-response.md).
+
+## Example Usage
+
+```php
+$body = StopMonitorRequestBuilder::init(
+    '0242123520-00001',
+    [
+        '35596ca6-bab4-4333-a914-42b4fc2da54c'
+    ]
+)->build();
+
+$apiResponse = $deviceMonitoringController->stopDeviceReachability($body);
 ```
 
 ## Errors

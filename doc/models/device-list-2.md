@@ -9,7 +9,7 @@
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `ids` | [`?(ESIMDeviceId[])`](../../doc/models/esim-device-id.md) | Optional | **Constraints**: *Maximum Items*: `100` | getIds(): ?array | setIds(?array ids): void |
+| `ids` | [`?(DeviceId2[])`](../../doc/models/device-id-2.md) | Optional | **Constraints**: *Maximum Items*: `100` | getIds(): ?array | setIds(?array ids): void |
 
 ## Example (as JSON)
 

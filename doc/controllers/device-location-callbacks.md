@@ -10,9 +10,57 @@ $deviceLocationCallbacksController = $client->getDeviceLocationCallbacksControll
 
 ## Methods
 
+* [Cancel Async Report](../../doc/controllers/device-location-callbacks.md#cancel-async-report)
 * [List Registered Callbacks](../../doc/controllers/device-location-callbacks.md#list-registered-callbacks)
 * [Register Callback](../../doc/controllers/device-location-callbacks.md#register-callback)
 * [Deregister Callback](../../doc/controllers/device-location-callbacks.md#deregister-callback)
+
+
+# Cancel Async Report
+
+Cancel an asynchronous report request.
+
+```php
+function cancelAsyncReport(string $accountName, string $txid): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountName` | `string` | Query, Required | Account identifier in "##########-#####". |
+| `txid` | `string` | Template, Required | The `transactionId` value. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`TransactionID`](../../doc/models/transaction-id.md).
+
+## Example Usage
+
+```php
+$accountName = '0000123456-00001';
+
+$txid = '2c90bd28-eeee-ffff-gggg-7e3bd4fbff33';
+
+$apiResponse = $deviceLocationCallbacksController->cancelAsyncReport(
+    $accountName,
+    $txid
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "txid": "2c90bd28-eeee-ffff-gggg-7e3bd4fbff33"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Unexpected error. | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
 
 
 # List Registered Callbacks
@@ -20,14 +68,14 @@ $deviceLocationCallbacksController = $client->getDeviceLocationCallbacksControll
 Returns a list of all registered callback URLs for the account.
 
 ```php
-function listRegisteredCallbacks(string $account): ApiResponse
+function listRegisteredCallbacks(string $accountName): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account number. |
+| `accountName` | `string` | Template, Required | Account number. |
 
 ## Response Type
 
@@ -36,9 +84,9 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$account = '0252012345-00001';
+$accountName = '0000123456-00001';
 
-$apiResponse = $deviceLocationCallbacksController->listRegisteredCallbacks($account);
+$apiResponse = $deviceLocationCallbacksController->listRegisteredCallbacks($accountName);
 ```
 
 ## Example Response *(as JSON)*
@@ -68,14 +116,14 @@ $apiResponse = $deviceLocationCallbacksController->listRegisteredCallbacks($acco
 Provide a URL to receive messages from a ThingSpace callback service.
 
 ```php
-function registerCallback(string $account, DeviceLocationCallback $body): ApiResponse
+function registerCallback(string $accountName, DeviceLocationCallback $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account number. |
+| `accountName` | `string` | Template, Required | Account number. |
 | `body` | [`DeviceLocationCallback`](../../doc/models/device-location-callback.md) | Body, Required | Request to register a callback. |
 
 ## Response Type
@@ -85,7 +133,7 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$account = '0252012345-00001';
+$accountName = '0000123456-00001';
 
 $body = DeviceLocationCallbackBuilder::init(
     CallbackServiceNameEnum::LOCATION,
@@ -93,7 +141,7 @@ $body = DeviceLocationCallbackBuilder::init(
 )->build();
 
 $apiResponse = $deviceLocationCallbacksController->registerCallback(
-    $account,
+    $accountName,
     $body
 );
 ```
@@ -119,14 +167,14 @@ $apiResponse = $deviceLocationCallbacksController->registerCallback(
 Deregister a URL to stop receiving callback messages.
 
 ```php
-function deregisterCallback(string $account, string $service): ApiResponse
+function deregisterCallback(string $accountName, string $service): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account number. |
+| `accountName` | `string` | Template, Required | Account number. |
 | `service` | [`string(CallbackServiceNameEnum)`](../../doc/models/callback-service-name-enum.md) | Template, Required | Callback service name. |
 
 ## Response Type
@@ -136,12 +184,12 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$account = '0252012345-00001';
+$accountName = '0000123456-00001';
 
 $service = CallbackServiceNameEnum::LOCATION;
 
 $apiResponse = $deviceLocationCallbacksController->deregisterCallback(
-    $account,
+    $accountName,
     $service
 );
 ```

@@ -10,8 +10,53 @@ $softwareManagementSubscriptionsV1Controller = $client->getSoftwareManagementSub
 
 ## Methods
 
-* [Get Account License Status](../../doc/controllers/software-management-subscriptions-v1.md#get-account-license-status)
 * [Get Account Subscription Status](../../doc/controllers/software-management-subscriptions-v1.md#get-account-subscription-status)
+* [Get Account License Status](../../doc/controllers/software-management-subscriptions-v1.md#get-account-license-status)
+
+
+# Get Account Subscription Status
+
+This subscriptions endpoint retrieves an account's current Software Management Service subscription status.
+
+```php
+function getAccountSubscriptionStatus(string $account): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V1AccountSubscription`](../../doc/models/v1-account-subscription.md).
+
+## Example Usage
+
+```php
+$account = '0402196254-00001';
+
+$apiResponse = $softwareManagementSubscriptionsV1Controller->getAccountSubscriptionStatus($account);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "accountName": "0402196254-00001",
+  "purchaseType": "TS-HFOTA-EVNT,TS-HFOTA-MRC",
+  "licenseCount": 9000,
+  "licenseUsedCount": 1000,
+  "updateTime": "2018-03-02T16:03:06.000Z"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
 
 
 # Get Account License Status
@@ -73,51 +118,6 @@ $apiResponse = $softwareManagementSubscriptionsV1Controller->getAccountLicenseSt
       "assignmentTime": "2016-11-29T15:03:36.000Z"
     }
   ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
-
-
-# Get Account Subscription Status
-
-This subscriptions endpoint retrieves an account's current Software Management Service subscription status.
-
-```php
-function getAccountSubscriptionStatus(string $account): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`V1AccountSubscription`](../../doc/models/v1-account-subscription.md).
-
-## Example Usage
-
-```php
-$account = '0402196254-00001';
-
-$apiResponse = $softwareManagementSubscriptionsV1Controller->getAccountSubscriptionStatus($account);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "accountName": "0402196254-00001",
-  "purchaseType": "TS-HFOTA-EVNT,TS-HFOTA-MRC",
-  "licenseCount": 9000,
-  "licenseUsedCount": 1000,
-  "updateTime": "2018-03-02T16:03:06.000Z"
 }
 ```
 

@@ -27,6 +27,28 @@ use VerizonLib\Server;
 class ClientLoggingController extends BaseController
 {
     /**
+     * Returns an array of all devices in the specified account for which logging is enabled.
+     *
+     * @param string $account Account identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listDevicesWithLoggingEnabled(string $account): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(DeviceLoggingStatus::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Each customer may have a maximum of 20 devices enabled for logging.
      *
      * @param string $account Account identifier.
@@ -93,28 +115,6 @@ class ClientLoggingController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(DeviceLoggingStatus::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns an array of all devices in the specified account for which logging is enabled.
-     *
-     * @param string $account Account identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listDevicesWithLoggingEnabled(string $account): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/logging/{account}/devices')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(DeviceLoggingStatus::class, 1)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

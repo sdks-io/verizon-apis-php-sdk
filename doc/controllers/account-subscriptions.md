@@ -22,7 +22,7 @@ function listAccountSubscriptions(SecuritySubscriptionRequest $body, ?string $xR
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `body` | [`SecuritySubscriptionRequest`](../../doc/models/security-subscription-request.md) | Body, Required | Request for account subscription. |
-| `xRequestID` | `?string` | Header, Optional | Transaction Id. |
+| `xRequestID` | `?string` | Header, Optional | Transaction Id.<br>**Constraints**: *Minimum Length*: `3`, *Maximum Length*: `32`, *Pattern*: `^[0-9]-[0-9]{3,32}$` |
 
 ## Response Type
 

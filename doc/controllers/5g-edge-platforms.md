@@ -33,8 +33,8 @@ function listMECPlatforms(
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `region` | `?string` | Query, Optional | MEC region name. Current valid values are US_WEST_2 and US_EAST_1. |
-| `serviceProfileId` | `?string` | Query, Optional | Unique identifier of the service profile. |
-| `subscriberDensity` | `?int` | Query, Optional | Minimum number of 4G/5G subscribers per square kilometer. |
+| `serviceProfileId` | `?string` | Query, Optional | Unique identifier of the service profile.<br>**Constraints**: *Maximum Length*: `36`, *Pattern*: ``^[a-zA-Z0-9!@#$&()\-`.+,/"]{3,36}$`` |
+| `subscriberDensity` | `?int` | Query, Optional | Minimum number of 4G/5G subscribers per square kilometer.<br>**Constraints**: `>= 1`, `<= 100` |
 | `uEIdentityType` | [`?string(UserEquipmentIdentityTypeEnum)`](../../doc/models/user-equipment-identity-type-enum.md) | Query, Optional | Type of User Equipment identifier used in `UEIdentity`. |
 | `uEIdentity` | `?string` | Query, Optional | The identifier value for User Equipment. The type of identifier is defined by the 'UEIdentityType' parameter. The`IPAddress`format can be IPv4 or IPv6. |
 

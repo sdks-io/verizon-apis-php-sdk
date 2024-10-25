@@ -41,9 +41,9 @@ class AccountDeviceListBuilder
     /**
      * Sets ip address field.
      */
-    public function ipAddress(?string $value): self
+    public function ipaddress(?string $value): self
     {
-        $this->instance->setIpAddress($value);
+        $this->instance->setIpaddress($value);
         return $this;
     }
 

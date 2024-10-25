@@ -27,16 +27,16 @@ class DevicesLocationSubscriptionsController extends BaseController
     /**
      * This subscriptions endpoint retrieves an account's current location subscription status.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      *
      * @return ApiResponse Response from the API call
      */
-    public function getLocationServiceSubscriptionStatus(string $account): ApiResponse
+    public function getLocationServiceSubscriptionStatus(string $accountName): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{account}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/subscriptions/{accountName}')
             ->server(Server::DEVICE_LOCATION)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
+            ->parameters(TemplateParam::init('accountName', $accountName));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))

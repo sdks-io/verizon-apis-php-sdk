@@ -27,60 +27,6 @@ use VerizonLib\Server;
 class SoftwareManagementReportsV2Controller extends BaseController
 {
     /**
-     * The report endpoint allows user to get campaign history of an account for specified status.
-     *
-     * @param string $account Account identifier.
-     * @param string $campaignStatus Status of the campaign.
-     * @param string|null $lastSeenCampaignId Last seen campaign Id.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getCampaignHistoryByStatus(
-        string $account,
-        string $campaignStatus,
-        ?string $lastSeenCampaignId = null
-    ): ApiResponse {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/campaigns')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(
-                TemplateParam::init('account', $account),
-                QueryParam::init('campaignStatus', $campaignStatus),
-                QueryParam::init('lastSeenCampaignId', $lastSeenCampaignId)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(V2CampaignHistory::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * The endpoint allows user to get software upgrade history of a device based on device IMEI.
-     *
-     * @param string $account Account identifier.
-     * @param string $deviceId Device IMEI identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getDeviceFirmwareUpgradeHistory(string $account, string $deviceId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/devices/{deviceId}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(DeviceSoftwareUpgrade::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * This endpoint allows user to list a certain type of software of an account.
      *
      * @param string $account Account identifier.
@@ -134,6 +80,60 @@ class SoftwareManagementReportsV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(V2AccountDeviceList::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * The endpoint allows user to get software upgrade history of a device based on device IMEI.
+     *
+     * @param string $account Account identifier.
+     * @param string $deviceId Device IMEI identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getDeviceFirmwareUpgradeHistory(string $account, string $deviceId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/devices/{deviceId}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('deviceId', $deviceId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(DeviceSoftwareUpgrade::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * The report endpoint allows user to get campaign history of an account for specified status.
+     *
+     * @param string $account Account identifier.
+     * @param string $campaignStatus Status of the campaign.
+     * @param string|null $lastSeenCampaignId Last seen campaign Id.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getCampaignHistoryByStatus(
+        string $account,
+        string $campaignStatus,
+        ?string $lastSeenCampaignId = null
+    ): ApiResponse {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/reports/{account}/campaigns')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(
+                TemplateParam::init('account', $account),
+                QueryParam::init('campaignStatus', $campaignStatus),
+                QueryParam::init('lastSeenCampaignId', $lastSeenCampaignId)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(V2CampaignHistory::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

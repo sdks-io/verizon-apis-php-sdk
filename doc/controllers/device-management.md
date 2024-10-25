@@ -10,35 +10,523 @@ $deviceManagementController = $client->getDeviceManagementController();
 
 ## Methods
 
-* [List Devices Information](../../doc/controllers/device-management.md#list-devices-information)
-* [Retrieve Device Connection History](../../doc/controllers/device-management.md#retrieve-device-connection-history)
-* [Get Device Extended Diagnostic Information](../../doc/controllers/device-management.md#get-device-extended-diagnostic-information)
 * [Activate Service for Devices](../../doc/controllers/device-management.md#activate-service-for-devices)
+* [Add Devices](../../doc/controllers/device-management.md#add-devices)
+* [Update Devices Contact Information](../../doc/controllers/device-management.md#update-devices-contact-information)
+* [Update Devices Custom Fields](../../doc/controllers/device-management.md#update-devices-custom-fields)
 * [Deactivate Service for Devices](../../doc/controllers/device-management.md#deactivate-service-for-devices)
+* [Delete Deactivated Devices](../../doc/controllers/device-management.md#delete-deactivated-devices)
+* [List Devices Information](../../doc/controllers/device-management.md#list-devices-information)
+* [List Devices With Imei Iccid Mismatch](../../doc/controllers/device-management.md#list-devices-with-imei-iccid-mismatch)
+* [Move Devices Within Accounts of Profile](../../doc/controllers/device-management.md#move-devices-within-accounts-of-profile)
 * [Update Devices State](../../doc/controllers/device-management.md#update-devices-state)
+* [Change Devices Service Plan](../../doc/controllers/device-management.md#change-devices-service-plan)
 * [Suspend Service for Devices](../../doc/controllers/device-management.md#suspend-service-for-devices)
 * [Restore Service for Suspended Devices](../../doc/controllers/device-management.md#restore-service-for-suspended-devices)
+* [Check Devices Availability for Activation](../../doc/controllers/device-management.md#check-devices-availability-for-activation)
+* [Retrieve Device Connection History](../../doc/controllers/device-management.md#retrieve-device-connection-history)
 * [Update Devices Cost Center Code](../../doc/controllers/device-management.md#update-devices-cost-center-code)
+* [Get Device Extended Diagnostic Information](../../doc/controllers/device-management.md#get-device-extended-diagnostic-information)
+* [List Devices Provisioning History](../../doc/controllers/device-management.md#list-devices-provisioning-history)
 * [List Current Devices PRL Version](../../doc/controllers/device-management.md#list-current-devices-prl-version)
 * [Get Device Service Suspension Status](../../doc/controllers/device-management.md#get-device-service-suspension-status)
-* [Device Upload](../../doc/controllers/device-management.md#device-upload)
-* [Add Devices](../../doc/controllers/device-management.md#add-devices)
-* [Move Devices Within Accounts of Profile](../../doc/controllers/device-management.md#move-devices-within-accounts-of-profile)
-* [Check Devices Availability for Activation](../../doc/controllers/device-management.md#check-devices-availability-for-activation)
-* [List Devices Provisioning History](../../doc/controllers/device-management.md#list-devices-provisioning-history)
 * [List Devices Usage History](../../doc/controllers/device-management.md#list-devices-usage-history)
 * [Retrieve Aggregate Device Usage History](../../doc/controllers/device-management.md#retrieve-aggregate-device-usage-history)
 * [Update Device Id](../../doc/controllers/device-management.md#update-device-id)
+* [Device Upload](../../doc/controllers/device-management.md#device-upload)
 * [Billed Usage Info](../../doc/controllers/device-management.md#billed-usage-info)
-* [Update Devices Contact Information](../../doc/controllers/device-management.md#update-devices-contact-information)
-* [Update Devices Custom Fields](../../doc/controllers/device-management.md#update-devices-custom-fields)
-* [Delete Deactivated Devices](../../doc/controllers/device-management.md#delete-deactivated-devices)
-* [List Devices With Imei Iccid Mismatch](../../doc/controllers/device-management.md#list-devices-with-imei-iccid-mismatch)
-* [Change Devices Service Plan](../../doc/controllers/device-management.md#change-devices-service-plan)
 * [Usage Segmentation Label Association](../../doc/controllers/device-management.md#usage-segmentation-label-association)
 * [Usage Segmentation Label Deletion](../../doc/controllers/device-management.md#usage-segmentation-label-deletion)
 * [Activation Order Status](../../doc/controllers/device-management.md#activation-order-status)
 * [Upload Device Identifier](../../doc/controllers/device-management.md#upload-device-identifier)
+
+
+# Activate Service for Devices
+
+If the devices do not already exist in the account, this API resource adds them before activation.
+
+```php
+function activateServiceForDevices(CarrierActivateRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`CarrierActivateRequest`](../../doc/models/carrier-activate-request.md) | Body, Required | Request for activating a service on devices. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
+
+## Example Usage
+
+```php
+$body = CarrierActivateRequestBuilder::init(
+    [
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '990013907835573',
+                    'imei'
+                )->build(),
+                DeviceIdBuilder::init(
+                    '89141390780800784259',
+                    'iccid'
+                )->build()
+            ]
+        )
+            ->ipaddress('1.2.3.456')
+            ->build(),
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '990013907884259',
+                    'imei'
+                )->build(),
+                DeviceIdBuilder::init(
+                    '89141390780800735573',
+                    'iccid'
+                )->build()
+            ]
+        )
+            ->ipaddress('1.2.3.456')
+            ->build()
+    ],
+    'the service plan name',
+    '98801'
+)
+    ->accountName('0868924207-00001')
+    ->customFields(
+        [
+            CustomFieldsBuilder::init(
+                'CustomField2',
+                'SuperVend'
+            )->build()
+        ]
+    )
+    ->groupName('4G West')
+    ->primaryPlaceOfUse(
+        PlaceOfUseBuilder::init(
+            AddressBuilder::init(
+                '1600 Pennsylvania Ave NW',
+                'Washington',
+                'DC',
+                '20500',
+                'USA'
+            )->build(),
+            CustomerNameBuilder::init(
+                'Zaffod',
+                'Beeblebrox'
+            )
+                ->title('President')
+                ->build()
+        )->build()
+    )->build();
+
+$apiResponse = $deviceManagementController->activateServiceForDevices($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Add Devices
+
+Use this API if you want to manage some device settings before you are ready to activate service for the devices.
+
+```php
+function addDevices(AddDevicesRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`AddDevicesRequest`](../../doc/models/add-devices-request.md) | Body, Required | Devices to add. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`AddDevicesResult[]`](../../doc/models/add-devices-result.md).
+
+## Example Usage
+
+```php
+$body = AddDevicesRequestBuilder::init(
+    'preactive',
+    [
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '990013907835573',
+                    'imei'
+                )->build(),
+                DeviceIdBuilder::init(
+                    '89141390780800784259',
+                    'iccid'
+                )->build()
+            ]
+        )->build(),
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '990013907884259',
+                    'imei'
+                )->build(),
+                DeviceIdBuilder::init(
+                    '89141390780800735573',
+                    'iccid'
+                )->build()
+            ]
+        )->build()
+    ]
+)
+    ->accountName('0868924207-00001')
+    ->customFields(
+        [
+            CustomFieldsBuilder::init(
+                'CustomField2',
+                'SuperVend'
+            )->build()
+        ]
+    )
+    ->groupName('West Region')
+    ->build();
+
+$apiResponse = $deviceManagementController->addDevices($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "deviceIds": [
+      {
+        "id": "89148000000800784259",
+        "kind": "iccid"
+      }
+    ],
+    "response": "Success"
+  }
+]
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Update Devices Contact Information
+
+Sends a CarrierService callback message for each device in the request when the contact information has been changed, or if there was a problem and the change could not be completed.
+
+```php
+function updateDevicesContactInformation(ContactInfoUpdateRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`ContactInfoUpdateRequest`](../../doc/models/contact-info-update-request.md) | Body, Required | Request to update contact information for devices. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
+
+## Example Usage
+
+```php
+$body = ContactInfoUpdateRequestBuilder::init(
+    PlaceOfUseBuilder::init(
+        AddressBuilder::init(
+            '9868 Scranton Rd',
+            'San Diego',
+            'CA',
+            '92121',
+            'USA'
+        )
+            ->addressLine2('Suite A')
+            ->zip4('0001')
+            ->phone('1234567890')
+            ->phoneType('H')
+            ->emailAddress('zaffod@theinternet.com')
+            ->build(),
+        CustomerNameBuilder::init(
+            'Zaffod',
+            'Beeblebrox'
+        )
+            ->title('President')
+            ->middleName('P')
+            ->suffix('I')
+            ->build()
+    )->build()
+)
+    ->accountName('0000123456-00001')
+    ->devices(
+        [
+            AccountDeviceListBuilder::init(
+                [
+                    DeviceIdBuilder::init(
+                        '19110173057',
+                        'ESN'
+                    )->build(),
+                    DeviceIdBuilder::init(
+                        '19110173057',
+                        'ESN'
+                    )->build()
+                ]
+            )->build()
+        ]
+    )->build();
+
+$apiResponse = $deviceManagementController->updateDevicesContactInformation($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "24da9f9a-d110-4a54-86b4-93fb76aab83c"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Update Devices Custom Fields
+
+Sends a CarrierService callback message for each device in the request when the custom fields have been changed, or if there was a problem and the change could not be completed.
+
+```php
+function updateDevicesCustomFields(CustomFieldsUpdateRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`CustomFieldsUpdateRequest`](../../doc/models/custom-fields-update-request.md) | Body, Required | Request to update custom field of devices. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
+
+## Example Usage
+
+```php
+$body = CustomFieldsUpdateRequestBuilder::init()
+    ->customFieldsToUpdate(
+        [
+            CustomFieldsBuilder::init(
+                'CustomField1',
+                'West Region'
+            )->build(),
+            CustomFieldsBuilder::init(
+                'CustomField2',
+                'Distribution'
+            )->build()
+        ]
+    )
+    ->devices(
+        [
+            AccountDeviceListBuilder::init(
+                [
+                    DeviceIdBuilder::init(
+                        '89148000000800139708',
+                        'iccid'
+                    )->build()
+                ]
+            )->build()
+        ]
+    )->build();
+
+$apiResponse = $deviceManagementController->updateDevicesCustomFields($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Deactivate Service for Devices
+
+Deactivating service for a device may result in an early termination fee (ETF) being charged to the account, depending on the terms of the contract with Verizon. If your contract allows ETF waivers and if you want to use one for a particular deactivation, set the etfWaiver value to True.
+
+```php
+function deactivateServiceForDevices(CarrierDeactivateRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`CarrierDeactivateRequest`](../../doc/models/carrier-deactivate-request.md) | Body, Required | Request to deactivate service for one or more devices. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
+
+## Example Usage
+
+```php
+$body = CarrierDeactivateRequestBuilder::init(
+    '0000123456-00001',
+    [
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '20-digit ICCID',
+                    'iccid'
+                )->build()
+            ]
+        )->build()
+    ],
+    'FF'
+)
+    ->etfWaiver(true)
+    ->deleteAfterDeactivation(true)
+    ->build();
+
+$apiResponse = $deviceManagementController->deactivateServiceForDevices($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Delete Deactivated Devices
+
+Use this API to remove unneeded devices from an account.
+
+```php
+function deleteDeactivatedDevices(DeleteDevicesRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeleteDevicesRequest`](../../doc/models/delete-devices-request.md) | Body, Required | Devices to delete. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeleteDevicesResult[]`](../../doc/models/delete-devices-result.md).
+
+## Example Usage
+
+```php
+$body = DeleteDevicesRequestBuilder::init(
+    [
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '09005470263',
+                    'esn'
+                )->build()
+            ]
+        )->build(),
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '85000022411113460014',
+                    'iccid'
+                )->build()
+            ]
+        )->build(),
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    '85000022412313460016',
+                    'iccid'
+                )->build()
+            ]
+        )->build()
+    ]
+)->build();
+
+$apiResponse = $deviceManagementController->deleteDeactivatedDevices($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "deviceIds": {
+      "id": "09005470263",
+      "kind": "esn"
+    },
+    "status": "Success"
+  },
+  {
+    "deviceIds": {
+      "id": "85000022411113460014",
+      "kind": "iccid"
+    },
+    "status": "Success"
+  },
+  {
+    "deviceIds": [
+      {
+        "id": "85000022412313460016",
+        "kind": "iccid"
+      },
+      {
+        "id": "09005470263",
+        "kind": "esn"
+      }
+    ],
+    "status": "Failed",
+    "message": "The device is not in deactive state."
+  }
+]
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
 
 
 # List Devices Information
@@ -120,135 +608,68 @@ $apiResponse = $deviceManagementController->listDevicesInformation($body);
 | 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
 
 
-# Retrieve Device Connection History
+# List Devices With Imei Iccid Mismatch
 
-Each response includes a maximum of 500 records. To obtain more records, you can call the API multiple times, adjusting the earliest value each time to start where the previous request finished.
+Returns a list of all 4G devices with an ICCID (SIM) that was not activated with the expected IMEI (hardware) during a specified time frame.
 
 ```php
-function retrieveDeviceConnectionHistory(DeviceConnectionListRequest $body): ApiResponse
+function listDevicesWithImeiIccidMismatch(DeviceMismatchListRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`DeviceConnectionListRequest`](../../doc/models/device-connection-list-request.md) | Body, Required | Query to retrieve device connection history. |
+| `body` | [`DeviceMismatchListRequest`](../../doc/models/device-mismatch-list-request.md) | Body, Required | Request to list devices with mismatched IMEIs and ICCIDs. |
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ConnectionHistoryResult`](../../doc/models/connection-history-result.md).
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceMismatchListResult`](../../doc/models/device-mismatch-list-result.md).
 
 ## Example Usage
 
 ```php
-$body = DeviceConnectionListRequestBuilder::init(
-    DeviceIdBuilder::init(
-        '89141390780800784259',
-        'iccid'
-    )->build(),
-    '2015-09-16T00:00:01Z',
-    '2010-09-18T00:00:01Z'
-)->build();
+$body = DeviceMismatchListRequestBuilder::init(
+    DateFilterBuilder::init(
+        '2020-05-01T15:00:00-08:00Z',
+        '2020-07-30T15:00:00-08:00Z'
+    )->build()
+)
+    ->devices(
+        [
+            AccountDeviceListBuilder::init(
+                [
+                    DeviceIdBuilder::init(
+                        '8914800000080078',
+                        'ICCID'
+                    )->build(),
+                    DeviceIdBuilder::init(
+                        '5096300587',
+                        'MDN'
+                    )->build()
+                ]
+            )->build()
+        ]
+    )
+    ->accountName('0342077109-00001')
+    ->build();
 
-$apiResponse = $deviceManagementController->retrieveDeviceConnectionHistory($body);
+$apiResponse = $deviceManagementController->listDevicesWithImeiIccidMismatch($body);
 ```
 
 ## Example Response *(as JSON)*
 
 ```json
 {
-  "connectionHistory": [
+  "devices": [
     {
-      "connectionEventAttributes": [
-        {
-          "key": "BytesUsed",
-          "value": "0"
-        },
-        {
-          "key": "Event",
-          "value": "Start"
-        }
-      ],
-      "extendedAttributes": [],
-      "occurredAt": "2015-12-17T14:12:36-05:00"
-    },
-    {
-      "connectionEventAttributes": [
-        {
-          "key": "BytesUsed",
-          "value": "419863234"
-        },
-        {
-          "key": "Event",
-          "value": "Stop"
-        },
-        {
-          "key": "Msisdn",
-          "value": "15086303371"
-        }
-      ],
-      "extendedAttributes": [],
-      "occurredAt": "2015-12-19T01:20:00-05:00"
-    }
-  ],
-  "hasMoreData": false
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Get Device Extended Diagnostic Information
-
-Returns extended diagnostic information about a specified device, including connectivity, provisioning, billing and location status.
-
-```php
-function getDeviceExtendedDiagnosticInformation(DeviceExtendedDiagnosticsRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeviceExtendedDiagnosticsRequest`](../../doc/models/device-extended-diagnostics-request.md) | Body, Required | Request to query extended diagnostics information for a device. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceExtendedDiagnosticsResult`](../../doc/models/device-extended-diagnostics-result.md).
-
-## Example Usage
-
-```php
-$body = DeviceExtendedDiagnosticsRequestBuilder::init(
-    '1223334444-00001',
-    [
-        DeviceIdBuilder::init(
-            '10-digit MDN',
-            'mdn'
-        )->build()
-    ]
-)->build();
-
-$apiResponse = $deviceManagementController->getDeviceExtendedDiagnosticInformation($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "categories": [
-    {
-      "categoryName": "Connectivity",
-      "extendedAttributes": [
-        {
-          "key": "Connected",
-          "value": "false"
-        }
-      ]
+      "accountName": "0212398765-00001",
+      "mdn": "5096300587",
+      "activationDate": "2011-01-21T10:55:27-08:00",
+      "iccid": "89148000000800784259",
+      "preImei": "990003420535573",
+      "postImei": "987603420573553",
+      "simOtaDate": "2017-12-01T16:00:00-08:00"
     }
   ]
 }
@@ -261,19 +682,19 @@ $apiResponse = $deviceManagementController->getDeviceExtendedDiagnosticInformati
 | 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
 
 
-# Activate Service for Devices
+# Move Devices Within Accounts of Profile
 
-If the devices do not already exist in the account, this API resource adds them before activation.
+Move active devices from one billing account to another within a customer profile.
 
 ```php
-function activateServiceForDevices(CarrierActivateRequest $body): ApiResponse
+function moveDevicesWithinAccountsOfProfile(MoveDeviceRequest $body): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `body` | [`CarrierActivateRequest`](../../doc/models/carrier-activate-request.md) | Body, Required | Request for activating a service on devices. |
+| `body` | [`MoveDeviceRequest`](../../doc/models/move-device-request.md) | Body, Required | Request to move devices between accounts. |
 
 ## Response Type
 
@@ -282,133 +703,32 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$body = CarrierActivateRequestBuilder::init(
-    [
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '990013907835573',
-                    'imei'
-                )->build(),
-                DeviceIdBuilder::init(
-                    '89141390780800784259',
-                    'iccid'
-                )->build()
-            ]
-        )
-            ->ipAddress('1.2.3.456')
-            ->build(),
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '990013907884259',
-                    'imei'
-                )->build(),
-                DeviceIdBuilder::init(
-                    '89141390780800735573',
-                    'iccid'
-                )->build()
-            ]
-        )
-            ->ipAddress('1.2.3.456')
-            ->build()
-    ],
-    'the service plan name',
-    '98801'
+$body = MoveDeviceRequestBuilder::init(
+    '0212345678-00001'
 )
-    ->accountName('0868924207-00001')
-    ->customFields(
+    ->devices(
         [
-            CustomFieldsBuilder::init(
-                'CustomField2',
-                'SuperVend'
+            AccountDeviceListBuilder::init(
+                [
+                    DeviceIdBuilder::init(
+                        '19110173057',
+                        'ESN'
+                    )->build()
+                ]
             )->build()
         ]
     )
-    ->groupName('4G West')
-    ->primaryPlaceOfUse(
-        PlaceOfUseBuilder::init(
-            AddressBuilder::init(
-                '1600 Pennsylvania Ave NW',
-                'Washington',
-                'DC',
-                '20500',
-                'USA'
-            )->build(),
-            CustomerNameBuilder::init(
-                'Zaffod',
-                'Beeblebrox'
-            )
-                ->title('President')
-                ->build()
-        )->build()
-    )->build();
-
-$apiResponse = $deviceManagementController->activateServiceForDevices($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Deactivate Service for Devices
-
-Deactivating service for a device may result in an early termination fee (ETF) being charged to the account, depending on the terms of the contract with Verizon. If your contract allows ETF waivers and if you want to use one for a particular deactivation, set the etfWaiver value to True.
-
-```php
-function deactivateServiceForDevices(CarrierDeactivateRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`CarrierDeactivateRequest`](../../doc/models/carrier-deactivate-request.md) | Body, Required | Request to deactivate service for one or more devices. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
-
-## Example Usage
-
-```php
-$body = CarrierDeactivateRequestBuilder::init(
-    '0000123456-00001',
-    [
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '20-digit ICCID',
-                    'iccid'
-                )->build()
-            ]
-        )->build()
-    ],
-    'FF'
-)
-    ->etfWaiver(true)
-    ->deleteAfterDeactivation(true)
+    ->servicePlan('M2M5GB')
     ->build();
 
-$apiResponse = $deviceManagementController->deactivateServiceForDevices($body);
+$apiResponse = $deviceManagementController->moveDevicesWithinAccountsOfProfile($body);
 ```
 
 ## Example Response *(as JSON)*
 
 ```json
 {
-  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+  "requestId": "ec682a8b-e288-4806-934d-24e7a59ed889"
 }
 ```
 
@@ -502,6 +822,63 @@ $apiResponse = $deviceManagementController->updateDevicesState($body);
 ```json
 {
   "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Change Devices Service Plan
+
+Changes the service plan for one or more devices.
+
+```php
+function changeDevicesServicePlan(ServicePlanUpdateRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`ServicePlanUpdateRequest`](../../doc/models/service-plan-update-request.md) | Body, Required | Request to change device service plan. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
+
+## Example Usage
+
+```php
+$body = ServicePlanUpdateRequestBuilder::init(
+    'Tablet5GB'
+)
+    ->devices(
+        [
+            AccountDeviceListBuilder::init(
+                [
+                    DeviceIdBuilder::init(
+                        'A100003685E561',
+                        'meid'
+                    )->build()
+                ]
+            )->build()
+        ]
+    )
+    ->carrierIpPoolName('IPPool')
+    ->build();
+
+$apiResponse = $deviceManagementController->changeDevicesServicePlan($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "c8de7c1d-59b9-4cf3-b969-db76cb2ce509"
 }
 ```
 
@@ -618,6 +995,141 @@ $apiResponse = $deviceManagementController->restoreServiceForSuspendedDevices($b
 | 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
 
 
+# Check Devices Availability for Activation
+
+Checks whether specified devices are registered by the manufacturer with the Verizon network and are available to be activated.
+
+```php
+function checkDevicesAvailabilityForActivation(DeviceActivationRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceActivationRequest`](../../doc/models/device-activation-request.md) | Body, Required | Request to check if devices can be activated or not. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
+
+## Example Usage
+
+```php
+$body = DeviceActivationRequestBuilder::init(
+    '0212345678-00001',
+    [
+        AccountDeviceListBuilder::init(
+            [
+                DeviceIdBuilder::init(
+                    'A100008385E561',
+                    'meid'
+                )->build()
+            ]
+        )->build()
+    ]
+)->build();
+
+$apiResponse = $deviceManagementController->checkDevicesAvailabilityForActivation($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Retrieve Device Connection History
+
+Each response includes a maximum of 500 records. To obtain more records, you can call the API multiple times, adjusting the earliest value each time to start where the previous request finished.
+
+```php
+function retrieveDeviceConnectionHistory(DeviceConnectionListRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceConnectionListRequest`](../../doc/models/device-connection-list-request.md) | Body, Required | Query to retrieve device connection history. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ConnectionHistoryResult`](../../doc/models/connection-history-result.md).
+
+## Example Usage
+
+```php
+$body = DeviceConnectionListRequestBuilder::init(
+    DeviceIdBuilder::init(
+        '89141390780800784259',
+        'iccid'
+    )->build(),
+    '2015-09-16T00:00:01Z',
+    '2010-09-18T00:00:01Z'
+)->build();
+
+$apiResponse = $deviceManagementController->retrieveDeviceConnectionHistory($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "connectionHistory": [
+    {
+      "connectionEventAttributes": [
+        {
+          "key": "BytesUsed",
+          "value": "0"
+        },
+        {
+          "key": "Event",
+          "value": "Start"
+        }
+      ],
+      "extendedAttributes": [],
+      "occurredAt": "2015-12-17T14:12:36-05:00"
+    },
+    {
+      "connectionEventAttributes": [
+        {
+          "key": "BytesUsed",
+          "value": "419863234"
+        },
+        {
+          "key": "Event",
+          "value": "Stop"
+        },
+        {
+          "key": "Msisdn",
+          "value": "15086303371"
+        }
+      ],
+      "extendedAttributes": [],
+      "occurredAt": "2015-12-19T01:20:00-05:00"
+    }
+  ],
+  "hasMoreData": false
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
 # Update Devices Cost Center Code
 
 Changes or removes the CostCenterCode value or customer name and address (Primary Place of Use) for one or more devices.
@@ -663,6 +1175,127 @@ $apiResponse = $deviceManagementController->updateDevicesCostCenterCode($body);
 {
   "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
 }
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# Get Device Extended Diagnostic Information
+
+Returns extended diagnostic information about a specified device, including connectivity, provisioning, billing and location status.
+
+```php
+function getDeviceExtendedDiagnosticInformation(DeviceExtendedDiagnosticsRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceExtendedDiagnosticsRequest`](../../doc/models/device-extended-diagnostics-request.md) | Body, Required | Request to query extended diagnostics information for a device. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceExtendedDiagnosticsResult`](../../doc/models/device-extended-diagnostics-result.md).
+
+## Example Usage
+
+```php
+$body = DeviceExtendedDiagnosticsRequestBuilder::init(
+    '1223334444-00001',
+    [
+        DeviceIdBuilder::init(
+            '10-digit MDN',
+            'mdn'
+        )->build()
+    ]
+)->build();
+
+$apiResponse = $deviceManagementController->getDeviceExtendedDiagnosticInformation($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "categories": [
+    {
+      "categoryName": "Connectivity",
+      "extendedAttributes": [
+        {
+          "key": "Connected",
+          "value": "false"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
+
+
+# List Devices Provisioning History
+
+Returns the provisioning history of a specified device during a specified time period.
+
+```php
+function listDevicesProvisioningHistory(DeviceProvisioningHistoryListRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceProvisioningHistoryListRequest`](../../doc/models/device-provisioning-history-list-request.md) | Body, Required | Query to obtain device provisioning history. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceProvisioningHistoryListResult[]`](../../doc/models/device-provisioning-history-list-result.md).
+
+## Example Usage
+
+```php
+$body = DeviceProvisioningHistoryListRequestBuilder::init(
+    DeviceIdBuilder::init(
+        '89141390780800784259',
+        'iccid'
+    )->build(),
+    '2015-09-16T00:00:01Z',
+    '2015-09-18T00:00:01Z'
+)->build();
+
+$apiResponse = $deviceManagementController->listDevicesProvisioningHistory($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "provisioningHistory": [
+      {
+        "occurredAt": "2015-12-17T13:56:13-05:00",
+        "status": "Success",
+        "eventBy": "Harry Potter",
+        "eventType": "Activation Confirmed",
+        "servicePlan": "Tablet5GB",
+        "mdn": "",
+        "msisdn": "15086303371",
+        "extendedAttributes": []
+      }
+    ],
+    "hasMoreData": false
+  }
+]
 ```
 
 ## Errors
@@ -769,333 +1402,6 @@ $apiResponse = $deviceManagementController->getDeviceServiceSuspensionStatus($bo
 {
   "requestId": "904dcdc6-a590-45e4-ac76-403306f6d883"
 }
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Device Upload
-
-This corresponds to the M2M-MC SOAP interface, `DeviceUploadService`.
-
-```php
-function deviceUpload(DeviceUploadRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeviceUploadRequest`](../../doc/models/device-upload-request.md) | Body, Required | Device Upload Query |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RequestResponse`](../../doc/models/request-response.md).
-
-## Example Usage
-
-```php
-$body = DeviceUploadRequestBuilder::init(
-    '1223334444-00001',
-    [
-        DeviceListBuilder::init()
-            ->deviceIds(
-                [
-                    DeviceIdBuilder::init(
-                        '15-digit IMEI',
-                        'IMEI'
-                    )->build()
-                ]
-            )->build(),
-        DeviceListBuilder::init()
-            ->deviceIds(
-                [
-                    DeviceIdBuilder::init(
-                        '15-digit IMEI',
-                        'IMEI'
-                    )->build()
-                ]
-            )->build(),
-        DeviceListBuilder::init()
-            ->deviceIds(
-                [
-                    DeviceIdBuilder::init(
-                        '15-digit IMEI',
-                        'IMEI'
-                    )->build()
-                ]
-            )->build()
-    ],
-    'bob@mycompany.com',
-    'VZW123456',
-    'IMEI'
-)->build();
-
-$apiResponse = $deviceManagementController->deviceUpload($body);
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error Response | [`RestErrorResponseException`](../../doc/models/rest-error-response-exception.md) |
-
-
-# Add Devices
-
-Use this API if you want to manage some device settings before you are ready to activate service for the devices.
-
-```php
-function addDevices(AddDevicesRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`AddDevicesRequest`](../../doc/models/add-devices-request.md) | Body, Required | Devices to add. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`AddDevicesResult[]`](../../doc/models/add-devices-result.md).
-
-## Example Usage
-
-```php
-$body = AddDevicesRequestBuilder::init(
-    'preactive',
-    [
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '990013907835573',
-                    'imei'
-                )->build(),
-                DeviceIdBuilder::init(
-                    '89141390780800784259',
-                    'iccid'
-                )->build()
-            ]
-        )->build(),
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '990013907884259',
-                    'imei'
-                )->build(),
-                DeviceIdBuilder::init(
-                    '89141390780800735573',
-                    'iccid'
-                )->build()
-            ]
-        )->build()
-    ]
-)
-    ->accountName('0868924207-00001')
-    ->customFields(
-        [
-            CustomFieldsBuilder::init(
-                'CustomField2',
-                'SuperVend'
-            )->build()
-        ]
-    )
-    ->groupName('West Region')
-    ->build();
-
-$apiResponse = $deviceManagementController->addDevices($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "deviceIds": [
-      {
-        "id": "89148000000800784259",
-        "kind": "iccid"
-      }
-    ],
-    "response": "Success"
-  }
-]
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Move Devices Within Accounts of Profile
-
-Move active devices from one billing account to another within a customer profile.
-
-```php
-function moveDevicesWithinAccountsOfProfile(MoveDeviceRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`MoveDeviceRequest`](../../doc/models/move-device-request.md) | Body, Required | Request to move devices between accounts. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
-
-## Example Usage
-
-```php
-$body = MoveDeviceRequestBuilder::init(
-    '0212345678-00001'
-)
-    ->devices(
-        [
-            AccountDeviceListBuilder::init(
-                [
-                    DeviceIdBuilder::init(
-                        '19110173057',
-                        'ESN'
-                    )->build()
-                ]
-            )->build()
-        ]
-    )
-    ->servicePlan('M2M5GB')
-    ->build();
-
-$apiResponse = $deviceManagementController->moveDevicesWithinAccountsOfProfile($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "ec682a8b-e288-4806-934d-24e7a59ed889"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Check Devices Availability for Activation
-
-Checks whether specified devices are registered by the manufacturer with the Verizon network and are available to be activated.
-
-```php
-function checkDevicesAvailabilityForActivation(DeviceActivationRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeviceActivationRequest`](../../doc/models/device-activation-request.md) | Body, Required | Request to check if devices can be activated or not. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
-
-## Example Usage
-
-```php
-$body = DeviceActivationRequestBuilder::init(
-    '0212345678-00001',
-    [
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    'A100008385E561',
-                    'meid'
-                )->build()
-            ]
-        )->build()
-    ]
-)->build();
-
-$apiResponse = $deviceManagementController->checkDevicesAvailabilityForActivation($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# List Devices Provisioning History
-
-Returns the provisioning history of a specified device during a specified time period.
-
-```php
-function listDevicesProvisioningHistory(DeviceProvisioningHistoryListRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeviceProvisioningHistoryListRequest`](../../doc/models/device-provisioning-history-list-request.md) | Body, Required | Query to obtain device provisioning history. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceProvisioningHistoryListResult[]`](../../doc/models/device-provisioning-history-list-result.md).
-
-## Example Usage
-
-```php
-$body = DeviceProvisioningHistoryListRequestBuilder::init(
-    DeviceIdBuilder::init(
-        '89141390780800784259',
-        'iccid'
-    )->build(),
-    '2015-09-16T00:00:01Z',
-    '2015-09-18T00:00:01Z'
-)->build();
-
-$apiResponse = $deviceManagementController->listDevicesProvisioningHistory($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "provisioningHistory": [
-      {
-        "occurredAt": "2015-12-17T13:56:13-05:00",
-        "status": "Success",
-        "eventBy": "Harry Potter",
-        "eventType": "Activation Confirmed",
-        "servicePlan": "Tablet5GB",
-        "mdn": "",
-        "msisdn": "15086303371",
-        "extendedAttributes": []
-      }
-    ],
-    "hasMoreData": false
-  }
-]
 ```
 
 ## Errors
@@ -1289,6 +1595,73 @@ $apiResponse = $deviceManagementController->updateDeviceId(
 | 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
 
 
+# Device Upload
+
+This corresponds to the M2M-MC SOAP interface, `DeviceUploadService`.
+
+```php
+function deviceUpload(DeviceUploadRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`DeviceUploadRequest`](../../doc/models/device-upload-request.md) | Body, Required | Device Upload Query |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`RequestResponse`](../../doc/models/request-response.md).
+
+## Example Usage
+
+```php
+$body = DeviceUploadRequestBuilder::init(
+    '1223334444-00001',
+    [
+        DeviceListBuilder::init()
+            ->deviceIds(
+                [
+                    DeviceIdBuilder::init(
+                        '15-digit IMEI',
+                        'IMEI'
+                    )->build()
+                ]
+            )->build(),
+        DeviceListBuilder::init()
+            ->deviceIds(
+                [
+                    DeviceIdBuilder::init(
+                        '15-digit IMEI',
+                        'IMEI'
+                    )->build()
+                ]
+            )->build(),
+        DeviceListBuilder::init()
+            ->deviceIds(
+                [
+                    DeviceIdBuilder::init(
+                        '15-digit IMEI',
+                        'IMEI'
+                    )->build()
+                ]
+            )->build()
+    ],
+    'bob@mycompany.com',
+    'VZW123456',
+    'IMEI'
+)->build();
+
+$apiResponse = $deviceManagementController->deviceUpload($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Error Response | [`RestErrorResponseException`](../../doc/models/rest-error-response-exception.md) |
+
+
 # Billed Usage Info
 
 Gets billed usage for for either multiple devices or an entire billing account.
@@ -1322,379 +1695,6 @@ $apiResponse = $deviceManagementController->billedUsageInfo($body);
 ```json
 {
   "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Update Devices Contact Information
-
-Sends a CarrierService callback message for each device in the request when the contact information has been changed, or if there was a problem and the change could not be completed.
-
-```php
-function updateDevicesContactInformation(ContactInfoUpdateRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`ContactInfoUpdateRequest`](../../doc/models/contact-info-update-request.md) | Body, Required | Request to update contact information for devices. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
-
-## Example Usage
-
-```php
-$body = ContactInfoUpdateRequestBuilder::init(
-    PlaceOfUseBuilder::init(
-        AddressBuilder::init(
-            '9868 Scranton Rd',
-            'San Diego',
-            'CA',
-            '92121',
-            'USA'
-        )
-            ->addressLine2('Suite A')
-            ->zip4('0001')
-            ->phone('1234567890')
-            ->phoneType('H')
-            ->emailAddress('zaffod@theinternet.com')
-            ->build(),
-        CustomerNameBuilder::init(
-            'Zaffod',
-            'Beeblebrox'
-        )
-            ->title('President')
-            ->middleName('P')
-            ->suffix('I')
-            ->build()
-    )->build()
-)
-    ->accountName('0212345678-00001')
-    ->devices(
-        [
-            AccountDeviceListBuilder::init(
-                [
-                    DeviceIdBuilder::init(
-                        '19110173057',
-                        'ESN'
-                    )->build(),
-                    DeviceIdBuilder::init(
-                        '19110173057',
-                        'ESN'
-                    )->build()
-                ]
-            )->build()
-        ]
-    )->build();
-
-$apiResponse = $deviceManagementController->updateDevicesContactInformation($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "24da9f9a-d110-4a54-86b4-93fb76aab83c"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Update Devices Custom Fields
-
-Sends a CarrierService callback message for each device in the request when the custom fields have been changed, or if there was a problem and the change could not be completed.
-
-```php
-function updateDevicesCustomFields(CustomFieldsUpdateRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`CustomFieldsUpdateRequest`](../../doc/models/custom-fields-update-request.md) | Body, Required | Request to update custom field of devices. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
-
-## Example Usage
-
-```php
-$body = CustomFieldsUpdateRequestBuilder::init()
-    ->customFieldsToUpdate(
-        [
-            CustomFieldsBuilder::init(
-                'CustomField1',
-                'West Region'
-            )->build(),
-            CustomFieldsBuilder::init(
-                'CustomField2',
-                'Distribution'
-            )->build()
-        ]
-    )
-    ->devices(
-        [
-            AccountDeviceListBuilder::init(
-                [
-                    DeviceIdBuilder::init(
-                        '89148000000800139708',
-                        'iccid'
-                    )->build()
-                ]
-            )->build()
-        ]
-    )->build();
-
-$apiResponse = $deviceManagementController->updateDevicesCustomFields($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "595f5c44-c31c-4552-8670-020a1545a84d"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Delete Deactivated Devices
-
-Use this API to remove unneeded devices from an account.
-
-```php
-function deleteDeactivatedDevices(DeleteDevicesRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeleteDevicesRequest`](../../doc/models/delete-devices-request.md) | Body, Required | Devices to delete. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeleteDevicesResult[]`](../../doc/models/delete-devices-result.md).
-
-## Example Usage
-
-```php
-$body = DeleteDevicesRequestBuilder::init(
-    [
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '09005470263',
-                    'esn'
-                )->build()
-            ]
-        )->build(),
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '85000022411113460014',
-                    'iccid'
-                )->build()
-            ]
-        )->build(),
-        AccountDeviceListBuilder::init(
-            [
-                DeviceIdBuilder::init(
-                    '85000022412313460016',
-                    'iccid'
-                )->build()
-            ]
-        )->build()
-    ]
-)->build();
-
-$apiResponse = $deviceManagementController->deleteDeactivatedDevices($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "deviceIds": {
-      "id": "09005470263",
-      "kind": "esn"
-    },
-    "status": "Success"
-  },
-  {
-    "deviceIds": {
-      "id": "85000022411113460014",
-      "kind": "iccid"
-    },
-    "status": "Success"
-  },
-  {
-    "deviceIds": [
-      {
-        "id": "85000022412313460016",
-        "kind": "iccid"
-      },
-      {
-        "id": "09005470263",
-        "kind": "esn"
-      }
-    ],
-    "status": "Failed",
-    "message": "The device is not in deactive state."
-  }
-]
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# List Devices With Imei Iccid Mismatch
-
-Returns a list of all 4G devices with an ICCID (SIM) that was not activated with the expected IMEI (hardware) during a specified time frame.
-
-```php
-function listDevicesWithImeiIccidMismatch(DeviceMismatchListRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`DeviceMismatchListRequest`](../../doc/models/device-mismatch-list-request.md) | Body, Required | Request to list devices with mismatched IMEIs and ICCIDs. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceMismatchListResult`](../../doc/models/device-mismatch-list-result.md).
-
-## Example Usage
-
-```php
-$body = DeviceMismatchListRequestBuilder::init(
-    DateFilterBuilder::init(
-        '2020-05-01T15:00:00-08:00Z',
-        '2020-07-30T15:00:00-08:00Z'
-    )->build()
-)
-    ->devices(
-        [
-            AccountDeviceListBuilder::init(
-                [
-                    DeviceIdBuilder::init(
-                        '8914800000080078',
-                        'ICCID'
-                    )->build(),
-                    DeviceIdBuilder::init(
-                        '5096300587',
-                        'MDN'
-                    )->build()
-                ]
-            )->build()
-        ]
-    )
-    ->accountName('0342077109-00001')
-    ->build();
-
-$apiResponse = $deviceManagementController->listDevicesWithImeiIccidMismatch($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "devices": [
-    {
-      "accountName": "0212398765-00001",
-      "mdn": "5096300587",
-      "activationDate": "2011-01-21T10:55:27-08:00",
-      "iccid": "89148000000800784259",
-      "preImei": "990003420535573",
-      "postImei": "987603420573553",
-      "simOtaDate": "2017-12-01T16:00:00-08:00"
-    }
-  ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Error response. | [`ConnectivityManagementResultException`](../../doc/models/connectivity-management-result-exception.md) |
-
-
-# Change Devices Service Plan
-
-Changes the service plan for one or more devices.
-
-```php
-function changeDevicesServicePlan(ServicePlanUpdateRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`ServicePlanUpdateRequest`](../../doc/models/service-plan-update-request.md) | Body, Required | Request to change device service plan. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`DeviceManagementResult`](../../doc/models/device-management-result.md).
-
-## Example Usage
-
-```php
-$body = ServicePlanUpdateRequestBuilder::init(
-    'Tablet5GB'
-)
-    ->devices(
-        [
-            AccountDeviceListBuilder::init(
-                [
-                    DeviceIdBuilder::init(
-                        'A100003685E561',
-                        'meid'
-                    )->build()
-                ]
-            )->build()
-        ]
-    )
-    ->carrierIpPoolName('IPPool')
-    ->build();
-
-$apiResponse = $deviceManagementController->changeDevicesServicePlan($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "requestId": "c8de7c1d-59b9-4cf3-b969-db76cb2ce509"
 }
 ```
 

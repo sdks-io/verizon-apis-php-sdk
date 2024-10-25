@@ -23,22 +23,19 @@ use VerizonLib\Server;
 class RetrieveTheTriggersController extends BaseController
 {
     /**
-     * Retrives a specific trigger by its ID.
-     *
-     * @param string $triggerId The ID of a specific trigger
+     * Retrieves all of the available triggers for pseudo-MDN.
      *
      * @return ApiResponse Response from the API call
      */
-    public function getTriggersById(string $triggerId): ApiResponse
+    public function getAllAvailableTriggers(): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers/{triggerId}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers')
             ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('triggerId', $triggerId));
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
-            ->type(TriggerValueResponse2::class)
+            ->type(TriggerValueResponse::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -86,19 +83,22 @@ class RetrieveTheTriggersController extends BaseController
     }
 
     /**
-     * Retrieves all of the available triggers for pseudo-MDN.
+     * Retrives a specific trigger by its ID.
+     *
+     * @param string $triggerId The ID of a specific trigger
      *
      * @return ApiResponse Response from the API call
      */
-    public function getAllAvailableTriggers(): ApiResponse
+    public function getTriggersById(string $triggerId): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v2/triggers/{triggerId}')
             ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'));
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('triggerId', $triggerId));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
-            ->type(TriggerValueResponse::class)
+            ->type(TriggerValueResponse2::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

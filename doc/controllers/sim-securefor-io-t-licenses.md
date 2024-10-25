@@ -27,7 +27,7 @@ function assignLicenseToDevices(AssignLicenseRequest $body, ?string $xRequestID 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `body` | [`AssignLicenseRequest`](../../doc/models/assign-license-request.md) | Body, Required | Request to assign license to devices. |
-| `xRequestID` | `?string` | Header, Optional | Transaction Id. |
+| `xRequestID` | `?string` | Header, Optional | Transaction Id.<br>**Constraints**: *Minimum Length*: `3`, *Maximum Length*: `32`, *Pattern*: `^[0-9]-[0-9]{3,32}$` |
 
 ## Response Type
 
@@ -91,7 +91,7 @@ function unassignLicenseToDevices(string $xRequestID): ApiResponse
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `xRequestID` | `string` | Header, Required | Transaction Id. |
+| `xRequestID` | `string` | Header, Required | Transaction Id.<br>**Constraints**: *Minimum Length*: `3`, *Maximum Length*: `32`, *Pattern*: `^[0-9]-[0-9]{3,32}$` |
 
 ## Response Type
 

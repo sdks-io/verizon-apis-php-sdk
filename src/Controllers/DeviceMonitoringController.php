@@ -25,13 +25,13 @@ use VerizonLib\Server;
 class DeviceMonitoringController extends BaseController
 {
     /**
-     * @param StopMonitorRequest|null $body
+     * @param NotificationReportRequest $body Create Reachability Report Request
      *
      * @return ApiResponse Response from the API call
      */
-    public function stopDeviceReachability(?StopMonitorRequest $body = null): ApiResponse
+    public function deviceReachability(NotificationReportRequest $body): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/diagnostics/basic/devicereachability')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/diagnostics/basic/devicereachability')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
@@ -45,13 +45,13 @@ class DeviceMonitoringController extends BaseController
     }
 
     /**
-     * @param NotificationReportRequest $body Create Reachability Report Request
+     * @param StopMonitorRequest|null $body
      *
      * @return ApiResponse Response from the API call
      */
-    public function deviceReachability(NotificationReportRequest $body): ApiResponse
+    public function stopDeviceReachability(?StopMonitorRequest $body = null): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/diagnostics/basic/devicereachability')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/m2m/v1/diagnostics/basic/devicereachability')
             ->server(Server::THINGSPACE)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));

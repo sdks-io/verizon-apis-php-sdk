@@ -17,14 +17,42 @@ use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
 use VerizonLib\Exceptions\ReadySimRestErrorResponseException;
 use VerizonLib\Http\ApiResponse;
+use VerizonLib\Models\ARequestBodyForUsage;
 use VerizonLib\Models\RequestBodyForUsage;
-use VerizonLib\Models\RequestBodyForUsage1;
 use VerizonLib\Models\ResponseToUsageQuery;
 use VerizonLib\Models\UsageRequestResponse;
 use VerizonLib\Server;
 
 class PromotionPeriodInformationController extends BaseController
 {
+    /**
+     * Retrieves the usage history of a device during the promotion period.
+     *
+     * @param ARequestBodyForUsage $body Retrieve Aggregate Usage
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function getPromoDeviceUsageHistory(ARequestBodyForUsage $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/usage/actions/promodeviceusage')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn(
+                '0',
+                ErrorType::init(
+                    'All error responses will be in this format',
+                    ReadySimRestErrorResponseException::class
+                )
+            )
+            ->type(ResponseToUsageQuery::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
     /**
      * Retrieves the aggregate usage for an account using pseudo-MDN during the promotional period using a
      * callback.
@@ -46,34 +74,6 @@ class PromotionPeriodInformationController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Error response', ReadySimRestErrorResponseException::class))
             ->type(UsageRequestResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Retrieves the usage history of a device during the promotion period.
-     *
-     * @param RequestBodyForUsage1 $body Retrieve Aggregate Usage
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function getPromoDeviceUsageHistory(RequestBodyForUsage1 $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/m2m/v1/devices/usage/actions/promodeviceusage')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn(
-                '0',
-                ErrorType::init(
-                    'All error responses will be in this format',
-                    ReadySimRestErrorResponseException::class
-                )
-            )
-            ->type(ResponseToUsageQuery::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

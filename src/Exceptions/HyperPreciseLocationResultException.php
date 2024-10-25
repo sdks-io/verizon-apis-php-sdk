@@ -31,11 +31,6 @@ class HyperPreciseLocationResultException extends ApiException
     private $fault;
 
     /**
-     * @var array|null
-     */
-    private $example;
-
-    /**
      * Returns Response Code.
      * Error Code.
      */
@@ -94,23 +89,5 @@ class HyperPreciseLocationResultException extends ApiException
     public function setFault(?\VerizonLib\Models\HyperPreciseLocationFault $fault): void
     {
         $this->fault = $fault;
-    }
-
-    /**
-     * Returns Example.
-     */
-    public function getExample(): ?array
-    {
-        return $this->example;
-    }
-
-    /**
-     * Sets Example.
-     *
-     * @maps example
-     */
-    public function setExample(?array $example): void
-    {
-        $this->example = $example;
     }
 }

@@ -10,56 +10,9 @@ $softwareManagementCallbacksV1Controller = $client->getSoftwareManagementCallbac
 
 ## Methods
 
-* [Deregister Callback](../../doc/controllers/software-management-callbacks-v1.md#deregister-callback)
 * [List Registered Callbacks](../../doc/controllers/software-management-callbacks-v1.md#list-registered-callbacks)
 * [Register Callback](../../doc/controllers/software-management-callbacks-v1.md#register-callback)
-
-
-# Deregister Callback
-
-Deregisters the callback endpoint and stops ThingSpace from sending FOTA callback messages for the specified account.
-
-```php
-function deregisterCallback(string $account, string $service): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
-| `service` | [`string(CallbackServiceEnum)`](../../doc/models/callback-service-enum.md) | Template, Required | Callback type. Must be 'Fota' for Software Management Services API. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV1SuccessResult`](../../doc/models/fota-v1-success-result.md).
-
-## Example Usage
-
-```php
-$account = '0242078689-00001';
-
-$service = CallbackServiceEnum::FOTA;
-
-$apiResponse = $softwareManagementCallbacksV1Controller->deregisterCallback(
-    $account,
-    $service
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "success": true
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+* [Deregister Callback](../../doc/controllers/software-management-callbacks-v1.md#deregister-callback)
 
 
 # List Registered Callbacks
@@ -148,6 +101,53 @@ $apiResponse = $softwareManagementCallbacksV1Controller->registerCallback(
 {
   "accountName": "0204563412-00001",
   "serviceName": "Fota"
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV1ResultException`](../../doc/models/fota-v1-result-exception.md) |
+
+
+# Deregister Callback
+
+Deregisters the callback endpoint and stops ThingSpace from sending FOTA callback messages for the specified account.
+
+```php
+function deregisterCallback(string $account, string $service): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+| `service` | [`string(CallbackServiceEnum)`](../../doc/models/callback-service-enum.md) | Template, Required | Callback type. Must be 'Fota' for Software Management Services API. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FotaV1SuccessResult`](../../doc/models/fota-v1-success-result.md).
+
+## Example Usage
+
+```php
+$account = '0242078689-00001';
+
+$service = CallbackServiceEnum::FOTA;
+
+$apiResponse = $softwareManagementCallbacksV1Controller->deregisterCallback(
+    $account,
+    $service
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "success": true
 }
 ```
 

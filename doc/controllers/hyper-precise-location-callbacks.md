@@ -10,9 +10,59 @@ $hyperPreciseLocationCallbacksController = $client->getHyperPreciseLocationCallb
 
 ## Methods
 
-* [Register Callback](../../doc/controllers/hyper-precise-location-callbacks.md#register-callback)
 * [List Registered Callbacks](../../doc/controllers/hyper-precise-location-callbacks.md#list-registered-callbacks)
+* [Register Callback](../../doc/controllers/hyper-precise-location-callbacks.md#register-callback)
 * [Deregister Callback](../../doc/controllers/hyper-precise-location-callbacks.md#deregister-callback)
+
+
+# List Registered Callbacks
+
+Find registered callback listener for account by account number.
+
+```php
+function listRegisteredCallbacks(string $accountNumber): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountNumber` | `string` | Query, Required | A unique identifier for an account. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CallbackCreated[]`](../../doc/models/callback-created.md).
+
+## Example Usage
+
+```php
+$accountNumber = '0844021539-00001';
+
+$apiResponse = $hyperPreciseLocationCallbacksController->listRegisteredCallbacks($accountNumber);
+```
+
+## Example Response *(as JSON)*
+
+```json
+[
+  {
+    "aname": "0844021539-00001",
+    "name": "BullseyeReporting",
+    "url": "https://tsustgtests.mocklab.io/notifications/bullseye"
+  }
+]
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Bad request. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
+| 401 | Unauthorized request. Access token is missing or invalid. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
+| 403 | Forbidden request. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
+| 404 | Bad request. Not found. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
+| 409 | Bad request. Conflict state. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
+| 500 | Internal Server Error. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
 
 
 # Register Callback
@@ -57,56 +107,6 @@ $apiResponse = $hyperPreciseLocationCallbacksController->registerCallback(
   "accountName": "0844021539-00001",
   "name": "BullseyeReporting"
 }
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Bad request. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
-| 401 | Unauthorized request. Access token is missing or invalid. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
-| 403 | Forbidden request. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
-| 404 | Bad request. Not found. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
-| 409 | Bad request. Conflict state. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
-| 500 | Internal Server Error. | [`HyperPreciseLocationResultException`](../../doc/models/hyper-precise-location-result-exception.md) |
-
-
-# List Registered Callbacks
-
-Find registered callback listener for account by account number.
-
-```php
-function listRegisteredCallbacks(string $accountNumber): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `accountNumber` | `string` | Query, Required | A unique identifier for an account. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`CallbackCreated[]`](../../doc/models/callback-created.md).
-
-## Example Usage
-
-```php
-$accountNumber = '0844021539-00001';
-
-$apiResponse = $hyperPreciseLocationCallbacksController->listRegisteredCallbacks($accountNumber);
-```
-
-## Example Response *(as JSON)*
-
-```json
-[
-  {
-    "aname": "0844021539-00001",
-    "name": "BullseyeReporting",
-    "url": "https://tsustgtests.mocklab.io/notifications/bullseye"
-  }
-]
 ```
 
 ## Errors

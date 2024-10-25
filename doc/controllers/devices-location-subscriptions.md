@@ -19,14 +19,14 @@ $devicesLocationSubscriptionsController = $client->getDevicesLocationSubscriptio
 This subscriptions endpoint retrieves an account's current location subscription status.
 
 ```php
-function getLocationServiceSubscriptionStatus(string $account): ApiResponse
+function getLocationServiceSubscriptionStatus(string $accountName): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+| `accountName` | `string` | Template, Required | Account identifier in "##########-#####". |
 
 ## Response Type
 
@@ -35,9 +35,9 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$account = '0000123456-00001';
+$accountName = '0000123456-00001';
 
-$apiResponse = $devicesLocationSubscriptionsController->getLocationServiceSubscriptionStatus($account);
+$apiResponse = $devicesLocationSubscriptionsController->getLocationServiceSubscriptionStatus($accountName);
 ```
 
 ## Example Response *(as JSON)*

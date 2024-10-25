@@ -32,6 +32,33 @@ use VerizonLib\Server;
 class CampaignsV2Controller extends BaseController
 {
     /**
+     * This endpoint allows user to schedule a software upgrade.
+     *
+     * @param string $account Account identifier.
+     * @param CampaignSoftwareUpgrade $body Software upgrade information.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function scheduleCampaignFirmwareUpgrade(string $account, CampaignSoftwareUpgrade $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(
+                TemplateParam::init('account', $account),
+                HeaderParam::init('Content-Type', '*/*'),
+                BodyParam::init($body)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(CampaignSoftware::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * This endpoint allows user to get information of a software upgrade.
      *
      * @param string $account Account identifier.
@@ -112,20 +139,26 @@ class CampaignsV2Controller extends BaseController
     }
 
     /**
-     * This endpoint allows user to schedule a software upgrade.
+     * This endpoint allows user to change campaign dates and time windows. Fields which need to remain
+     * unchanged should be also provided.
      *
      * @param string $account Account identifier.
-     * @param CampaignSoftwareUpgrade $body Software upgrade information.
+     * @param string $campaignId Software upgrade information.
+     * @param V2ChangeCampaignDatesRequest $body New dates and time windows.
      *
      * @return ApiResponse Response from the API call
      */
-    public function scheduleCampaignFirmwareUpgrade(string $account, CampaignSoftwareUpgrade $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/campaigns/{account}')
+    public function updateCampaignDates(
+        string $account,
+        string $campaignId,
+        V2ChangeCampaignDatesRequest $body
+    ): ApiResponse {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}/dates')
             ->server(Server::SOFTWARE_MANAGEMENT_V2)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
                 TemplateParam::init('account', $account),
+                TemplateParam::init('campaignId', $campaignId),
                 HeaderParam::init('Content-Type', '*/*'),
                 BodyParam::init($body)
             );
@@ -160,39 +193,6 @@ class CampaignsV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(UploadAndScheduleFileResponse::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows user to change campaign dates and time windows. Fields which need to remain
-     * unchanged should be also provided.
-     *
-     * @param string $account Account identifier.
-     * @param string $campaignId Software upgrade information.
-     * @param V2ChangeCampaignDatesRequest $body New dates and time windows.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function updateCampaignDates(
-        string $account,
-        string $campaignId,
-        V2ChangeCampaignDatesRequest $body
-    ): ApiResponse {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/campaigns/{account}/{campaignId}/dates')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(
-                TemplateParam::init('account', $account),
-                TemplateParam::init('campaignId', $campaignId),
-                HeaderParam::init('Content-Type', '*/*'),
-                BodyParam::init($body)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(CampaignSoftware::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

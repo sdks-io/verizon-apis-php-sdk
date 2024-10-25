@@ -60,13 +60,14 @@ use VerizonLib\Controllers\FirmwareV3Controller;
 use VerizonLib\Controllers\FixedWirelessQualificationController;
 use VerizonLib\Controllers\GlobalReportingController;
 use VerizonLib\Controllers\HyperPreciseLocationCallbacksController;
+use VerizonLib\Controllers\M5gBIDeviceActionsController;
 use VerizonLib\Controllers\M5gEdgePlatformsController;
 use VerizonLib\Controllers\ManagingESIMProfilesController;
-use VerizonLib\Controllers\MECController;
 use VerizonLib\Controllers\MV2TriggersController;
 use VerizonLib\Controllers\OauthAuthorizationController;
 use VerizonLib\Controllers\PerformanceMetricsController;
 use VerizonLib\Controllers\PromotionPeriodInformationController;
+use VerizonLib\Controllers\PWNController;
 use VerizonLib\Controllers\RetrieveTheTriggersController;
 use VerizonLib\Controllers\ServerLoggingController;
 use VerizonLib\Controllers\ServiceEndpointsController;
@@ -227,7 +228,7 @@ class VerizonClient implements ConfigurationInterface
 
     private $thingSpaceQualityOfServiceAPIActions;
 
-    private $mEC;
+    private $pWN;
 
     private $promotionPeriodInformation;
 
@@ -240,6 +241,8 @@ class VerizonClient implements ConfigurationInterface
     private $globalReporting;
 
     private $mV2Triggers;
+
+    private $m5gBIDeviceActions;
 
     private $oauthAuthorization;
 
@@ -260,15 +263,8 @@ class VerizonClient implements ConfigurationInterface
     public function __construct(array $config = [])
     {
         $this->config = array_merge(ConfigurationDefaults::_ALL, CoreHelper::clone($config));
-        $this->thingspaceOauthManager = new ThingspaceOauthManager(
-            $this->config['oauthClientId'] ?? ConfigurationDefaults::O_AUTH_CLIENT_ID,
-            $this->config['oauthClientSecret'] ?? ConfigurationDefaults::O_AUTH_CLIENT_SECRET,
-            $this->config['oauthToken'],
-            $this->config['oauthScopes']
-        );
-        $this->vZM2mTokenManager = new VZM2mTokenManager(
-            $this->config['vZM2mToken'] ?? ConfigurationDefaults::VZ_M2_M_TOKEN
-        );
+        $this->thingspaceOauthManager = new ThingspaceOauthManager($this->config);
+        $this->vZM2mTokenManager = new VZM2mTokenManager($this->config);
         $this->validateConfig();
         $this->client = ClientBuilder::init(new HttpClient(Configuration::init($this)))
             ->converter(new CompatibilityConverter())
@@ -1168,14 +1164,14 @@ class VerizonClient implements ConfigurationInterface
     }
 
     /**
-     * Returns MEC Controller
+     * Returns PWN Controller
      */
-    public function getMECController(): MECController
+    public function getPWNController(): PWNController
     {
-        if ($this->mEC == null) {
-            $this->mEC = new MECController($this->client);
+        if ($this->pWN == null) {
+            $this->pWN = new PWNController($this->client);
         }
-        return $this->mEC;
+        return $this->pWN;
     }
 
     /**
@@ -1242,6 +1238,17 @@ class VerizonClient implements ConfigurationInterface
             $this->mV2Triggers = new MV2TriggersController($this->client);
         }
         return $this->mV2Triggers;
+    }
+
+    /**
+     * Returns 5g BI Device Actions Controller
+     */
+    public function getM5gBIDeviceActionsController(): M5gBIDeviceActionsController
+    {
+        if ($this->m5gBIDeviceActions == null) {
+            $this->m5gBIDeviceActions = new M5gBIDeviceActionsController($this->client);
+        }
+        return $this->m5gBIDeviceActions;
     }
 
     /**

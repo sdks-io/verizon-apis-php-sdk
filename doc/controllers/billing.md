@@ -10,62 +10,10 @@ $billingController = $client->getBillingController();
 
 ## Methods
 
-* [Managed Account Action](../../doc/controllers/billing.md#managed-account-action)
 * [Add Account](../../doc/controllers/billing.md#add-account)
+* [Managed Account Action](../../doc/controllers/billing.md#managed-account-action)
 * [Cancel Managed Account Action](../../doc/controllers/billing.md#cancel-managed-account-action)
 * [List Managed Account](../../doc/controllers/billing.md#list-managed-account)
-
-
-# Managed Account Action
-
-Activates a managed billing service relationship between a managed account and the primary account.
-
-```php
-function managedAccountAction(ManagedAccountsProvisionRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`ManagedAccountsProvisionRequest`](../../doc/models/managed-accounts-provision-request.md) | Body, Required | Service name and list of accounts to add |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ManagedAccountsProvisionResponse`](../../doc/models/managed-accounts-provision-response.md).
-
-## Example Usage
-
-```php
-$body = ManagedAccountsProvisionRequestBuilder::init(
-    '1223334444-00001',
-    '1234567890-00001',
-    ServiceNameEnum::LOCATION,
-    'TS-LOC-COARSE-CellID-5K',
-    'd4fbff33-ece4-9f02-42ef-2c90bd287e3b'
-)->build();
-
-$apiResponse = $billingController->managedAccountAction($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "txid": "4fbff332-ece4-42ef-9f02-7e3bdc90bd28",
-  "accountName": "1223334444-00001",
-  "paccountName": "1234567890-00001",
-  "serviceName": "Location",
-  "status": "Success",
-  "reason": "Success"
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
 
 
 # Add Account
@@ -107,7 +55,7 @@ $apiResponse = $billingController->addAccount($body);
 
 ```json
 {
-  "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33",
+  "txid": "2c90bd28-eeee-ffff-gggg-7e3bd4fbff33",
   "statusList": [
     {
       "id": "1223334444-00001",
@@ -125,6 +73,58 @@ $apiResponse = $billingController->addAccount($body);
       "reason": "Success"
     }
   ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
+
+
+# Managed Account Action
+
+Activates a managed billing service relationship between a managed account and the primary account.
+
+```php
+function managedAccountAction(ManagedAccountsProvisionRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`ManagedAccountsProvisionRequest`](../../doc/models/managed-accounts-provision-request.md) | Body, Required | Service name and list of accounts to add |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ManagedAccountsProvisionResponse`](../../doc/models/managed-accounts-provision-response.md).
+
+## Example Usage
+
+```php
+$body = ManagedAccountsProvisionRequestBuilder::init(
+    '1223334444-00001',
+    '1234567890-00001',
+    ServiceNameEnum::LOCATION,
+    'TS-LOC-COARSE-CellID-5K',
+    'd4fbff33-eeee-ffff-gggg-2c90bd287e3b'
+)->build();
+
+$apiResponse = $billingController->managedAccountAction($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "txid": "4fbff332-eeee-ffff-gggg-7e3bdc90bd28",
+  "accountName": "1223334444-00001",
+  "paccountName": "1234567890-00001",
+  "serviceName": "Location",
+  "status": "Success",
+  "reason": "Success"
 }
 ```
 
@@ -161,7 +161,7 @@ $body = ManagedAccountCancelRequestBuilder::init(
     '1234567890-00001',
     ServiceNameEnum::LOCATION,
     'TS-LOC-COARSE-CellID-5K',
-    'd4fbff33-ece4-9f02-42ef-2c90bd287e3b'
+    'd4fbff33-eeee-ffff-gggg-2c90bd287e3b'
 )->build();
 
 $apiResponse = $billingController->cancelManagedAccountAction($body);
@@ -171,7 +171,7 @@ $apiResponse = $billingController->cancelManagedAccountAction($body);
 
 ```json
 {
-  "txid": "4fbff332-ece4-42ef-9f02-7e3bdc90bd28",
+  "txid": "4fbff332-eeee-ffff-gggg-7e3bdc90bd28",
   "accountName": "1223334444-00001",
   "paccountName": "1234567890-00001",
   "serviceName": "Location",
@@ -227,11 +227,11 @@ $apiResponse = $billingController->listManagedAccount(
   "ManagedAccAddedList": [
     {
       "id": "1223334444-00001",
-      "txid": "2c90bd28-ece4-42ef-9f02-7e3bd4fbff33"
+      "txid": "2c90bd28-eeee-ffff-gggg-7e3bd4fbff33"
     },
     {
       "id": "2334445555-00001",
-      "txid": "d4fbff33-ece4-9f02-42ef-2c90bd287e3b"
+      "txid": "d4fbff33-eeee-ffff-gggg-2c90bd287e3b"
     }
   ]
 }

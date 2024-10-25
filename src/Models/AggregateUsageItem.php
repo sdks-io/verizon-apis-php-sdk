@@ -33,11 +33,6 @@ class AggregateUsageItem implements \JsonSerializable
     private $bytesTransferred;
 
     /**
-     * @var array|null
-     */
-    private $example;
-
-    /**
      * Returns Imei.
      * International Mobile Equipment Identifier. This is the ID of the device reporting usage.
      */
@@ -98,24 +93,6 @@ class AggregateUsageItem implements \JsonSerializable
     }
 
     /**
-     * Returns Example.
-     */
-    public function getExample(): ?array
-    {
-        return $this->example;
-    }
-
-    /**
-     * Sets Example.
-     *
-     * @maps example
-     */
-    public function setExample(?array $example): void
-    {
-        $this->example = $example;
-    }
-
-    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -135,9 +112,6 @@ class AggregateUsageItem implements \JsonSerializable
         }
         if (isset($this->bytesTransferred)) {
             $json['bytesTransferred'] = $this->bytesTransferred;
-        }
-        if (isset($this->example)) {
-            $json['example']          = $this->example;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

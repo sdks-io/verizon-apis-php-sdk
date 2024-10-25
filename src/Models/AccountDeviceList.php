@@ -25,7 +25,7 @@ class AccountDeviceList implements \JsonSerializable
     /**
      * @var string|null
      */
-    private $ipAddress;
+    private $ipaddress;
 
     /**
      * @param DeviceId[] $deviceIds
@@ -61,21 +61,21 @@ class AccountDeviceList implements \JsonSerializable
     }
 
     /**
-     * Returns Ip Address.
+     * Returns Ipaddress.
      */
-    public function getIpAddress(): ?string
+    public function getIpaddress(): ?string
     {
-        return $this->ipAddress;
+        return $this->ipaddress;
     }
 
     /**
-     * Sets Ip Address.
+     * Sets Ipaddress.
      *
      * @maps ipAddress
      */
-    public function setIpAddress(?string $ipAddress): void
+    public function setIpaddress(?string $ipaddress): void
     {
-        $this->ipAddress = $ipAddress;
+        $this->ipaddress = $ipaddress;
     }
 
     /**
@@ -91,8 +91,8 @@ class AccountDeviceList implements \JsonSerializable
     {
         $json = [];
         $json['deviceIds']     = $this->deviceIds;
-        if (isset($this->ipAddress)) {
-            $json['ipAddress'] = $this->ipAddress;
+        if (isset($this->ipaddress)) {
+            $json['ipAddress'] = $this->ipaddress;
         }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

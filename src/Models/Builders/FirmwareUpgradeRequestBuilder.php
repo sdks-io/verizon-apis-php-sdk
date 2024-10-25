@@ -38,10 +38,11 @@ class FirmwareUpgradeRequestBuilder
         string $firmwareName,
         string $firmwareTo,
         \DateTime $startDate,
+        \DateTime $endDate,
         array $deviceList
     ): self {
         return new self(
-            new FirmwareUpgradeRequest($accountName, $firmwareName, $firmwareTo, $startDate, $deviceList)
+            new FirmwareUpgradeRequest($accountName, $firmwareName, $firmwareTo, $startDate, $endDate, $deviceList)
         );
     }
 

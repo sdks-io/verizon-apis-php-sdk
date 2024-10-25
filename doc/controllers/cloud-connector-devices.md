@@ -10,95 +10,12 @@ $cloudConnectorDevicesController = $client->getCloudConnectorDevicesController()
 
 ## Methods
 
-* [Search Device Event History](../../doc/controllers/cloud-connector-devices.md#search-device-event-history)
 * [Update Devices Configuration Value](../../doc/controllers/cloud-connector-devices.md#update-devices-configuration-value)
-* [Search Sensor Readings](../../doc/controllers/cloud-connector-devices.md#search-sensor-readings)
-* [Delete Device From Account](../../doc/controllers/cloud-connector-devices.md#delete-device-from-account)
 * [Find Device by Property Values](../../doc/controllers/cloud-connector-devices.md#find-device-by-property-values)
 * [Search Devices Resources by Property Values](../../doc/controllers/cloud-connector-devices.md#search-devices-resources-by-property-values)
-
-
-# Search Device Event History
-
-Search device event history to find events that match criteria.Sensor readings, configuration changes, and other device data are all stored as events.
-
-```php
-function searchDeviceEventHistory(SearchDeviceEventHistoryRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`SearchDeviceEventHistoryRequest`](../../doc/models/search-device-event-history-request.md) | Body, Required | The device identifier and fields to match in the search. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`SearchDeviceEventHistoryResponseList`](../../doc/models/search-device-event-history-response-list.md).
-
-## Example Usage
-
-```php
-$body = SearchDeviceEventHistoryRequestBuilder::init(
-    AccountIdentifierBuilder::init()
-        ->billingaccountid('1223334444-00001')
-        ->build(),
-    ResourceIdentifierBuilder::init()
-        ->imei('864508030084997')
-        ->build()
-)
-    ->selection(
-        [
-            'kind' => 'ts.event.configuration'
-        ]
-    )
-    ->limitnumber(2)
-    ->build();
-
-$apiResponse = $cloudConnectorDevicesController->searchDeviceEventHistory($body);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "SearchDeviceEventHistory": [
-    {
-      "action": "set",
-      "createdon": "2019-02-21T02:05:25.270417481Z",
-      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
-      "id": "e521b8ae-440d-6cc1-f687-7c80e085ff29",
-      "kind": "ts.event.configuration",
-      "lastupdated": "2019-02-21T02:05:25.394230017Z",
-      "name": "SetConfigurationReq",
-      "state": "update",
-      "tagids": [
-        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
-        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
-      ],
-      "transactionid": "c7a0a8cf-6856-4733-93ea-69913650e4ca",
-      "version": "1.0",
-      "versionid": "270e4820-357d-11e9-9d6c-02420a470c06"
-    },
-    {
-      "action": "set",
-      "createdon": "2019-02-21T01:58:45.163Z",
-      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
-      "id": "25819e96-c4f2-6545-fb68-0e1d9662359f",
-      "kind": "ts.event.configuration",
-      "lastupdated": "2019-02-21T01:58:45.163Z",
-      "state": "pending",
-      "tagids": [
-        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
-        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
-      ],
-      "transactionid": "c7a0a8cf-6856-4733-93ea-69913650e4ca",
-      "version": "1.0",
-      "versionid": "387fe2fe-357c-11e9-ae40-02420a49140a"
-    }
-  ]
-}
-```
+* [Search Device Event History](../../doc/controllers/cloud-connector-devices.md#search-device-event-history)
+* [Search Sensor Readings](../../doc/controllers/cloud-connector-devices.md#search-sensor-readings)
+* [Delete Device From Account](../../doc/controllers/cloud-connector-devices.md#delete-device-from-account)
 
 
 # Update Devices Configuration Value
@@ -164,129 +81,6 @@ $apiResponse = $cloudConnectorDevicesController->updateDevicesConfigurationValue
   "transactionid": "1d38aae7-558d-4cb9-8269-e8d4c0519045",
   "version": "1.0"
 }
-```
-
-
-# Search Sensor Readings
-
-Returns the readings of a specified sensor, with the most recent reading first. Sensor readings are stored as events; this request an array of events.
-
-```php
-function searchSensorReadings(string $fieldname, SearchSensorHistoryRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `fieldname` | `string` | Template, Required | The name of the sensor. |
-| `body` | [`SearchSensorHistoryRequest`](../../doc/models/search-sensor-history-request.md) | Body, Required | The device identifier and fields to match in the search. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`SearchSensorHistoryResponseList`](../../doc/models/search-sensor-history-response-list.md).
-
-## Example Usage
-
-```php
-$fieldname = 'fieldname8';
-
-$body = SearchSensorHistoryRequestBuilder::init(
-    AccountIdentifierBuilder::init()
-        ->billingaccountid('1223334444-00001')
-        ->build(),
-    ResourceIdentifierBuilder::init()
-        ->imei('864508030084997')
-        ->build()
-)
-    ->limitnumber(2)
-    ->build();
-
-$apiResponse = $cloudConnectorDevicesController->searchSensorReadings(
-    $fieldname,
-    $body
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "SearchSensorHistory": [
-    {
-      "action": "update",
-      "createdon": "2019-02-22T04:05:26Z",
-      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
-      "fields": {
-        "temperature": "18.4"
-      },
-      "id": "4521b7a7-7de1-6e68-f020-1345ef3b764a",
-      "kind": "ts.event",
-      "lastupdated": "2019-02-22T04:05:49.786Z",
-      "state": "update",
-      "tagids": [
-        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
-        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
-      ],
-      "transactionid": "864508030084997-OnBoard-c05f946c-3f5c-4527-b4d0-5aca256fc3dd",
-      "version": "1.0",
-      "versionid": "238addb9-3657-11e9-8848-02420a951f13"
-    },
-    {
-      "action": "update",
-      "createdon": "2019-02-22T03:05:26Z",
-      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
-      "fields": {
-        "temperature": "19.0"
-      },
-      "id": "05b1ea7b-4bf2-6af6-ea8b-414595f2c3e9",
-      "kind": "ts.event",
-      "lastupdated": "2019-02-22T03:05:48.483Z",
-      "state": "update",
-      "tagids": [
-        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
-        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
-      ],
-      "transactionid": "864508030084997-OnBoard-5f71f47d-4464-4f69-a3ee-5c243f0ef5b8",
-      "version": "1.0",
-      "versionid": "c0ffa4b5-364e-11e9-a3ee-02420a8c0d14"
-    }
-  ]
-}
-```
-
-
-# Delete Device From Account
-
-Remove a device from a ThingSpace account.
-
-```php
-function deleteDeviceFromAccount(RemoveDeviceRequest $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `body` | [`RemoveDeviceRequest`](../../doc/models/remove-device-request.md) | Body, Required | The request body identifies the device to delete. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance.
-
-## Example Usage
-
-```php
-$body = RemoveDeviceRequestBuilder::init(
-    AccountIdentifierBuilder::init()
-        ->billingaccountid('1223334444-00001')
-        ->build(),
-    ResourceIdentifierBuilder::init()
-        ->imei('864508030084997')
-        ->build()
-)->build();
-
-$apiResponse = $cloudConnectorDevicesController->deleteDeviceFromAccount($body);
 ```
 
 
@@ -429,5 +223,211 @@ $apiResponse = $cloudConnectorDevicesController->searchDevicesResourcesByPropert
     }
   ]
 }
+```
+
+
+# Search Device Event History
+
+Search device event history to find events that match criteria.Sensor readings, configuration changes, and other device data are all stored as events.
+
+```php
+function searchDeviceEventHistory(SearchDeviceEventHistoryRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`SearchDeviceEventHistoryRequest`](../../doc/models/search-device-event-history-request.md) | Body, Required | The device identifier and fields to match in the search. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`SearchDeviceEventHistoryResponseList`](../../doc/models/search-device-event-history-response-list.md).
+
+## Example Usage
+
+```php
+$body = SearchDeviceEventHistoryRequestBuilder::init(
+    AccountIdentifierBuilder::init()
+        ->billingaccountid('1223334444-00001')
+        ->build(),
+    ResourceIdentifierBuilder::init()
+        ->imei('864508030084997')
+        ->build()
+)
+    ->selection(
+        [
+            'kind' => 'ts.event.configuration'
+        ]
+    )
+    ->limitnumber(2)
+    ->build();
+
+$apiResponse = $cloudConnectorDevicesController->searchDeviceEventHistory($body);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "SearchDeviceEventHistory": [
+    {
+      "action": "set",
+      "createdon": "2019-02-21T02:05:25.270417481Z",
+      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
+      "id": "e521b8ae-440d-6cc1-f687-7c80e085ff29",
+      "kind": "ts.event.configuration",
+      "lastupdated": "2019-02-21T02:05:25.394230017Z",
+      "name": "SetConfigurationReq",
+      "state": "update",
+      "tagids": [
+        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
+        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
+      ],
+      "transactionid": "c7a0a8cf-6856-4733-93ea-69913650e4ca",
+      "version": "1.0",
+      "versionid": "270e4820-357d-11e9-9d6c-02420a470c06"
+    },
+    {
+      "action": "set",
+      "createdon": "2019-02-21T01:58:45.163Z",
+      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
+      "id": "25819e96-c4f2-6545-fb68-0e1d9662359f",
+      "kind": "ts.event.configuration",
+      "lastupdated": "2019-02-21T01:58:45.163Z",
+      "state": "pending",
+      "tagids": [
+        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
+        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
+      ],
+      "transactionid": "c7a0a8cf-6856-4733-93ea-69913650e4ca",
+      "version": "1.0",
+      "versionid": "387fe2fe-357c-11e9-ae40-02420a49140a"
+    }
+  ]
+}
+```
+
+
+# Search Sensor Readings
+
+Returns the readings of a specified sensor, with the most recent reading first. Sensor readings are stored as events; this request an array of events.
+
+```php
+function searchSensorReadings(string $fieldname, SearchSensorHistoryRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `fieldname` | `string` | Template, Required | The name of the sensor. |
+| `body` | [`SearchSensorHistoryRequest`](../../doc/models/search-sensor-history-request.md) | Body, Required | The device identifier and fields to match in the search. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`SearchSensorHistoryResponseList`](../../doc/models/search-sensor-history-response-list.md).
+
+## Example Usage
+
+```php
+$fieldname = 'fieldname8';
+
+$body = SearchSensorHistoryRequestBuilder::init(
+    AccountIdentifierBuilder::init()
+        ->billingaccountid('1223334444-00001')
+        ->build(),
+    ResourceIdentifierBuilder::init()
+        ->imei('864508030084997')
+        ->build()
+)
+    ->limitnumber(2)
+    ->build();
+
+$apiResponse = $cloudConnectorDevicesController->searchSensorReadings(
+    $fieldname,
+    $body
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "SearchSensorHistory": [
+    {
+      "action": "update",
+      "createdon": "2019-02-22T04:05:26Z",
+      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
+      "fields": {
+        "temperature": "18.4"
+      },
+      "id": "4521b7a7-7de1-6e68-f020-1345ef3b764a",
+      "kind": "ts.event",
+      "lastupdated": "2019-02-22T04:05:49.786Z",
+      "state": "update",
+      "tagids": [
+        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
+        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
+      ],
+      "transactionid": "864508030084997-OnBoard-c05f946c-3f5c-4527-b4d0-5aca256fc3dd",
+      "version": "1.0",
+      "versionid": "238addb9-3657-11e9-8848-02420a951f13"
+    },
+    {
+      "action": "update",
+      "createdon": "2019-02-22T03:05:26Z",
+      "deviceid": "8461f530-2e31-6e87-e357-6c38251d4d01",
+      "fields": {
+        "temperature": "19.0"
+      },
+      "id": "05b1ea7b-4bf2-6af6-ea8b-414595f2c3e9",
+      "kind": "ts.event",
+      "lastupdated": "2019-02-22T03:05:48.483Z",
+      "state": "update",
+      "tagids": [
+        "4d110e4f-7a7c-6b26-eaac-31cc34c6e1d4",
+        "cd81ed16-18ae-6c7d-eaba-2883b0395387"
+      ],
+      "transactionid": "864508030084997-OnBoard-5f71f47d-4464-4f69-a3ee-5c243f0ef5b8",
+      "version": "1.0",
+      "versionid": "c0ffa4b5-364e-11e9-a3ee-02420a8c0d14"
+    }
+  ]
+}
+```
+
+
+# Delete Device From Account
+
+Remove a device from a ThingSpace account.
+
+```php
+function deleteDeviceFromAccount(RemoveDeviceRequest $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`RemoveDeviceRequest`](../../doc/models/remove-device-request.md) | Body, Required | The request body identifies the device to delete. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance.
+
+## Example Usage
+
+```php
+$body = RemoveDeviceRequestBuilder::init(
+    AccountIdentifierBuilder::init()
+        ->billingaccountid('1223334444-00001')
+        ->build(),
+    ResourceIdentifierBuilder::init()
+        ->imei('864508030084997')
+        ->build()
+)->build();
+
+$apiResponse = $cloudConnectorDevicesController->deleteDeviceFromAccount($body);
 ```
 

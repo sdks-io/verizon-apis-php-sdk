@@ -53,7 +53,8 @@ interface ThingspaceOauthCredentials
     public function fetchToken(?array $additionalParams = null): OAuthToken;
 
     /**
-     * Has the OAuth token expired?
+     * Has the OAuth token expired? If the token argument is not provided then this function will check the
+     * expiry of the initial oauthToken, that's set in the client initialization.
      */
-    public function isTokenExpired(): bool;
+    public function isTokenExpired(?OAuthToken $token = null): bool;
 }

@@ -45,6 +45,8 @@ class ConfigurationDefaults
 
     public const VZ_M2_M_TOKEN = '';
 
+    public const THINGSPACE_OAUTH_CLOCK_SKEW = 0;
+
     /**
      * @var array Associative list of all default configurations
      */
@@ -63,6 +65,9 @@ class ConfigurationDefaults
         'oauthClientSecret' => self::O_AUTH_CLIENT_SECRET,
         'oauthToken' => self::O_AUTH_TOKEN,
         'oauthScopes' => self::O_AUTH_SCOPES,
-        'vZM2mToken' => self::VZ_M2_M_TOKEN
+        'vZM2mToken' => self::VZ_M2_M_TOKEN,
+        'thingspace_oauth-ClockSkew' => self::THINGSPACE_OAUTH_CLOCK_SKEW,
+        'thingspace_oauth-TokenProvider' => null,
+        'thingspace_oauth-OnTokenUpdate' => null
     ];
 }

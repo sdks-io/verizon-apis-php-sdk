@@ -29,6 +29,29 @@ use VerizonLib\Server;
 class FirmwareV1Controller extends BaseController
 {
     /**
+     * Lists all device firmware images available for an account, based on the devices registered to that
+     * account.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAvailableFirmware(string $account): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(Firmware::class, 1)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Schedules a firmware upgrade for devices.
      *
      * @param FirmwareUpgradeRequest $body Details of the firmware upgrade request.
@@ -54,18 +77,21 @@ class FirmwareV1Controller extends BaseController
      * Returns information about a specified upgrade, include the target date of the upgrade, the list of
      * devices in the upgrade, and the status of the upgrade for each device.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      * @param string $upgradeId The UUID of the upgrade, returned by POST /upgrades when the upgrade
      *        was scheduled.
      *
      * @return ApiResponse Response from the API call
      */
-    public function listFirmwareUpgradeDetails(string $account, string $upgradeId): ApiResponse
+    public function listFirmwareUpgradeDetails(string $accountName, string $upgradeId): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/upgrades/{account}/upgrade/{upgradeId}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/upgrades/{accountName}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
+            ->parameters(
+                TemplateParam::init('accountName', $accountName),
+                TemplateParam::init('upgradeId', $upgradeId)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
@@ -76,32 +102,9 @@ class FirmwareV1Controller extends BaseController
     }
 
     /**
-     * Lists all device firmware images available for an account, based on the devices registered to that
-     * account.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAvailableFirmware(string $account): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/firmware/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(Firmware::class, 1)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Add or remove devices from a scheduled upgrade.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      * @param string $upgradeId The UUID of the upgrade, returned by POST /upgrades when the upgrade
      *        was scheduled.
      * @param FirmwareUpgradeChangeRequest $body List of devices to add or remove.
@@ -109,15 +112,15 @@ class FirmwareV1Controller extends BaseController
      * @return ApiResponse Response from the API call
      */
     public function updateFirmwareUpgradeDevices(
-        string $account,
+        string $accountName,
         string $upgradeId,
         FirmwareUpgradeChangeRequest $body
     ): ApiResponse {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/upgrades/{account}/upgrade/{upgradeId}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::PUT, '/upgrades/{accountName}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
             ->parameters(
-                TemplateParam::init('account', $account),
+                TemplateParam::init('accountName', $accountName),
                 TemplateParam::init('upgradeId', $upgradeId),
                 HeaderParam::init('Content-Type', '*/*'),
                 BodyParam::init($body)
@@ -134,17 +137,20 @@ class FirmwareV1Controller extends BaseController
     /**
      * Cancel a scheduled firmware upgrade.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      * @param string $upgradeId The UUID of the scheduled upgrade that you want to cancel.
      *
      * @return ApiResponse Response from the API call
      */
-    public function cancelScheduledFirmwareUpgrade(string $account, string $upgradeId): ApiResponse
+    public function cancelScheduledFirmwareUpgrade(string $accountName, string $upgradeId): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/upgrades/{account}/upgrade/{upgradeId}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/upgrades/{accountName}/upgrade/{upgradeId}')
             ->server(Server::SOFTWARE_MANAGEMENT_V1)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('upgradeId', $upgradeId));
+            ->parameters(
+                TemplateParam::init('accountName', $accountName),
+                TemplateParam::init('upgradeId', $upgradeId)
+            );
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))

@@ -12,9 +12,122 @@ $exclusionsController = $client->getExclusionsController();
 
 ## Methods
 
+* [Devices Location Get Consent Async](../../doc/controllers/exclusions.md#devices-location-get-consent-async)
+* [Devices Location Give Consent Async](../../doc/controllers/exclusions.md#devices-location-give-consent-async)
+* [Devices Location Update Consent](../../doc/controllers/exclusions.md#devices-location-update-consent)
 * [Exclude Devices](../../doc/controllers/exclusions.md#exclude-devices)
 * [Remove Devices From Exclusion List](../../doc/controllers/exclusions.md#remove-devices-from-exclusion-list)
 * [List Excluded Devices](../../doc/controllers/exclusions.md#list-excluded-devices)
+
+
+# Devices Location Get Consent Async
+
+Get the consent settings for the entire account or device list in an account.
+
+```php
+function devicesLocationGetConsentAsync(string $accountName, ?string $deviceId = null): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountName` | `string` | Query, Required | The numeric name of the account. |
+| `deviceId` | `?string` | Query, Optional | The IMEI of the device being queried |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`GetAccountDeviceConsent`](../../doc/models/get-account-device-consent.md).
+
+## Example Usage
+
+```php
+$accountName = '0000123456-00001';
+
+$deviceId = '900000000000009';
+
+$apiResponse = $exclusionsController->devicesLocationGetConsentAsync(
+    $accountName,
+    $deviceId
+);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Unexpected error. | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
+
+
+# Devices Location Give Consent Async
+
+Create a consent record to use location services as an asynchronous request.
+
+```php
+function devicesLocationGiveConsentAsync(?AccountConsentCreate $body = null): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`?AccountConsentCreate`](../../doc/models/account-consent-create.md) | Body, Optional | Account details to create a consent record. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ConsentTransactionID`](../../doc/models/consent-transaction-id.md).
+
+## Example Usage
+
+```php
+$body = AccountConsentCreateBuilder::init()
+    ->accountName('0000123456-00001')
+    ->build();
+
+$apiResponse = $exclusionsController->devicesLocationGiveConsentAsync($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Unexpected error. | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
+
+
+# Devices Location Update Consent
+
+Update the location services consent record for an entire account.
+
+```php
+function devicesLocationUpdateConsent(?AccountConsentUpdate $body = null): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `body` | [`?AccountConsentUpdate`](../../doc/models/account-consent-update.md) | Body, Optional | Account details to update a consent record. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`ConsentTransactionID`](../../doc/models/consent-transaction-id.md).
+
+## Example Usage
+
+```php
+$body = AccountConsentUpdateBuilder::init()
+    ->accountName('0000123456-00001')
+    ->allDeviceConsent(0)
+    ->build();
+
+$apiResponse = $exclusionsController->devicesLocationUpdateConsent($body);
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| Default | Unexpected error. | [`DeviceLocationResultException`](../../doc/models/device-location-result-exception.md) |
 
 
 # Exclude Devices
@@ -114,14 +227,14 @@ $apiResponse = $exclusionsController->removeDevicesFromExclusionList(
 This consents endpoint retrieves a list of excluded devices in an account.
 
 ```php
-function listExcludedDevices(string $account, string $startIndex): ApiResponse
+function listExcludedDevices(string $accountName, string $startIndex): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `account` | `string` | Template, Required | Account identifier in "##########-#####". |
+| `accountName` | `string` | Template, Required | Account identifier in "##########-#####". |
 | `startIndex` | `string` | Template, Required | Zero-based number of the first record to return. |
 
 ## Response Type
@@ -131,12 +244,12 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$account = '0252012345-00001';
+$accountName = '0252012345-00001';
 
 $startIndex = '0';
 
 $apiResponse = $exclusionsController->listExcludedDevices(
-    $account,
+    $accountName,
     $startIndex
 );
 ```

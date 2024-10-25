@@ -20,6 +20,8 @@ Firmware upgrade for devices.
 | `endDate` | `DateTime` | Required | Campaign end date. | getEndDate(): \DateTime | setEndDate(\DateTime endDate): void |
 | `campaignTimeWindowList` | [`?(V3TimeWindow[])`](../../doc/models/v3-time-window.md) | Optional | List of allowed campaign time windows. | getCampaignTimeWindowList(): ?array | setCampaignTimeWindowList(?array campaignTimeWindowList): void |
 | `deviceList` | `string[]` | Required | Device IMEI list. | getDeviceList(): array | setDeviceList(array deviceList): void |
+| `autoAssignLicenseFlag` | `bool` | Required | This flag, when set to true, will assign a FOTA license automatically if the device does not have one already. | getAutoAssignLicenseFlag(): bool | setAutoAssignLicenseFlag(bool autoAssignLicenseFlag): void |
+| `autoAddDevicesFlag` | `bool` | Required | this flag, when set to true, will automatically add a device of the same make and model to a campaign. | getAutoAddDevicesFlag(): bool | setAutoAddDevicesFlag(bool autoAddDevicesFlag): void |
 
 ## Example (as JSON)
 
@@ -40,7 +42,9 @@ Firmware upgrade for devices.
   ],
   "deviceList": [
     "15-digit IMEI"
-  ]
+  ],
+  "autoAssignLicenseFlag": false,
+  "autoAddDevicesFlag": false
 }
 ```
 

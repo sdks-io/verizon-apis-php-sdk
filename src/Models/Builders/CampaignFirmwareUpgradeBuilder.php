@@ -40,7 +40,9 @@ class CampaignFirmwareUpgradeBuilder
         string $protocol,
         \DateTime $startDate,
         \DateTime $endDate,
-        array $deviceList
+        array $deviceList,
+        bool $autoAssignLicenseFlag,
+        bool $autoAddDevicesFlag
     ): self {
         return new self(new CampaignFirmwareUpgrade(
             $firmwareName,
@@ -49,7 +51,9 @@ class CampaignFirmwareUpgradeBuilder
             $protocol,
             $startDate,
             $endDate,
-            $deviceList
+            $deviceList,
+            $autoAssignLicenseFlag,
+            $autoAddDevicesFlag
         ));
     }
 

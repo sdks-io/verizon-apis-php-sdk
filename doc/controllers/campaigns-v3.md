@@ -10,11 +10,96 @@ $campaignsV3Controller = $client->getCampaignsV3Controller();
 
 ## Methods
 
-* [Update Campaign Firmware Devices](../../doc/controllers/campaigns-v3.md#update-campaign-firmware-devices)
-* [Get Campaign Information](../../doc/controllers/campaigns-v3.md#get-campaign-information)
 * [Schedule Campaign Firmware Upgrade](../../doc/controllers/campaigns-v3.md#schedule-campaign-firmware-upgrade)
+* [Update Campaign Firmware Devices](../../doc/controllers/campaigns-v3.md#update-campaign-firmware-devices)
 * [Update Campaign Dates](../../doc/controllers/campaigns-v3.md#update-campaign-dates)
+* [Get Campaign Information](../../doc/controllers/campaigns-v3.md#get-campaign-information)
 * [Cancel Campaign](../../doc/controllers/campaigns-v3.md#cancel-campaign)
+
+
+# Schedule Campaign Firmware Upgrade
+
+This endpoint allows a user to schedule a firmware upgrade for a list of devices.
+
+```php
+function scheduleCampaignFirmwareUpgrade(string $accountName, CampaignFirmwareUpgrade $body): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountName` | `string` | Template, Required | Account identifier. |
+| `body` | [`CampaignFirmwareUpgrade`](../../doc/models/campaign-firmware-upgrade.md) | Body, Required | Firmware upgrade information. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FirmwareCampaign`](../../doc/models/firmware-campaign.md).
+
+## Example Usage
+
+```php
+$accountName = '0000123456-00001';
+
+$body = CampaignFirmwareUpgradeBuilder::init(
+    'SEQUANSCommunications_GM01Q_SR1.2.0.0-10512_SR1.2.0.0-10657',
+    'SR1.2.0.0-10512',
+    'SR1.2.0.0-10657',
+    'LWM2M',
+    DateTimeHelper::fromSimpleDateRequired('2021-09-29'),
+    DateTimeHelper::fromSimpleDateRequired('2021-10-01'),
+    [
+        '15-digit IMEI'
+    ],
+    false,
+    false
+)
+    ->campaignName('Smart FOTA - test 4')
+    ->campaignTimeWindowList(
+        [
+            V3TimeWindowBuilder::init(
+                18,
+                22
+            )->build()
+        ]
+    )->build();
+
+$apiResponse = $campaignsV3Controller->scheduleCampaignFirmwareUpgrade(
+    $accountName,
+    $body
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "id": "f858b8c4-2153-11ec-8c44-aeb16d1aa652",
+  "accountName": "0000123456-00001",
+  "campaignName": "Smart FOTA - test 4",
+  "firmwareName": "SEQUANSCommunications_GM01Q_SR1.2.0.0-10512_SR1.2.0.0-10657",
+  "protocol": "LWM2M",
+  "firmwareFrom": "SR1.2.0.0-10512",
+  "firmwareTo": "SR1.2.0.0-10657",
+  "make": "SEQUANS Communications",
+  "model": "GM01Q",
+  "status": "CampaignRequestPending",
+  "startDate": "2021-09-29",
+  "endDate": "2021-10-01",
+  "campaignTimeWindowList": [
+    {
+      "startTime": 18,
+      "endTime": 22
+    }
+  ]
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
 
 
 # Update Campaign Firmware Devices
@@ -73,153 +158,6 @@ $apiResponse = $campaignsV3Controller->updateCampaignFirmwareDevices(
       "deviceId": "15-digit IMEI",
       "status": "AddDeviceSucceed",
       "Reason": "Device added Successfully"
-    }
-  ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
-
-
-# Get Campaign Information
-
-This endpoint allows the user to retrieve campaign level information for a specified campaign.
-
-```php
-function getCampaignInformation(string $acc, string $campaignId): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `campaignId` | `string` | Template, Required | Firmware upgrade identifier. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`Campaign`](../../doc/models/campaign.md).
-
-## Example Usage
-
-```php
-$acc = '0000123456-00001';
-
-$campaignId = 'f858b8c4-2153-11ec-8c44-aeb16d1aa652';
-
-$apiResponse = $campaignsV3Controller->getCampaignInformation(
-    $acc,
-    $campaignId
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "id": "f858b8c4-2153-11ec-8c44-aeb16d1aa652",
-  "accountName": "0642233522-00001",
-  "campaignName": "Smart FOTA - test 4",
-  "protocol": "LWM2M",
-  "make": "SEQUANS Communications",
-  "model": "GM01Q",
-  "status": "CampaignPreScheduled",
-  "startDate": "2021-09-29",
-  "endDate": "2021-10-01",
-  "firmwareName": "SEQUANSCommunications_GM01Q_SR1.2.0.0-10512_SR1.2.0.0-10657",
-  "firmwareFrom": "SR1.2.0.0-10512",
-  "firmwareTo": "SR1.2.0.0-10657",
-  "campaignTimeWindowList": [
-    {
-      "startTime": 18,
-      "endTime": 22
-    }
-  ]
-}
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
-
-
-# Schedule Campaign Firmware Upgrade
-
-This endpoint allows a user to schedule a firmware upgrade for a list of devices.
-
-```php
-function scheduleCampaignFirmwareUpgrade(string $acc, CampaignFirmwareUpgrade $body): ApiResponse
-```
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
-| `body` | [`CampaignFirmwareUpgrade`](../../doc/models/campaign-firmware-upgrade.md) | Body, Required | Firmware upgrade information. |
-
-## Response Type
-
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`FirmwareCampaign`](../../doc/models/firmware-campaign.md).
-
-## Example Usage
-
-```php
-$acc = '0000123456-00001';
-
-$body = CampaignFirmwareUpgradeBuilder::init(
-    'SEQUANSCommunications_GM01Q_SR1.2.0.0-10512_SR1.2.0.0-10657',
-    'SR1.2.0.0-10512',
-    'SR1.2.0.0-10657',
-    'LWM2M',
-    DateTimeHelper::fromSimpleDateRequired('2021-09-29'),
-    DateTimeHelper::fromSimpleDateRequired('2021-10-01'),
-    [
-        '15-digit IMEI'
-    ]
-)
-    ->campaignName('Smart FOTA - test 4')
-    ->campaignTimeWindowList(
-        [
-            V3TimeWindowBuilder::init(
-                18,
-                22
-            )->build()
-        ]
-    )->build();
-
-$apiResponse = $campaignsV3Controller->scheduleCampaignFirmwareUpgrade(
-    $acc,
-    $body
-);
-```
-
-## Example Response *(as JSON)*
-
-```json
-{
-  "id": "f858b8c4-2153-11ec-8c44-aeb16d1aa652",
-  "accountName": "0000123456-00001",
-  "campaignName": "Smart FOTA - test 4",
-  "firmwareName": "SEQUANSCommunications_GM01Q_SR1.2.0.0-10512_SR1.2.0.0-10657",
-  "protocol": "LWM2M",
-  "firmwareFrom": "SR1.2.0.0-10512",
-  "firmwareTo": "SR1.2.0.0-10657",
-  "make": "SEQUANS Communications",
-  "model": "GM01Q",
-  "status": "CampaignRequestPending",
-  "startDate": "2021-09-29",
-  "endDate": "2021-10-01",
-  "campaignTimeWindowList": [
-    {
-      "startTime": 18,
-      "endTime": 22
     }
   ]
 }
@@ -311,19 +249,85 @@ $apiResponse = $campaignsV3Controller->updateCampaignDates(
 | 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
 
 
-# Cancel Campaign
+# Get Campaign Information
 
-This endpoint allows user to cancel a firmware campaign. A firmware campaign already started can not be cancelled.
+This endpoint allows the user to retrieve campaign level information for a specified campaign.
 
 ```php
-function cancelCampaign(string $acc, string $campaignId): ApiResponse
+function getCampaignInformation(string $accountName, string $campaignId): ApiResponse
 ```
 
 ## Parameters
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `acc` | `string` | Template, Required | Account identifier. |
+| `accountName` | `string` | Template, Required | Account identifier. |
+| `campaignId` | `string` | Template, Required | Firmware upgrade identifier. |
+
+## Response Type
+
+This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`Campaign`](../../doc/models/campaign.md).
+
+## Example Usage
+
+```php
+$accountName = '0000123456-00001';
+
+$campaignId = 'f858b8c4-2153-11ec-8c44-aeb16d1aa652';
+
+$apiResponse = $campaignsV3Controller->getCampaignInformation(
+    $accountName,
+    $campaignId
+);
+```
+
+## Example Response *(as JSON)*
+
+```json
+{
+  "id": "f858b8c4-2153-11ec-8c44-aeb16d1aa652",
+  "accountName": "0642233522-00001",
+  "campaignName": "Smart FOTA - test 4",
+  "protocol": "LWM2M",
+  "make": "SEQUANS Communications",
+  "model": "GM01Q",
+  "status": "CampaignPreScheduled",
+  "startDate": "2021-09-29",
+  "endDate": "2021-10-01",
+  "firmwareName": "SEQUANSCommunications_GM01Q_SR1.2.0.0-10512_SR1.2.0.0-10657",
+  "firmwareFrom": "SR1.2.0.0-10512",
+  "firmwareTo": "SR1.2.0.0-10657",
+  "campaignTimeWindowList": [
+    {
+      "startTime": 18,
+      "endTime": 22
+    }
+  ],
+  "autoAssignLicenseFlag": false,
+  "autoAddDevicesFlag": false
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Unexpected error. | [`FotaV3ResultException`](../../doc/models/fota-v3-result-exception.md) |
+
+
+# Cancel Campaign
+
+This endpoint allows user to cancel a firmware campaign. A firmware campaign already started can not be cancelled.
+
+```php
+function cancelCampaign(string $accountName, string $campaignId): ApiResponse
+```
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `accountName` | `string` | Template, Required | Account identifier. |
 | `campaignId` | `string` | Template, Required | Firmware upgrade information. |
 
 ## Response Type
@@ -333,12 +337,12 @@ This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()`
 ## Example Usage
 
 ```php
-$acc = '0000123456-00001';
+$accountName = '0000123456-00001';
 
 $campaignId = 'f858b8c4-2153-11ec-8c44-aeb16d1aa652';
 
 $apiResponse = $campaignsV3Controller->cancelCampaign(
-    $acc,
+    $accountName,
     $campaignId
 );
 ```

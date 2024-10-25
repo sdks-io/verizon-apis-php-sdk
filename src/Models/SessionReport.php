@@ -33,11 +33,6 @@ class SessionReport implements \JsonSerializable
     private $txid;
 
     /**
-     * @var array|null
-     */
-    private $example;
-
-    /**
      * @param string $id
      */
     public function __construct(string $id)
@@ -115,24 +110,6 @@ class SessionReport implements \JsonSerializable
     }
 
     /**
-     * Returns Example.
-     */
-    public function getExample(): ?array
-    {
-        return $this->example;
-    }
-
-    /**
-     * Sets Example.
-     *
-     * @maps example
-     */
-    public function setExample(?array $example): void
-    {
-        $this->example = $example;
-    }
-
-    /**
      * Encode this object to JSON
      *
      * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
@@ -149,9 +126,6 @@ class SessionReport implements \JsonSerializable
         }
         $json['id']           = $this->id;
         $json['txid']         = $this->txid;
-        if (isset($this->example)) {
-            $json['example']  = $this->example;
-        }
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
     }

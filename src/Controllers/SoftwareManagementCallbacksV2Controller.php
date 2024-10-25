@@ -27,6 +27,28 @@ use VerizonLib\Server;
 class SoftwareManagementCallbacksV2Controller extends BaseController
 {
     /**
+     * This endpoint allows user to get the registered callback information.
+     *
+     * @param string $account Account identifier.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listRegisteredCallbacks(string $account): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{account}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V2)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
+            ->type(CallbackSummary::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * This endpoint allows user to update the HTTPS callback address.
      *
      * @param string $account Account identifier.
@@ -97,28 +119,6 @@ class SoftwareManagementCallbacksV2Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
             ->type(FotaV2SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * This endpoint allows user to get the registered callback information.
-     *
-     * @param string $account Account identifier.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listRegisteredCallbacks(string $account): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/callbacks/{account}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V2)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV2ResultException::class))
-            ->type(CallbackSummary::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

@@ -47,6 +47,28 @@ class AccountsController extends BaseController
     }
 
     /**
+     * Returns a list and details of all custom services and states defined for a specified account.
+     *
+     * @param string $aname Account name.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listAccountStatesAndServices(string $aname): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/accounts/{aname}/statesandservices')
+            ->server(Server::THINGSPACE)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('aname', $aname));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
+            ->type(AccountStatesAndServices::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * When HTTP status is 202, a URL will be returned in the Location header of the form /leads/{aname}?
      * next={token}. This URL can be used to request the next set of leads.
      *
@@ -65,28 +87,6 @@ class AccountsController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
             ->type(AccountLeadsResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns a list and details of all custom services and states defined for a specified account.
-     *
-     * @param string $aname Account name.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listAccountStatesAndServices(string $aname): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/m2m/v1/accounts/{aname}/statesandservices')
-            ->server(Server::THINGSPACE)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('aname', $aname));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Error response.', ConnectivityManagementResultException::class))
-            ->type(AccountStatesAndServices::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

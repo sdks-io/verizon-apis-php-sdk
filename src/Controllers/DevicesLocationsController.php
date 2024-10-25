@@ -13,7 +13,6 @@ namespace VerizonLib\Controllers;
 use Core\Authentication\Auth;
 use Core\Request\Parameters\BodyParam;
 use Core\Request\Parameters\HeaderParam;
-use Core\Request\Parameters\QueryParam;
 use Core\Request\Parameters\TemplateParam;
 use Core\Response\Types\ErrorType;
 use CoreInterfaces\Core\Request\RequestMethod;
@@ -53,37 +52,6 @@ class DevicesLocationsController extends BaseController
     }
 
     /**
-     * Download a completed asynchronous device location report.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param string $txid Transaction ID from POST /locationreports response.
-     * @param int $startindex Zero-based number of the first record to return.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function retrieveLocationReport(string $account, string $txid, int $startindex): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(
-            RequestMethod::GET,
-            '/locationreports/{account}/report/{txid}/index/{startindex}'
-        )
-            ->server(Server::DEVICE_LOCATION)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(
-                TemplateParam::init('account', $account),
-                TemplateParam::init('txid', $txid),
-                TemplateParam::init('startindex', $startindex)
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
-            ->type(LocationReport::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Requests the current or cached location of up to 10,000 IoT or consumer devices (phones, tablets.
      * etc.). This request returns a synchronous transaction ID, and the location information for each
      * device is returned asynchronously as a DeviceLocation callback message.
@@ -102,30 +70,6 @@ class DevicesLocationsController extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
             ->type(SynchronousLocationRequestResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Cancel a queued or unfinished device location request.
-     *
-     * @param string $accountName Account identifier in "##########-#####".
-     * @param string $txid Transaction ID of the request to cancel, from the synchronous response to
-     *        the original request.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function cancelDeviceLocationRequest(string $accountName, string $txid): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/devicelocations/{txid}')
-            ->server(Server::DEVICE_LOCATION)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(QueryParam::init('accountName', $accountName), TemplateParam::init('txid', $txid));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
-            ->type(TransactionID::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);
@@ -154,19 +98,53 @@ class DevicesLocationsController extends BaseController
     }
 
     /**
+     * Download a completed asynchronous device location report.
+     *
+     * @param string $accountName Account identifier in "##########-#####".
+     * @param string $txid Transaction ID from POST /locationreports response.
+     * @param int $startindex Zero-based number of the first record to return.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function retrieveLocationReport(string $accountName, string $txid, int $startindex): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::GET,
+            '/locationreports/{accountName}/report/{txid}/index/{startindex}'
+        )
+            ->server(Server::DEVICE_LOCATION)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(
+                TemplateParam::init('accountName', $accountName),
+                TemplateParam::init('txid', $txid),
+                TemplateParam::init('startindex', $startindex)
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
+            ->type(LocationReport::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Returns the current status of a requested device location report.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      * @param string $txid Transaction ID of the report.
      *
      * @return ApiResponse Response from the API call
      */
-    public function getLocationReportStatus(string $account, string $txid): ApiResponse
+    public function getLocationReportStatus(string $accountName, string $txid): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/locationreports/{account}/report/{txid}/status')
+        $_reqBuilder = $this->requestBuilder(
+            RequestMethod::GET,
+            '/locationreports/{accountName}/report/{txid}/status'
+        )
             ->server(Server::DEVICE_LOCATION)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('txid', $txid));
+            ->parameters(TemplateParam::init('accountName', $accountName), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))
@@ -179,17 +157,17 @@ class DevicesLocationsController extends BaseController
     /**
      * Cancel a queued device location report.
      *
-     * @param string $account Account identifier in "##########-#####".
+     * @param string $accountName Account identifier in "##########-#####".
      * @param string $txid Transaction ID of the report to cancel.
      *
      * @return ApiResponse Response from the API call
      */
-    public function cancelQueuedLocationReportGeneration(string $account, string $txid): ApiResponse
+    public function cancelQueuedLocationReportGeneration(string $accountName, string $txid): ApiResponse
     {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/locationreports/{account}/report/{txid}')
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/locationreports/{accountName}/report/{txid}')
             ->server(Server::DEVICE_LOCATION)
             ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('txid', $txid));
+            ->parameters(TemplateParam::init('accountName', $accountName), TemplateParam::init('txid', $txid));
 
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('0', ErrorType::init('Unexpected error.', DeviceLocationResultException::class))

@@ -79,6 +79,39 @@ class ServiceEndpointsController extends BaseController
     }
 
     /**
+     * Register Service Endpoints of a deployed application to specified MEC Platforms.
+     *
+     * @param ResourcesEdgeHostedServiceWithProfileId[] $body An array of Service Endpoint data for
+     *        a deployed application. The request body passes all of the needed parameters to
+     *        create a service endpoint. Parameters will be edited here rather than the
+     *        **Parameters** section above. The `ern`,`applicationServerProviderId`,
+     *        `applicationId` and `serviceProfileID` parameters are required. **Note:** Currently,
+     *        the only valid value for `applicationServerProviderId`is **AWS**. Also, if you do
+     *        not know one of the optional values (i.e. URI), you can erase the line from the
+     *        query by back-spacing over it.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function registerServiceEndpoints(array $body): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceendpoints')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(RegisterServiceEndpointResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
      * Returns a list of all registered service endpoints.
      *
      * @return ApiResponse Response from the API call
@@ -129,66 +162,6 @@ class ServiceEndpointsController extends BaseController
     }
 
     /**
-     * Deregister an application's Service Endpoint from the MEC Platform(s).
-     *
-     * @param string $serviceEndpointsId A system-defined string identifier representing one or more
-     *        registered Service Endpoints.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deregisterServiceEndpoint(string $serviceEndpointsId): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceendpoints/{serviceEndpointsId}')
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(DeregisterServiceEndpointResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Register Service Endpoints of a deployed application to specified MEC Platforms.
-     *
-     * @param ResourcesEdgeHostedServiceWithProfileId[] $body An array of Service Endpoint data for
-     *        a deployed application. The request body passes all of the needed parameters to
-     *        create a service endpoint. Parameters will be edited here rather than the
-     *        **Parameters** section above. The `ern`,`applicationServerProviderId`,
-     *        `applicationId` and `serviceProfileID` parameters are required. **Note:** Currently,
-     *        the only valid value for `applicationServerProviderId`is **AWS**. Also, if you do
-     *        not know one of the optional values (i.e. URI), you can erase the line from the
-     *        query by back-spacing over it.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function registerServiceEndpoints(array $body): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::POST, '/serviceendpoints')
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(HeaderParam::init('Content-Type', 'application/json'), BodyParam::init($body));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
-            ->throwErrorOn(
-                '0',
-                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
-            )
-            ->type(RegisterServiceEndpointResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Update registered Service Endpoint information.
      *
      * @param string $serviceEndpointsId A system-defined string identifier representing one or more
@@ -220,6 +193,33 @@ class ServiceEndpointsController extends BaseController
                 ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
             )
             ->type(UpdateServiceEndpointResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Deregister an application's Service Endpoint from the MEC Platform(s).
+     *
+     * @param string $serviceEndpointsId A system-defined string identifier representing one or more
+     *        registered Service Endpoints.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deregisterServiceEndpoint(string $serviceEndpointsId): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/serviceendpoints/{serviceEndpointsId}')
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('serviceEndpointsId', $serviceEndpointsId));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('HTTP 400 Bad Request.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn('401', ErrorType::init('HTTP 401 Unauthorized.', EdgeDiscoveryResultException::class))
+            ->throwErrorOn(
+                '0',
+                ErrorType::init('HTTP 500 Internal Server Error.', EdgeDiscoveryResultException::class)
+            )
+            ->type(DeregisterServiceEndpointResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

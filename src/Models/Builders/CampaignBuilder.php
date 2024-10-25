@@ -41,9 +41,22 @@ class CampaignBuilder
         string $model,
         \DateTime $startDate,
         \DateTime $endDate,
-        string $status
+        string $status,
+        bool $autoAssignLicenseFlag,
+        bool $autoAddDevicesFlag
     ): self {
-        return new self(new Campaign($id, $accountName, $protocol, $make, $model, $startDate, $endDate, $status));
+        return new self(new Campaign(
+            $id,
+            $accountName,
+            $protocol,
+            $make,
+            $model,
+            $startDate,
+            $endDate,
+            $status,
+            $autoAssignLicenseFlag,
+            $autoAddDevicesFlag
+        ));
     }
 
     /**

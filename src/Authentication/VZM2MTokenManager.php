@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace VerizonLib\Authentication;
 
 use Core\Authentication\CoreAuth;
+use VerizonLib\ConfigurationDefaults;
 use Core\Request\Parameters\HeaderParam;
 
 /**
@@ -18,18 +19,15 @@ use Core\Request\Parameters\HeaderParam;
  */
 class VZM2MTokenManager extends CoreAuth implements VZM2MTokenCredentials
 {
-    private $vZM2mToken;
-
     /**
-     * Returns an instance of this class.
-     *
-     * @param string $vZM2mToken M2M Session Token ([How to generate an M2M session
-     *        token?]($e/Session%20Management/StartConnectivityManagementSession))
+     * @var array
      */
-    public function __construct(string $vZM2mToken)
+    private $config;
+
+    public function __construct(array $config)
     {
-        parent::__construct(HeaderParam::init('VZ-M2M-Token', $vZM2mToken)->requiredNonEmpty());
-        $this->vZM2mToken = $vZM2mToken;
+        $this->config = $config;
+        parent::__construct(HeaderParam::init('VZ-M2M-Token', $this->getVZM2mToken())->requiredNonEmpty());
     }
 
     /**
@@ -37,7 +35,7 @@ class VZM2MTokenManager extends CoreAuth implements VZM2MTokenCredentials
      */
     public function getVZM2mToken(): string
     {
-        return $this->vZM2mToken;
+        return $this->config['vZM2mToken'] ?? ConfigurationDefaults::VZ_M2_M_TOKEN;
     }
 
     /**
@@ -48,6 +46,6 @@ class VZM2MTokenManager extends CoreAuth implements VZM2MTokenCredentials
      */
     public function equals(string $vZM2mToken): bool
     {
-        return $vZM2mToken == $this->vZM2mToken;
+        return $vZM2mToken == $this->getVZM2mToken();
     }
 }

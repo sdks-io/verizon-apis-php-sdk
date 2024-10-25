@@ -15,8 +15,8 @@ The following parameters are configurable for the API Client:
 | `retryOnTimeout` | `bool` | Whether to retry on request timeout.<br>*Default*: `true` |
 | `httpStatusCodesToRetry` | `array` | Http status codes to retry against.<br>*Default*: `408, 413, 429, 500, 502, 503, 504, 521, 522, 524` |
 | `httpMethodsToRetry` | `array` | Http methods to retry against.<br>*Default*: `'GET', 'PUT'` |
-| `thingspaceOauthCredentials` | [`ThingspaceOauthCredentials`]($a/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
-| `vZM2mTokenCredentials` | [`VZM2mTokenCredentials`]($a/custom-header-signature.md) | The Credentials Setter for Custom Header Signature |
+| `thingspaceOauthCredentials` | [`ThingspaceOauthCredentials`](auth/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
+| `vZM2mTokenCredentials` | [`VZM2mTokenCredentials`](auth/custom-header-signature.md) | The Credentials Setter for Custom Header Signature |
 
 The API client can be initialized as follows:
 
@@ -39,7 +39,7 @@ $client = VerizonClientBuilder::init()
             'VZ-M2M-Token'
         )
     )
-    ->environment('Production')
+    ->environment(Environment::PRODUCTION)
     ->build();
 ```
 
@@ -124,12 +124,13 @@ The gateway for the SDK. This class acts as a factory for the Controllers and al
 | getDeviceSMSMessagingController() | Gets DeviceSMSMessagingController |
 | getDeviceActionsController() | Gets DeviceActionsController |
 | getThingSpaceQualityOfServiceAPIActionsController() | Gets ThingSpaceQualityOfServiceAPIActionsController |
-| getMECController() | Gets MECController |
+| getPWNController() | Gets PWNController |
 | getPromotionPeriodInformationController() | Gets PromotionPeriodInformationController |
 | getRetrieveTheTriggersController() | Gets RetrieveTheTriggersController |
 | getUpdateTriggersController() | Gets UpdateTriggersController |
 | getSIMActionsController() | Gets SIMActionsController |
 | getGlobalReportingController() | Gets GlobalReportingController |
 | getMV2TriggersController() | Gets MV2TriggersController |
+| getM5gBIDeviceActionsController() | Gets M5gBIDeviceActionsController |
 | getOauthAuthorizationController() | Gets OauthAuthorizationController |
 

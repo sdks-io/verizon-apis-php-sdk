@@ -76,7 +76,7 @@ class GoToStateRequest implements \JsonSerializable
     /**
      * @var string|null
      */
-    private $ipAddress;
+    private $ipaddress;
 
     /**
      * @var string|null
@@ -353,23 +353,23 @@ class GoToStateRequest implements \JsonSerializable
     }
 
     /**
-     * Returns Ip Address.
+     * Returns Ipaddress.
      * The IP address of the device.
      */
-    public function getIpAddress(): ?string
+    public function getIpaddress(): ?string
     {
-        return $this->ipAddress;
+        return $this->ipaddress;
     }
 
     /**
-     * Sets Ip Address.
+     * Sets Ipaddress.
      * The IP address of the device.
      *
      * @maps ipAddress
      */
-    public function setIpAddress(?string $ipAddress): void
+    public function setIpaddress(?string $ipaddress): void
     {
-        $this->ipAddress = $ipAddress;
+        $this->ipaddress = $ipaddress;
     }
 
     /**
@@ -455,8 +455,8 @@ class GoToStateRequest implements \JsonSerializable
         if (isset($this->devicesWithServiceAddress)) {
             $json['devicesWithServiceAddress'] = $this->devicesWithServiceAddress;
         }
-        if (isset($this->ipAddress)) {
-            $json['ipAddress']                 = $this->ipAddress;
+        if (isset($this->ipaddress)) {
+            $json['ipAddress']                 = $this->ipaddress;
         }
         if (isset($this->groupName)) {
             $json['groupName']                 = $this->groupName;

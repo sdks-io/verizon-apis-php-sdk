@@ -39,6 +39,11 @@ class FirmwareUpgradeRequest implements \JsonSerializable
     private $startDate;
 
     /**
+     * @var \DateTime
+     */
+    private $endDate;
+
+    /**
      * @var string[]
      */
     private $deviceList;
@@ -48,6 +53,7 @@ class FirmwareUpgradeRequest implements \JsonSerializable
      * @param string $firmwareName
      * @param string $firmwareTo
      * @param \DateTime $startDate
+     * @param \DateTime $endDate
      * @param string[] $deviceList
      */
     public function __construct(
@@ -55,12 +61,14 @@ class FirmwareUpgradeRequest implements \JsonSerializable
         string $firmwareName,
         string $firmwareTo,
         \DateTime $startDate,
+        \DateTime $endDate,
         array $deviceList
     ) {
         $this->accountName = $accountName;
         $this->firmwareName = $firmwareName;
         $this->firmwareTo = $firmwareTo;
         $this->startDate = $startDate;
+        $this->endDate = $endDate;
         $this->deviceList = $deviceList;
     }
 
@@ -129,7 +137,7 @@ class FirmwareUpgradeRequest implements \JsonSerializable
 
     /**
      * Returns Start Date.
-     * The date that the upgrade should begin.
+     * The date that the upgrade begins.
      */
     public function getStartDate(): \DateTime
     {
@@ -138,15 +146,37 @@ class FirmwareUpgradeRequest implements \JsonSerializable
 
     /**
      * Sets Start Date.
-     * The date that the upgrade should begin.
+     * The date that the upgrade begins.
      *
      * @required
      * @maps startDate
-     * @factory \VerizonLib\Utils\DateTimeHelper::fromRfc3339DateTime
+     * @factory \VerizonLib\Utils\DateTimeHelper::fromSimpleDate
      */
     public function setStartDate(\DateTime $startDate): void
     {
         $this->startDate = $startDate;
+    }
+
+    /**
+     * Returns End Date.
+     * The date that the upgrade ends.
+     */
+    public function getEndDate(): \DateTime
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * Sets End Date.
+     * The date that the upgrade ends.
+     *
+     * @required
+     * @maps endDate
+     * @factory \VerizonLib\Utils\DateTimeHelper::fromSimpleDate
+     */
+    public function setEndDate(\DateTime $endDate): void
+    {
+        $this->endDate = $endDate;
     }
 
     /**
@@ -189,7 +219,8 @@ class FirmwareUpgradeRequest implements \JsonSerializable
         $json['accountName']  = $this->accountName;
         $json['firmwareName'] = $this->firmwareName;
         $json['firmwareTo']   = $this->firmwareTo;
-        $json['startDate']    = DateTimeHelper::toRfc3339DateTime($this->startDate);
+        $json['startDate']    = DateTimeHelper::toSimpleDate($this->startDate);
+        $json['endDate']      = DateTimeHelper::toSimpleDate($this->endDate);
         $json['deviceList']   = $this->deviceList;
 
         return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;

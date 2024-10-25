@@ -29,63 +29,6 @@ use VerizonLib\Server;
 class SoftwareManagementLicensesV1Controller extends BaseController
 {
     /**
-     * Deletes the entire list of cancellation candidate devices.
-     *
-     * @deprecated
-     *
-     * @param string $account Account identifier in "##########-#####".
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deleteListOfLicensesToRemove(string $account): ApiResponse
-    {
-        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(FotaV1SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
-     * Returns a list of devices from which licenses will be removed if the number of MRC licenses becomes
-     * less than the number of assigned licenses.
-     *
-     * @deprecated
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param string $startIndex The zero-based number of the first record to return. Set
-     *        startIndex=0 for the first request. If there are more than 1,000 devices in the
-     *        response, set startIndex=1000 for the second request, 2000 for the third request,
-     *        etc.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function listLicensesToRemove(string $account, string $startIndex): ApiResponse
-    {
-        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
-
-        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}/cancel/index/{startIndex}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(V1ListOfLicensesToRemove::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Assigns licenses to a specified list of devices so that firmware upgrades can be scheduled for those
      * devices.
      *
@@ -175,6 +118,63 @@ class SoftwareManagementLicensesV1Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(V1ListOfLicensesToRemoveResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Deletes the entire list of cancellation candidate devices.
+     *
+     * @deprecated
+     *
+     * @param string $account Account identifier in "##########-#####".
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deleteListOfLicensesToRemove(string $account): ApiResponse
+    {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
+
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/licenses/{account}/cancel')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(FotaV1SuccessResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Returns a list of devices from which licenses will be removed if the number of MRC licenses becomes
+     * less than the number of assigned licenses.
+     *
+     * @deprecated
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param string $startIndex The zero-based number of the first record to return. Set
+     *        startIndex=0 for the first request. If there are more than 1,000 devices in the
+     *        response, set startIndex=1000 for the second request, 2000 for the third request,
+     *        etc.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function listLicensesToRemove(string $account, string $startIndex): ApiResponse
+    {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated.', E_USER_DEPRECATED);
+
+        $_reqBuilder = $this->requestBuilder(RequestMethod::GET, '/licenses/{account}/cancel/index/{startIndex}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(TemplateParam::init('account', $account), TemplateParam::init('startIndex', $startIndex));
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(V1ListOfLicensesToRemove::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

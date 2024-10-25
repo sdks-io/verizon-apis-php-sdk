@@ -28,33 +28,6 @@ use VerizonLib\Server;
 class SoftwareManagementCallbacksV1Controller extends BaseController
 {
     /**
-     * Deregisters the callback endpoint and stops ThingSpace from sending FOTA callback messages for the
-     * specified account.
-     *
-     * @param string $account Account identifier in "##########-#####".
-     * @param string $service Callback type. Must be 'Fota' for Software Management Services API.
-     *
-     * @return ApiResponse Response from the API call
-     */
-    public function deregisterCallback(string $account, string $service): ApiResponse
-    {
-        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{account}/name/{service}')
-            ->server(Server::SOFTWARE_MANAGEMENT_V1)
-            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
-            ->parameters(
-                TemplateParam::init('account', $account),
-                TemplateParam::init('service', $service)->serializeBy([CallbackServiceEnum::class, 'checkValue'])
-            );
-
-        $_resHandler = $this->responseHandler()
-            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
-            ->type(FotaV1SuccessResult::class)
-            ->returnApiResponse();
-
-        return $this->execute($_reqBuilder, $_resHandler);
-    }
-
-    /**
      * Returns the name and endpoint URL of the callback listening services registered for a given account.
      *
      * @param string $account Account identifier in "##########-#####".
@@ -99,6 +72,33 @@ class SoftwareManagementCallbacksV1Controller extends BaseController
         $_resHandler = $this->responseHandler()
             ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
             ->type(FotaV1CallbackRegistrationResult::class)
+            ->returnApiResponse();
+
+        return $this->execute($_reqBuilder, $_resHandler);
+    }
+
+    /**
+     * Deregisters the callback endpoint and stops ThingSpace from sending FOTA callback messages for the
+     * specified account.
+     *
+     * @param string $account Account identifier in "##########-#####".
+     * @param string $service Callback type. Must be 'Fota' for Software Management Services API.
+     *
+     * @return ApiResponse Response from the API call
+     */
+    public function deregisterCallback(string $account, string $service): ApiResponse
+    {
+        $_reqBuilder = $this->requestBuilder(RequestMethod::DELETE, '/callbacks/{account}/name/{service}')
+            ->server(Server::SOFTWARE_MANAGEMENT_V1)
+            ->auth(Auth::and('thingspace_oauth', 'VZ-M2M-Token'))
+            ->parameters(
+                TemplateParam::init('account', $account),
+                TemplateParam::init('service', $service)->serializeBy([CallbackServiceEnum::class, 'checkValue'])
+            );
+
+        $_resHandler = $this->responseHandler()
+            ->throwErrorOn('400', ErrorType::init('Unexpected error.', FotaV1ResultException::class))
+            ->type(FotaV1SuccessResult::class)
             ->returnApiResponse();
 
         return $this->execute($_reqBuilder, $_resHandler);

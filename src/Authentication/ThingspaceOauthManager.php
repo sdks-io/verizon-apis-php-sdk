@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace VerizonLib\Authentication;
 
+use Closure;
+use Exception;
 use CoreInterfaces\Core\Request\TypeValidatorInterface;
 use Core\Authentication\CoreAuth;
 use Core\Client;
@@ -18,6 +20,7 @@ use Core\Utils\CoreHelper;
 use InvalidArgumentException;
 use VerizonLib\Models\OauthToken;
 use VerizonLib\Controllers\OauthAuthorizationController;
+use VerizonLib\ConfigurationDefaults;
 
 /**
  * Utility class for OAuth 2 authorization and token management
@@ -30,38 +33,21 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     private $oAuthApi;
 
-    private $oauthClientId;
-
-    private $oauthClientSecret;
-
-    private $oauthToken;
-
-    private $oauthScopes;
+    /**
+     * @var array
+     */
+    private $config;
 
     /**
-     * Returns an instance of this class.
-     *
-     * @param string $oauthClientId OAuth 2 Client ID
-     * @param string $oauthClientSecret OAuth 2 Client Secret
-     * @param mixed $oauthToken Object for storing information about the OAuth token
-     * @param mixed $oauthScopes List of scopes that apply to the OAuth token
+     * @var OAuthToken|null
      */
-    public function __construct(string $oauthClientId, string $oauthClientSecret, $oauthToken, $oauthScopes)
+    private $internalOAuthToken;
+
+    public function __construct(array $config)
     {
-        $this->oauthClientId = $oauthClientId;
-        $this->oauthClientSecret = $oauthClientSecret;
-        if ($oauthToken instanceof OauthToken) {
-            $this->oauthToken = $oauthToken;
-            parent::__construct(
-                HeaderParam::init(
-                    'Authorization',
-                    CoreHelper::getBearerAuthString($oauthToken->getAccessToken())
-                )->requiredNonEmpty()
-            );
-        }
-        if (is_array($oauthScopes)) {
-            $this->oauthScopes = $oauthScopes;
-        }
+        parent::__construct();
+        $this->config = $config;
+        $this->internalOAuthToken = $this->getOAuthToken();
     }
 
     public function setClient(Client $client): void
@@ -74,7 +60,7 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     public function getOauthClientId(): string
     {
-        return $this->oauthClientId;
+        return $this->config['oauthClientId'] ?? ConfigurationDefaults::O_AUTH_CLIENT_ID;
     }
 
     /**
@@ -82,7 +68,7 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     public function getOauthClientSecret(): string
     {
-        return $this->oauthClientSecret;
+        return $this->config['oauthClientSecret'] ?? ConfigurationDefaults::O_AUTH_CLIENT_SECRET;
     }
 
     /**
@@ -90,7 +76,11 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     public function getOauthToken(): ?OauthToken
     {
-        return $this->oauthToken;
+        $oauthToken = $this->config['oauthToken'];
+        if ($oauthToken instanceof OauthToken) {
+            return clone $oauthToken;
+        }
+        return ConfigurationDefaults::O_AUTH_TOKEN;
     }
 
     /**
@@ -98,7 +88,11 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     public function getOauthScopes(): ?array
     {
-        return $this->oauthScopes;
+        $oauthScopes = $this->config['oauthScopes'];
+        if (is_array($oauthScopes)) {
+            return $oauthScopes;
+        }
+        return ConfigurationDefaults::O_AUTH_SCOPES;
     }
 
     /**
@@ -109,8 +103,16 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     public function equals(string $oauthClientId, string $oauthClientSecret): bool
     {
-        return $oauthClientId == $this->oauthClientId &&
-            $oauthClientSecret == $this->oauthClientSecret;
+        return $oauthClientId == $this->getOauthClientId() &&
+            $oauthClientSecret == $this->getOauthClientSecret();
+    }
+
+    /**
+     * Clock skew time in seconds applied while checking the OAuth Token expiry.
+     */
+    public function getOAuthClockSkew(): int
+    {
+        return $this->config['thingspace_oauth-ClockSkew'] ?? ConfigurationDefaults::THINGSPACE_OAUTH_CLOCK_SKEW;
     }
 
     /**
@@ -122,25 +124,48 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
         //send request for access token
         $oAuthToken = $this->oAuthApi->requestTokenThingspaceOauth(
             $this->buildBasicHeader(),
-            implode(' ', $this->oauthScopes ?? []),
+            implode(' ', $this->getOauthScopes() ?? []),
             $additionalParams
         )->getResult();
 
-        //add expiry
-        if ($oAuthToken->getExpiresIn() != null && $oAuthToken->getExpiresIn() != 0) {
-            $oAuthToken->setExpiry(time() + $oAuthToken->getExpiresIn());
-        }
+        $this->addExpiryTime($oAuthToken);
 
         return $oAuthToken;
     }
 
     /**
-     * Has the OAuth token expired?
+     * Has the OAuth token expired? If the token argument is not provided then this function will check the expiry of
+     * the initial oauthToken, that's set in the client initialization.
      */
-    public function isTokenExpired(): bool
+    public function isTokenExpired(?OAuthToken $token = null): bool
     {
-        return $this->oauthToken->getExpiry() != null &&
-            $this->oauthToken->getExpiry() < time();
+        $token = $token ?? $this->getOAuthToken();
+        if ($token == null || empty($token->getExpiry())) {
+            return true;
+        }
+        return $token->getExpiry() < time() + $this->getOAuthClockSkew();
+    }
+
+    private function getTokenFromProvider(): ?OAuthToken
+    {
+        if ($this->internalOAuthToken != null && !$this->isTokenExpired($this->internalOAuthToken)) {
+            return $this->internalOAuthToken;
+        }
+        $provider = $this->config['thingspace_oauth-TokenProvider'];
+        if (is_callable($provider)) {
+            $token = Closure::fromCallable($provider)($this->internalOAuthToken, $this);
+        } else {
+            try {
+                $token = $this->fetchToken();
+            } catch (Exception $exp) {
+                return $this->internalOAuthToken;
+            }
+        }
+        $updateCallback = $this->config['thingspace_oauth-OnTokenUpdate'];
+        if (is_callable($updateCallback)) {
+            Closure::fromCallable($updateCallback)($token);
+        }
+        return $token;
     }
 
     /**
@@ -150,23 +175,41 @@ class ThingspaceOauthManager extends CoreAuth implements ThingspaceOauthCredenti
      */
     public function validate(TypeValidatorInterface $validator): void
     {
-        if ($this->oauthToken == null) {
+        $this->internalOAuthToken = $this->getTokenFromProvider();
+        if ($this->internalOAuthToken == null) {
             throw new InvalidArgumentException('Client is not authorized. An OAuth token is needed to make API calls.');
         }
-
-        if ($this->isTokenExpired()) {
+        if ($this->isTokenExpired($this->internalOAuthToken)) {
             throw new InvalidArgumentException('OAuth token is expired. A valid token is needed to make API calls.');
         }
+        parent::__construct(
+            HeaderParam::init(
+                'Authorization',
+                CoreHelper::getBearerAuthString($this->internalOAuthToken->getAccessToken())
+            )->requiredNonEmpty()
+        );
         parent::validate($validator);
     }
 
     /**
-     * Build authorization header value for basic auth
+     * Build authorization header value for basic auth.
      */
     private function buildBasicHeader(): string
     {
         return 'Basic ' . base64_encode(
-            $this->oauthClientId . ':' . $this->oauthClientSecret
+            $this->getOauthClientId() . ':' . $this->getOauthClientSecret()
         );
+    }
+
+    /**
+     * Adds the expiry time to the given oAuthToken instance.
+     */
+    private function addExpiryTime(OAuthToken $oAuthToken): void
+    {
+        $expiresIn = $oAuthToken->getExpiresIn();
+        if (empty($expiresIn)) {
+            return;
+        }
+        $oAuthToken->setExpiry(time() + $expiresIn);
     }
 }
