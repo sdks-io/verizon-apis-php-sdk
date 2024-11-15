@@ -19,7 +19,7 @@ $thingSpaceQualityofServiceAPIActionsController = $client->getThingSpaceQualityo
 Creates a QoS elevation subscription ID and activates the subscription.
 
 ```php
-function createAThingSpaceQualityOfServiceAPISubscription(SubscribeRequest $body): ApiResponse
+function createAThingSpaceQualityOfServiceAPISubscription(SubscribeRequest $body): M201success
 ```
 
 ## Parameters
@@ -30,42 +30,23 @@ function createAThingSpaceQualityOfServiceAPISubscription(SubscribeRequest $body
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`M201success`](../../doc/models/m201-success.md).
+[`M201success`](../../doc/models/m201-success.md)
 
 ## Example Usage
 
 ```php
-$body = SubscribeRequestBuilder::init(
-    '0000123456-00001',
-    [
-        QosDeviceInfoBuilder::init(
-            QosDeviceIdBuilder::init()
-                ->id('10-digit phone number')
-                ->kind('mdn')
-                ->build(),
-            [
-                FlowInfoBuilder::init()
-                    ->flowServer('[IPv6 address]:port')
-                    ->flowDevice('[IPv6 address]:port')
-                    ->flowDirection('UPLINK')
-                    ->flowProtocol('UDP')
-                    ->qciOption('Premium')
-                    ->build()
-            ]
-        )
-            ->deviceIPv6Addr('IPv6 address')
-            ->build()
-    ]
-)->build();
+$body = SubscribeRequestBuilder::init()
+    ->accountName('0000123456-00001')
+    ->build();
 
-$apiResponse = $thingSpaceQualityOfServiceAPIActionsController->createAThingSpaceQualityOfServiceAPISubscription($body);
+$result = $thingSpaceQualityOfServiceAPIActionsController->createAThingSpaceQualityOfServiceAPISubscription($body);
 ```
 
 ## Errors
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| Default | Error Response | [`DefaultResponseException`](../../doc/models/default-response-exception.md) |
+| Default | Error Response | [`MDefaultException`](../../doc/models/m-default-exception.md) |
 
 
 # Stop a Thing Space Quality of Service API Subscription
@@ -76,7 +57,7 @@ Stops an active ThingSpace Quality of Service API subscription using the account
 function stopAThingSpaceQualityOfServiceAPISubscription(
     string $accountName,
     string $qosSubscriptionId
-): ApiResponse
+): M201success
 ```
 
 ## Parameters
@@ -88,7 +69,7 @@ function stopAThingSpaceQualityOfServiceAPISubscription(
 
 ## Response Type
 
-This method returns a `VerizonLib\Utils\ApiResponse` instance. The `getResult()` method on this instance returns the response data which is of type [`M201success`](../../doc/models/m201-success.md).
+[`M201success`](../../doc/models/m201-success.md)
 
 ## Example Usage
 
@@ -97,7 +78,7 @@ $accountName = '0000123456-00001';
 
 $qosSubscriptionId = 'QoS subscription ID';
 
-$apiResponse = $thingSpaceQualityOfServiceAPIActionsController->stopAThingSpaceQualityOfServiceAPISubscription(
+$result = $thingSpaceQualityOfServiceAPIActionsController->stopAThingSpaceQualityOfServiceAPISubscription(
     $accountName,
     $qosSubscriptionId
 );
@@ -107,5 +88,5 @@ $apiResponse = $thingSpaceQualityOfServiceAPIActionsController->stopAThingSpaceQ
 
 | HTTP Status Code | Error Description | Exception Class |
 |  --- | --- | --- |
-| Default | Error Response | [`DefaultResponseException`](../../doc/models/default-response-exception.md) |
+| Default | Error Response | [`MDefaultException`](../../doc/models/m-default-exception.md) |
 
