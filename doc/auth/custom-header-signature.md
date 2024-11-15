@@ -3,17 +3,17 @@
 
 
 
-Documentation for accessing and setting credentials for vz-m2m-session_token.
+Documentation for accessing and setting credentials for VZ-M2M-Token.
 
 ## Auth Credentials
 
 | Name | Type | Description | Setter | Getter |
 |  --- | --- | --- | --- | --- |
-| VZ-M2M-Token | `string` | The VZ-M2M session token from [Getting Started](/content/thingspace-portal/documentation/apis/connectivity-management/get-started.html) | `vZM2MToken` | `getVZM2MToken()` |
+| VZ-M2M-Token | `string` | M2M Session Token ([How to generate an M2M session token?]($e/Session%20Management/StartConnectivityManagementSession)) | `vZM2mToken` | `getVZM2mToken()` |
 
 
 
-**Note:** Auth credentials can be set using `VzM2mSessionTokenCredentialsBuilder::init()` in `vzM2mSessionTokenCredentials` method in the client builder and accessed through `getVzM2mSessionTokenCredentials` method in the client instance.
+**Note:** Auth credentials can be set using `VZM2mTokenCredentialsBuilder::init()` in `vZM2mTokenCredentials` method in the client builder and accessed through `getVZM2mTokenCredentials` method in the client instance.
 
 ## Usage Example
 
@@ -22,9 +22,9 @@ Documentation for accessing and setting credentials for vz-m2m-session_token.
 You must provide credentials in the client as shown in the following code snippet.
 
 ```php
-$client = VerizonThingSpaceQualityOfServiceAPIEndpointsClientBuilder::init()
-    ->vzM2mSessionTokenCredentials(
-        VzM2mSessionTokenCredentialsBuilder::init(
+$client = VerizonClientBuilder::init()
+    ->vZM2mTokenCredentials(
+        VZM2MTokenCredentialsBuilder::init(
             'VZ-M2M-Token'
         )
     )

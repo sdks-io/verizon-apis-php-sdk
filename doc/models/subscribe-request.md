@@ -9,8 +9,8 @@
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `accountName` | `?string` | Optional | The numeric name of an account | getAccountName(): ?string | setAccountName(?string accountName): void |
-| `deviceInfo` | [`?(DeviceInfo[])`](../../doc/models/device-info.md) | Optional | An array of device identifiers (deviceId values) | getDeviceInfo(): ?array | setDeviceInfo(?array deviceInfo): void |
+| `accountName` | `string` | Required | - | getAccountName(): string | setAccountName(string accountName): void |
+| `deviceInfo` | [`QosDeviceInfo[]`](../../doc/models/qos-device-info.md) | Required | - | getDeviceInfo(): array | setDeviceInfo(array deviceInfo): void |
 
 ## Example (as JSON)
 
@@ -20,33 +20,17 @@
   "deviceInfo": [
     {
       "deviceId": {
-        "id": "id0",
-        "kind": "kind8"
+        "id": "10-digit phone number",
+        "kind": "mdn"
       },
-      "deviceIPv6Addr": "deviceIPv6Addr4",
+      "deviceIPv6Addr": "IPv6 address",
       "flowInfo": [
         {
-          "flowServer": "flowServer4",
-          "flowDevice": "flowDevice2",
-          "flowDirection": "flowDirection6",
-          "flowProtocol": "flowProtocol4",
-          "qciOption": "qciOption0"
-        }
-      ]
-    },
-    {
-      "deviceId": {
-        "id": "id0",
-        "kind": "kind8"
-      },
-      "deviceIPv6Addr": "deviceIPv6Addr4",
-      "flowInfo": [
-        {
-          "flowServer": "flowServer4",
-          "flowDevice": "flowDevice2",
-          "flowDirection": "flowDirection6",
-          "flowProtocol": "flowProtocol4",
-          "qciOption": "qciOption0"
+          "flowServer": "[IPv6 address]:port",
+          "flowDevice": "[IPv6 address]:port",
+          "flowDirection": "UPLINK",
+          "flowProtocol": "UDP",
+          "qciOption": "Premium"
         }
       ]
     }

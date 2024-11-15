@@ -1,7 +1,7 @@
 
 # Device Id
 
-device identifiers consisting of an ID value and what that value represents (kind)
+An identifier for a single device.
 
 ## Structure
 
@@ -11,15 +11,15 @@ device identifiers consisting of an ID value and what that value represents (kin
 
 | Name | Type | Tags | Description | Getter | Setter |
 |  --- | --- | --- | --- | --- | --- |
-| `id` | `?string` | Optional | The numeric or alphanumeric ID value | getId(): ?string | setId(?string id): void |
-| `kind` | `?string` | Optional | What the ID value represents, which could be a Mobile Directory Number (MDN) or an International Mobile Equipment Identifier (IMEI) as an example | getKind(): ?string | setKind(?string kind): void |
+| `id` | `string` | Required | The value of the device identifier. | getId(): string | setId(string id): void |
+| `kind` | `string` | Required | The type of the device identifier. Valid types of identifiers are:ESN (decimal),EID,ICCID (up to 20 digits),IMEI (up to 16 digits),MDN,MEID (hexadecimal),MSISDN. | getKind(): string | setKind(string kind): void |
 
 ## Example (as JSON)
 
 ```json
 {
-  "id": "10-digit phone number",
-  "kind": "mdn"
+  "kind": "imei",
+  "id": "990013907835573"
 }
 ```
 

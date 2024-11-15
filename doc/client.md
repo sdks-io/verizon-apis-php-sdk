@@ -5,7 +5,6 @@ The following parameters are configurable for the API Client:
 
 | Parameter | Type | Description |
 |  --- | --- | --- |
-| `vZM2MToken2` | `string` | The VZ-M2M session token from [Getting Started](/content/thingspace-portal/documentation/apis/connectivity-management/get-started.html) |
 | `environment` | `Environment` | The API environment. <br> **Default: `Environment.PRODUCTION`** |
 | `timeout` | `int` | Timeout for API calls in seconds.<br>*Default*: `0` |
 | `enableRetries` | `bool` | Whether to enable retries and backoff feature.<br>*Default*: `false` |
@@ -17,29 +16,42 @@ The following parameters are configurable for the API Client:
 | `httpStatusCodesToRetry` | `array` | Http status codes to retry against.<br>*Default*: `408, 413, 429, 500, 502, 503, 504, 521, 522, 524` |
 | `httpMethodsToRetry` | `array` | Http methods to retry against.<br>*Default*: `'GET', 'PUT'` |
 | `thingspaceOauthCredentials` | [`ThingspaceOauthCredentials`](auth/oauth-2-client-credentials-grant.md) | The Credentials Setter for OAuth 2 Client Credentials Grant |
-| `vzM2mSessionTokenCredentials` | [`VzM2mSessionTokenCredentials`](auth/custom-header-signature.md) | The Credentials Setter for Custom Header Signature |
+| `vZM2mTokenCredentials` | [`VZM2mTokenCredentials`](auth/custom-header-signature.md) | The Credentials Setter for Custom Header Signature |
 
 The API client can be initialized as follows:
 
 ```php
-$client = VerizonThingSpaceQualityOfServiceAPIEndpointsClientBuilder::init()
+$client = VerizonClientBuilder::init()
     ->thingspaceOauthCredentials(
         ThingspaceOauthCredentialsBuilder::init(
             'OAuthClientId',
             'OAuthClientSecret'
         )
+            ->oauthScopes(
+                [
+                    OauthScopeThingspaceOauthEnum::DISCOVERYREAD,
+                    OauthScopeThingspaceOauthEnum::SERVICEPROFILEREAD
+                ]
+            )
     )
-    ->vzM2mSessionTokenCredentials(
-        VzM2mSessionTokenCredentialsBuilder::init(
+    ->vZM2mTokenCredentials(
+        VZM2MTokenCredentialsBuilder::init(
             'VZ-M2M-Token'
         )
     )
-    ->vZM2MToken2('VZ-M2M-Token')
     ->environment(Environment::PRODUCTION)
     ->build();
 ```
 
-## Verizon ThingSpace Quality of Service API endpoints Client
+API calls return an `ApiResponse` object that includes the following fields:
+
+| Field | Description |
+|  --- | --- |
+| `getStatusCode` | Status code of the HTTP response |
+| `getHeaders` | Headers of the HTTP response as a Hash |
+| `getResult` | The deserialized body of the HTTP response as a String |
+
+## Verizon Client
 
 The gateway for the SDK. This class acts as a factory for the Controllers and also holds the configuration of the SDK.
 
@@ -47,7 +59,78 @@ The gateway for the SDK. This class acts as a factory for the Controllers and al
 
 | Name | Description |
 |  --- | --- |
-| getThingSpaceQualityOfServiceAPIActionsController() | Gets ThingSpaceQualityOfServiceAPIActionsController |
+| getM5gEdgePlatformsController() | Gets M5gEdgePlatformsController |
+| getServiceEndpointsController() | Gets ServiceEndpointsController |
+| getServiceProfilesController() | Gets ServiceProfilesController |
+| getDeviceManagementController() | Gets DeviceManagementController |
+| getAccountsController() | Gets AccountsController |
+| getDeviceGroupsController() | Gets DeviceGroupsController |
+| getSMSController() | Gets SMSController |
+| getSessionManagementController() | Gets SessionManagementController |
+| getConnectivityCallbacksController() | Gets ConnectivityCallbacksController |
+| getAccountRequestsController() | Gets AccountRequestsController |
+| getServicePlansController() | Gets ServicePlansController |
+| getDeviceDiagnosticsController() | Gets DeviceDiagnosticsController |
+| getDeviceProfileManagementController() | Gets DeviceProfileManagementController |
+| getDeviceMonitoringController() | Gets DeviceMonitoringController |
+| getEUICCDeviceProfileManagementController() | Gets EUICCDeviceProfileManagementController |
+| getDevicesLocationsController() | Gets DevicesLocationsController |
 | getExclusionsController() | Gets ExclusionsController |
-| getOAuthAuthorizationController() | Gets OAuthAuthorizationController |
+| getDevicesLocationSubscriptionsController() | Gets DevicesLocationSubscriptionsController |
+| getDeviceLocationCallbacksController() | Gets DeviceLocationCallbacksController |
+| getUsageTriggerManagementController() | Gets UsageTriggerManagementController |
+| getBillingController() | Gets BillingController |
+| getSoftwareManagementSubscriptionsV1Controller() | Gets SoftwareManagementSubscriptionsV1Controller |
+| getSoftwareManagementLicensesV1Controller() | Gets SoftwareManagementLicensesV1Controller |
+| getFirmwareV1Controller() | Gets FirmwareV1Controller |
+| getSoftwareManagementCallbacksV1Controller() | Gets SoftwareManagementCallbacksV1Controller |
+| getSoftwareManagementReportsV1Controller() | Gets SoftwareManagementReportsV1Controller |
+| getSoftwareManagementSubscriptionsV2Controller() | Gets SoftwareManagementSubscriptionsV2Controller |
+| getSoftwareManagementLicensesV2Controller() | Gets SoftwareManagementLicensesV2Controller |
+| getCampaignsV2Controller() | Gets CampaignsV2Controller |
+| getSoftwareManagementCallbacksV2Controller() | Gets SoftwareManagementCallbacksV2Controller |
+| getSoftwareManagementReportsV2Controller() | Gets SoftwareManagementReportsV2Controller |
+| getClientLoggingController() | Gets ClientLoggingController |
+| getServerLoggingController() | Gets ServerLoggingController |
+| getConfigurationFilesController() | Gets ConfigurationFilesController |
+| getSoftwareManagementSubscriptionsV3Controller() | Gets SoftwareManagementSubscriptionsV3Controller |
+| getSoftwareManagementLicensesV3Controller() | Gets SoftwareManagementLicensesV3Controller |
+| getCampaignsV3Controller() | Gets CampaignsV3Controller |
+| getSoftwareManagementReportsV3Controller() | Gets SoftwareManagementReportsV3Controller |
+| getFirmwareV3Controller() | Gets FirmwareV3Controller |
+| getAccountDevicesController() | Gets AccountDevicesController |
+| getSoftwareManagementCallbacksV3Controller() | Gets SoftwareManagementCallbacksV3Controller |
+| getSIMSecureForIoTLicensesController() | Gets SIMSecureForIoTLicensesController |
+| getAccountSubscriptionsController() | Gets AccountSubscriptionsController |
+| getPerformanceMetricsController() | Gets PerformanceMetricsController |
+| getDiagnosticsSubscriptionsController() | Gets DiagnosticsSubscriptionsController |
+| getDiagnosticsObservationsController() | Gets DiagnosticsObservationsController |
+| getDiagnosticsHistoryController() | Gets DiagnosticsHistoryController |
+| getDiagnosticsSettingsController() | Gets DiagnosticsSettingsController |
+| getDiagnosticsCallbacksController() | Gets DiagnosticsCallbacksController |
+| getDiagnosticsFactoryResetController() | Gets DiagnosticsFactoryResetController |
+| getTargetsController() | Gets TargetsController |
+| getCloudConnectorSubscriptionsController() | Gets CloudConnectorSubscriptionsController |
+| getCloudConnectorDevicesController() | Gets CloudConnectorDevicesController |
+| getDeviceServiceManagementController() | Gets DeviceServiceManagementController |
+| getDeviceReportsController() | Gets DeviceReportsController |
+| getHyperPreciseLocationCallbacksController() | Gets HyperPreciseLocationCallbacksController |
+| getAnomalySettingsController() | Gets AnomalySettingsController |
+| getAnomalyTriggersController() | Gets AnomalyTriggersController |
+| getAnomalyTriggersV2Controller() | Gets AnomalyTriggersV2Controller |
+| getWirelessNetworkPerformanceController() | Gets WirelessNetworkPerformanceController |
+| getFixedWirelessQualificationController() | Gets FixedWirelessQualificationController |
+| getManagingESIMProfilesController() | Gets ManagingESIMProfilesController |
+| getDeviceSMSMessagingController() | Gets DeviceSMSMessagingController |
+| getDeviceActionsController() | Gets DeviceActionsController |
+| getThingSpaceQualityOfServiceAPIActionsController() | Gets ThingSpaceQualityOfServiceAPIActionsController |
+| getPWNController() | Gets PWNController |
+| getPromotionPeriodInformationController() | Gets PromotionPeriodInformationController |
+| getRetrieveTheTriggersController() | Gets RetrieveTheTriggersController |
+| getUpdateTriggersController() | Gets UpdateTriggersController |
+| getSIMActionsController() | Gets SIMActionsController |
+| getGlobalReportingController() | Gets GlobalReportingController |
+| getMV2TriggersController() | Gets MV2TriggersController |
+| getM5gBIDeviceActionsController() | Gets M5gBIDeviceActionsController |
+| getOauthAuthorizationController() | Gets OauthAuthorizationController |
 
